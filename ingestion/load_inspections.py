@@ -11,11 +11,22 @@ URL = "https://data.cityofchicago.org/resource/4ijn-s7e5.json"
 DATABASE_URL = os.environ["DATABASE_URL"]  # from your Codespaces secret
 
 # --- 1. Extract: pull the latest inspections from the city API ---
-params = {"$limit": 1000, "$order": "inspection_date DESC"}
-response = requests.get(URL, params=params, timeout=30)
-response.raise_for_status()
-rows = response.json()
-print(f"Fetched {len(rows)} rows")
+rows, offset, page = [], 0, 50000
+while True:
+    params = {
+        "$where": "inspection_date >= '2024-01-01'",
+        "$order": "inspection_id",
+        "$limit": page,
+        "$offset": offset,
+    }
+    response = requests.get(URL, params=params, timeout=60)
+    response.raise_for_status()
+    batch = response.json()
+    if not batch:
+        break
+    rows.extend(batch)
+    offset += page
+    print(f"Fetched {len(rows)} rows so far")
 
 # Keep a raw copy on disk (ignored by git)
 out_dir = Path("data/raw")
