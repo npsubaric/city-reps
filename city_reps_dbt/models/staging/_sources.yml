@@ -1,0 +1,15 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: public
+    tables:
+      - name: raw_inspections
+
+models:
+  - name: stg_inspections
+    columns:
+      - name: inspection_id
+        tests:
+          - unique
+          - not_null
