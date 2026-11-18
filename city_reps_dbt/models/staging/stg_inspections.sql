@@ -4,6 +4,8 @@ with source as (
 
 select
     inspection_id,
+    nullif(nullif(raw->>'license_', '')::bigint, 0) as license_no,
+    upper(trim(raw->>'aka_name'))                    as aka_name,
     upper(trim(dba_name))         as business_name,
     upper(trim(facility_type))    as facility_type_clean,
     upper(trim(risk))             as risk,

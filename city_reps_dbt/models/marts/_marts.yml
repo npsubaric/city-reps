@@ -1,0 +1,10 @@
+version: 2
+
+models:
+  - name: dim_facilities
+    description: One row per licensed location, with its latest inspection.
+    columns:
+      - name: license_no
+        tests:
+          - unique
+          - not_null
