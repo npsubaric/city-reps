@@ -5,10 +5,10 @@ seeds:
     description: >
       The hand-picked City Reps spots, exported from the app. One row per
       place: cafés, bakeries, libraries, parks, bookstores and sights.
+      Coordinates come from open data via ingestion/geocode_spots.py and
+      live in a separate seed, spot_coordinates.
     config:
       column_types:
-        lat: double precision
-        lon: double precision
         is_free: boolean
         good_for_work: boolean
     columns:
@@ -20,14 +20,11 @@ seeds:
       - name: name
         tests:
           - not_null
+      - name: address
+        tests:
+          - not_null
       - name: kind
         tests:
           - accepted_values:
               arguments:
                 values: ['cafe', 'bakery', 'library', 'park', 'trail', 'walk', 'museum', 'books', 'public']
-      - name: lat
-        tests:
-          - not_null
-      - name: lon
-        tests:
-          - not_null
