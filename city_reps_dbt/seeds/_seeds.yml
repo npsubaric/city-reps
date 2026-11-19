@@ -28,3 +28,33 @@ seeds:
           - accepted_values:
               arguments:
                 values: ['cafe', 'bakery', 'library', 'park', 'trail', 'walk', 'museum', 'books', 'public']
+
+  - name: spot_coordinates
+    description: >
+      Open-data coordinates for each spot, written by ingestion/geocode_spots.py.
+      Sources: US Census Geocoder (public domain) and OpenStreetMap
+      (© OpenStreetMap contributors, ODbL).
+    config:
+      column_types:
+        lat: double precision
+        lon: double precision
+    columns:
+      - name: spot_id
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('spots')
+                field: spot_id
+      - name: lat
+        tests:
+          - not_null
+      - name: lon
+        tests:
+          - not_null
+      - name: source
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['census', 'openstreetmap']

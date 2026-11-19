@@ -13,6 +13,7 @@ Run from the repo root:
     python ingestion/geocode_spots.py
 """
 import csv
+import re
 import time
 from pathlib import Path
 
@@ -30,6 +31,13 @@ HEADERS = {"User-Agent": "city-reps/0.1 (https://github.com/npsubaric/city-reps)
 # A box around Chicago, used to reject matches in the wrong city
 LAT_RANGE = (41.64, 42.03)
 LON_RANGE = (-87.95, -87.52)
+
+# Spots whose app address isn't a street address. Each hint is the nearest
+# real address on Chicago's grid, so the Census geocoder can place it.
+GEOCODE_HINTS = {
+    "606-east": "1800 N Ashland Ave",       # Ashland & Bloomingdale (1800 N) trailhead
+    "fulton-walk": "1000 W Fulton Market",  # middle of the Fulton Market walk
+}
 
 
 def in_chicago(lat, lon):
@@ -67,10 +75,13 @@ def nominatim(query):
 
 def geocode(spot):
     """Try each source in order; return (lat, lon, source, matched) or None."""
+    address = GEOCODE_HINTS.get(spot["spot_id"], spot["address"])
+    # Drop notes in parentheses, like "(east end)", which confuse OpenStreetMap
+    name = re.sub(r"\s*\(.*?\)", "", spot["name"]).strip()
     attempts = [
-        ("census", census, spot["address"]),
-        ("openstreetmap", nominatim, spot["name"]),
-        ("openstreetmap", nominatim, spot["address"]),
+        ("census", census, address),
+        ("openstreetmap", nominatim, name),
+        ("openstreetmap", nominatim, address),
     ]
     for source, lookup, query in attempts:
         result = lookup(query)
