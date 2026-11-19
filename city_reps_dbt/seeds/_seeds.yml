@@ -1,0 +1,33 @@
+version: 2
+
+seeds:
+  - name: spots
+    description: >
+      The hand-picked City Reps spots, exported from the app. One row per
+      place: cafés, bakeries, libraries, parks, bookstores and sights.
+    config:
+      column_types:
+        lat: double precision
+        lon: double precision
+        is_free: boolean
+        good_for_work: boolean
+    columns:
+      - name: spot_id
+        description: Stable ID used by the app.
+        tests:
+          - unique
+          - not_null
+      - name: name
+        tests:
+          - not_null
+      - name: kind
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['cafe', 'bakery', 'library', 'park', 'trail', 'walk', 'museum', 'books', 'public']
+      - name: lat
+        tests:
+          - not_null
+      - name: lon
+        tests:
+          - not_null
