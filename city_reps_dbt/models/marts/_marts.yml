@@ -8,3 +8,36 @@ models:
         tests:
           - unique
           - not_null
+  - name: dim_spots
+    description: >
+      One row per City Reps spot, with the best available coordinates and the
+      city's license status. This is the table the app reads.
+    columns:
+      - name: spot_id
+        tests:
+          - unique
+          - not_null
+      - name: lat
+        tests:
+          - not_null
+      - name: lon
+        tests:
+          - not_null
+      - name: coord_source
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['city_license', 'census', 'openstreetmap']
+      - name: license_no
+        tests:
+          - unique
+      - name: license_state
+        description: >
+          current: license unexpired. on_file: matched but the latest record has
+          expired (records lag, so not proof of closing). cancelled: city marked
+          it AAC or REV. not_found: a café, bakery or bookstore with no match.
+          not_applicable: libraries, parks and other unlicensed spots.
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['current', 'on_file', 'cancelled', 'not_found', 'not_applicable']
