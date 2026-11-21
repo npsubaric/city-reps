@@ -5,6 +5,11 @@ sources:
     schema: public
     tables:
       - name: raw_inspections
+      - name: raw_business_licenses
+        description: >
+          Chicago Business Licenses (data.cityofchicago.org, r5kz-chrr), loaded by
+          ingestion/load_business_licenses.py. Retail food and limited business
+          licenses expiring on or after 2025-01-01.
 
 models:
   - name: stg_inspections
@@ -13,3 +18,20 @@ models:
         tests:
           - unique
           - not_null
+
+  - name: stg_business_licenses
+    description: One row per license record (initial issue or renewal), cleaned up.
+    columns:
+      - name: license_id
+        tests:
+          - unique
+          - not_null
+      - name: license_no
+        tests:
+          - not_null
+      - name: license_status
+        description: AAI issued, AAC cancelled, REV revoked, REA revocation appealed.
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['AAI', 'AAC', 'REV', 'REA']
