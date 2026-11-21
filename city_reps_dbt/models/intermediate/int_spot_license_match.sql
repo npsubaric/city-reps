@@ -4,22 +4,39 @@
 --   1. Only cafés and bakeries (Retail Food) and bookstores (Limited Business)
 --      hold these licenses. Libraries, parks and museums are skipped.
 --   2. Same street address. The city often adds a unit ("1211 N DAMEN AVE 1",
---      "1458 W CHICAGO AVE 1ST"), so a license address may also start with the
---      spot's address followed by a space.
+--      "1458 W CHICAGO AVE 1ST") and files some places under a range of
+--      numbers ("1755-1759 W GRAND AVE"). A spot matches when its house number
+--      falls inside the license's range, on the same side of the street, and
+--      the street is the same (the license may add a unit after it).
+--      spot_match_address_overrides can point a spot at a different address
+--      when the city files its license under one (Caffè Umbria: 2545 vs 2535).
 --   3. A name check: a distinctive word from the spot's name must appear in the
 --      license's business or legal name. If no name matches, the match is only
 --      accepted when it's the only license of that type at the address.
 
-with spots as (
+with spots_with_overrides as (
+    select
+        spots.spot_id,
+        spots.name,
+        spots.kind,
+        upper(trim(coalesce(overrides.match_address, spots.address))) as address
+    from {{ ref('spots') }} as spots
+    left join {{ ref('spot_match_address_overrides') }} as overrides
+        using (spot_id)
+),
+
+spots as (
     select
         spot_id,
         name,
-        upper(trim(address)) as address,
+        address,
+        substring(address from '^(\d+)')::int                        as house_num,
+        regexp_replace(substring(address from '^\d+\s+(.*)$'), '\s+', ' ', 'g') as street,
         case
             when kind in ('cafe', 'bakery') then 'RETAIL FOOD ESTABLISHMENT'
             when kind = 'books'             then 'LIMITED BUSINESS LICENSE'
         end as expected_license_type
-    from {{ ref('spots') }}
+    from spots_with_overrides
 ),
 
 licenses as (
@@ -63,8 +80,12 @@ candidates as (
     from spots
     join licenses
       on  licenses.license_type = spots.expected_license_type
-      and (   licenses.address = spots.address
-           or licenses.address like spots.address || ' %')
+      -- house number inside the license's range, same side of the street
+      and spots.house_num between licenses.house_num_low and licenses.house_num_high
+      and spots.house_num % 2 = licenses.house_num_low % 2
+      -- same street; the license may add a unit after it
+      and (   licenses.street_and_unit = spots.street
+           or licenses.street_and_unit like spots.street || ' %')
 ),
 
 ranked as (
