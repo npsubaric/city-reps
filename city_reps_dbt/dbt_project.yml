@@ -18,5 +18,7 @@ models:
   city_reps_dbt:
     staging:
       +materialized: view
+    intermediate:
+      +materialized: view
     marts:
       +materialized: table

@@ -5,8 +5,10 @@ Updated daily by the city.
 
 What it loads: license records for retail food places (cafés, bakeries,
 restaurants) and limited business licenses (bookstores and other shops)
-that expire on or after 2025-01-01, so it covers current and recently
-closed businesses without pulling all 1M+ rows since 2002.
+that expire on or after 2022-01-01. That covers current businesses plus
+ones whose latest record is a few years stale (the city's renewals can lag
+or have gaps; Myopic Books' last record expired in 2024 though it's open),
+without pulling all 1M+ rows since 2002.
 
 Run from the repo root:
     python ingestion/load_business_licenses.py
@@ -30,7 +32,8 @@ PAGE_SIZE = 10000
 
 # Which licenses to keep. Values are the city's license_description text.
 LICENSE_TYPES = ("Retail Food Establishment", "Limited Business License")
-EXPIRES_ON_OR_AFTER = "2025-01-01"
+# Reaches back a few years because license records can lag behind reality
+EXPIRES_ON_OR_AFTER = "2022-01-01"
 
 # Fields this script depends on. If the city renames one, we stop early.
 REQUIRED_FIELDS = {

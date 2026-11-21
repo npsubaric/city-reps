@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: int_license_locations
+    description: One row per licensed location (license_no), from its most recent license term.
+    columns:
+      - name: license_no
+        tests:
+          - unique
+          - not_null
+
+  - name: int_spot_license_match
+    description: >
+      The business license behind each City Reps spot, matched on street address
+      plus a name check. Spots without a license (libraries, parks, museums) are absent.
+    columns:
+      - name: spot_id
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('spots')
+                field: spot_id
+      - name: license_no
+        description: A license should never be matched to two spots.
+        tests:
+          - unique
+          - not_null
+      - name: match_method
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['address_and_name', 'address_only']

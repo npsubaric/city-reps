@@ -9,7 +9,7 @@ sources:
         description: >
           Chicago Business Licenses (data.cityofchicago.org, r5kz-chrr), loaded by
           ingestion/load_business_licenses.py. Retail food and limited business
-          licenses expiring on or after 2025-01-01.
+          licenses expiring on or after 2022-01-01.
 
 models:
   - name: stg_inspections
