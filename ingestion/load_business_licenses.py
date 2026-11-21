@@ -20,10 +20,13 @@ from pathlib import Path
 import psycopg
 import requests
 from psycopg.types.json import Jsonb
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 URL = "https://data.cityofchicago.org/resource/r5kz-chrr.json"
 DATABASE_URL = os.environ["DATABASE_URL"]  # from your Codespaces secret
-PAGE_SIZE = 50000
+# Smaller pages: the city's server can drop very large filtered requests
+PAGE_SIZE = 10000
 
 # Which licenses to keep. Values are the city's license_description text.
 LICENSE_TYPES = ("Retail Food Establishment", "Limited Business License")
@@ -37,9 +40,29 @@ REQUIRED_FIELDS = {
 }
 
 
+def make_session():
+    """An HTTP session that retries dropped connections and server errors.
+
+    Waits 2s, 4s, 8s, 16s, 32s between tries (backoff_factor=2), so a brief
+    hiccup on the city's side doesn't kill the whole load.
+    """
+    retry = Retry(
+        total=5,
+        backoff_factor=2,
+        status_forcelist=(429, 500, 502, 503, 504),
+        allowed_methods=("GET",),
+    )
+    session = requests.Session()
+    session.mount("https://", HTTPAdapter(max_retries=retry))
+    return session
+
+
+SESSION = make_session()
+
+
 def check_schema():
     """Fetch one row and make sure the fields we rely on still exist."""
-    response = requests.get(URL, params={"$limit": 1}, timeout=60)
+    response = SESSION.get(URL, params={"$limit": 1}, timeout=60)
     response.raise_for_status()
     sample = response.json()[0]
     missing = REQUIRED_FIELDS - set(sample)
@@ -57,7 +80,7 @@ def extract():
     rows, offset = [], 0
     while True:
         params = {"$where": where, "$order": "license_id", "$limit": PAGE_SIZE, "$offset": offset}
-        response = requests.get(URL, params=params, timeout=120)
+        response = SESSION.get(URL, params=params, timeout=120)
         response.raise_for_status()
         batch = response.json()
         if not batch:
