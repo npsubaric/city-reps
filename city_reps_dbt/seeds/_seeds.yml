@@ -58,3 +58,25 @@ seeds:
           - accepted_values:
               arguments:
                 values: ['census', 'openstreetmap']
+
+  - name: spot_match_address_overrides
+    description: >
+      Spots whose business license is filed under a different address than the
+      one people use. int_spot_license_match matches these spots on
+      match_address instead of their public address. Add a row, with a reason,
+      whenever a spot's license sits at another number on the same building.
+    columns:
+      - name: spot_id
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('spots')
+                field: spot_id
+      - name: match_address
+        tests:
+          - not_null
+      - name: reason
+        tests:
+          - not_null
