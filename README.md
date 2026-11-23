@@ -6,6 +6,8 @@ City Reps is a small app that helps me get out of my apartment: it picks a café
 
 **Live app:** [npsubaric.github.io/city-reps](https://npsubaric.github.io/city-reps/) · **dbt docs:** [npsubaric.github.io/city-reps/docs](https://npsubaric.github.io/city-reps/docs/) (models, tests, lineage graph)
 
+<p align="center"><img src="assets/demo.gif" alt="City Reps demo: picking a spot, the map, New near you and the directory" width="360"></p>
+
 Built by [Nikolas Subaric](https://github.com/npsubaric), a data engineer in Chicago.
 
 ---
@@ -114,6 +116,7 @@ Seeds: `spots` (the app's spots and notes), `spot_coordinates` (open-data geocod
 | --- | --- | --- |
 | [Daily pipeline](.github/workflows/daily_pipeline.yml) | Every day, 11:17 UTC (+ manual button) | Runs the loaders, then `dbt build`, then commits the JSON export if the data changed |
 | [Deploy website](.github/workflows/pages.yml) | After each pipeline run, and on changes to the app or models | Publishes `app/`, the backup JSON and the dbt docs site to GitHub Pages |
+| [Record demo GIF](.github/workflows/record_demo.yml) | By hand, after visible app changes | Drives the live site with Playwright and commits `assets/demo.gif` |
 | [CI](.github/workflows/ci.yml) | Every pull request | Runs the Python tests, then builds and tests every model in separate `ci` and `ci_public` schemas, so checks never touch production tables |
 
 Every change goes through a pull request and must pass CI before merging.
