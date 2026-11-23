@@ -28,11 +28,20 @@ jobs:
       SUPABASE_PASSWORD: ${{ secrets.SUPABASE_PASSWORD }}
 
     steps:
+      - name: Check secrets are set
+        run: |
+          for s in DATABASE_URL SUPABASE_HOST SUPABASE_USER SUPABASE_PASSWORD; do
+            if [ -z "${!s}" ]; then
+              echo "::error::$s is not set. Add it under Settings > Secrets and variables > Actions."
+              exit 1
+            fi
+          done
+
       - name: Check out the code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
           cache: pip
