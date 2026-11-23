@@ -16,3 +16,13 @@ models:
       - name: lon
         tests:
           - not_null
+
+  - name: public_new_places
+    description: >
+      The website's "New near you" list, published as the table "new_places".
+      Read-only through Supabase's Data API.
+    columns:
+      - name: license_no
+        tests:
+          - unique
+          - not_null
