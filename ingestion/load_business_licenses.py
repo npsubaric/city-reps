@@ -15,6 +15,7 @@ Run from the repo root:
 """
 import json
 import os
+import time
 import sys
 from datetime import date
 from pathlib import Path
@@ -62,11 +63,36 @@ def make_session():
 SESSION = make_session()
 
 
+def get_json(params, timeout=120, attempts=5):
+    """Download one page of results as JSON.
+
+    The session above retries failures before a response starts. This also
+    retries when the connection breaks partway through a download
+    ("IncompleteRead" / ChunkedEncodingError), which the city's API does
+    now and then on large pages. Waits 2s, 4s, 8s, 16s between tries.
+    """
+    for attempt in range(1, attempts + 1):
+        try:
+            response = SESSION.get(URL, params=params, timeout=timeout)
+            response.raise_for_status()
+            return response.json()
+        except (
+            requests.exceptions.ChunkedEncodingError,
+            requests.exceptions.ConnectionError,
+            requests.exceptions.Timeout,
+            requests.exceptions.JSONDecodeError,
+        ) as error:
+            if attempt == attempts:
+                raise
+            wait = 2 ** attempt
+            print(f"Download failed ({type(error).__name__}); retrying in {wait}s "
+                  f"(attempt {attempt + 1} of {attempts})")
+            time.sleep(wait)
+
+
 def check_schema():
     """Fetch one row and make sure the fields we rely on still exist."""
-    response = SESSION.get(URL, params={"$limit": 1}, timeout=60)
-    response.raise_for_status()
-    sample = response.json()[0]
+    sample = get_json({"$limit": 1}, timeout=60)[0]
     missing = REQUIRED_FIELDS - set(sample)
     if missing:
         print(f"The API is missing fields this script expects: {sorted(missing)}")
@@ -82,9 +108,7 @@ def extract():
     rows, offset = [], 0
     while True:
         params = {"$where": where, "$order": "license_id", "$limit": PAGE_SIZE, "$offset": offset}
-        response = SESSION.get(URL, params=params, timeout=120)
-        response.raise_for_status()
-        batch = response.json()
+        batch = get_json(params)
         if not batch:
             break
         rows.extend(batch)

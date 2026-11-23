@@ -11,6 +11,7 @@ Run from the repo root:
 """
 import json
 import os
+import time
 from datetime import date
 from pathlib import Path
 
@@ -41,6 +42,33 @@ def make_session():
 SESSION = make_session()
 
 
+def get_json(params, timeout=120, attempts=5):
+    """Download one page of results as JSON.
+
+    The session above retries failures before a response starts. This also
+    retries when the connection breaks partway through a download
+    ("IncompleteRead" / ChunkedEncodingError), which the city's API does
+    now and then on large pages. Waits 2s, 4s, 8s, 16s between tries.
+    """
+    for attempt in range(1, attempts + 1):
+        try:
+            response = SESSION.get(URL, params=params, timeout=timeout)
+            response.raise_for_status()
+            return response.json()
+        except (
+            requests.exceptions.ChunkedEncodingError,
+            requests.exceptions.ConnectionError,
+            requests.exceptions.Timeout,
+            requests.exceptions.JSONDecodeError,
+        ) as error:
+            if attempt == attempts:
+                raise
+            wait = 2 ** attempt
+            print(f"Download failed ({type(error).__name__}); retrying in {wait}s "
+                  f"(attempt {attempt + 1} of {attempts})")
+            time.sleep(wait)
+
+
 def extract():
     """Page through the API and return every inspection since the cutoff."""
     rows, offset = [], 0
@@ -51,9 +79,7 @@ def extract():
             "$limit": PAGE_SIZE,
             "$offset": offset,
         }
-        response = SESSION.get(URL, params=params, timeout=120)
-        response.raise_for_status()
-        batch = response.json()
+        batch = get_json(params)
         if not batch:
             break
         rows.extend(batch)
