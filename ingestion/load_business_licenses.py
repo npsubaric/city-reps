@@ -15,13 +15,13 @@ Run from the repo root:
 """
 import json
 import os
+import time
 import sys
 from datetime import date
 from pathlib import Path
 
 import psycopg
 import requests
-from psycopg.types.json import Jsonb
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
@@ -63,11 +63,36 @@ def make_session():
 SESSION = make_session()
 
 
+def get_json(params, timeout=120, attempts=5):
+    """Download one page of results as JSON.
+
+    The session above retries failures before a response starts. This also
+    retries when the connection breaks partway through a download
+    ("IncompleteRead" / ChunkedEncodingError), which the city's API does
+    now and then on large pages. Waits 2s, 4s, 8s, 16s between tries.
+    """
+    for attempt in range(1, attempts + 1):
+        try:
+            response = SESSION.get(URL, params=params, timeout=timeout)
+            response.raise_for_status()
+            return response.json()
+        except (
+            requests.exceptions.ChunkedEncodingError,
+            requests.exceptions.ConnectionError,
+            requests.exceptions.Timeout,
+            requests.exceptions.JSONDecodeError,
+        ) as error:
+            if attempt == attempts:
+                raise
+            wait = 2 ** attempt
+            print(f"Download failed ({type(error).__name__}); retrying in {wait}s "
+                  f"(attempt {attempt + 1} of {attempts})")
+            time.sleep(wait)
+
+
 def check_schema():
     """Fetch one row and make sure the fields we rely on still exist."""
-    response = SESSION.get(URL, params={"$limit": 1}, timeout=60)
-    response.raise_for_status()
-    sample = response.json()[0]
+    sample = get_json({"$limit": 1}, timeout=60)[0]
     missing = REQUIRED_FIELDS - set(sample)
     if missing:
         print(f"The API is missing fields this script expects: {sorted(missing)}")
@@ -83,9 +108,7 @@ def extract():
     rows, offset = [], 0
     while True:
         params = {"$where": where, "$order": "license_id", "$limit": PAGE_SIZE, "$offset": offset}
-        response = SESSION.get(URL, params=params, timeout=120)
-        response.raise_for_status()
-        batch = response.json()
+        batch = get_json(params)
         if not batch:
             break
         rows.extend(batch)
@@ -111,7 +134,7 @@ def to_date(value):
 
 
 def transform(rows):
-    """Pick out the columns we query often; keep the full record in raw."""
+    """Pick out the columns the dbt models use. The full record stays on disk."""
     return [
         {
             "license_id": r["license_id"],
@@ -130,7 +153,6 @@ def transform(rows):
             "license_status_change_date": to_date(r.get("license_status_change_date")),
             "latitude": to_float(r.get("latitude")),
             "longitude": to_float(r.get("longitude")),
-            "raw": Jsonb(r),
         }
         for r in rows
     ]
@@ -154,7 +176,6 @@ create table if not exists raw_business_licenses (
     license_status_change_date  date,
     latitude                    double precision,
     longitude                   double precision,
-    raw                         jsonb,
     loaded_at                   timestamptz default now()
 );
 """
@@ -164,24 +185,34 @@ COLUMNS = [
     "doing_business_as_name", "address", "zip_code", "license_description",
     "business_activity", "application_type", "license_start_date",
     "expiration_date", "license_status", "license_status_change_date",
-    "latitude", "longitude", "raw",
+    "latitude", "longitude",
 ]
+UPDATABLE = [c for c in COLUMNS if c != "license_id"]
+
+# Drops the full JSON copy that used to live in "raw". It was most of the
+# table's size and pushed Supabase past its free 500 MB. CASCADE also drops
+# the dbt views built on it; dbt build recreates them after the loaders run.
+MIGRATE = "alter table raw_business_licenses drop column if exists raw cascade;"
 
 # On a re-run, refresh every column except the key, so status changes
-# (like a license being cancelled) are picked up.
+# (like a license being cancelled) are picked up. Rows are only rewritten when
+# something changed: an UPDATE makes Postgres write a whole new copy of the
+# row, so rewriting unchanged rows every day would waste space.
 UPSERT = f"""
 insert into raw_business_licenses ({", ".join(COLUMNS)})
 values ({", ".join(f"%({c})s" for c in COLUMNS)})
 on conflict (license_id) do update set
-    {", ".join(f"{c} = excluded.{c}" for c in COLUMNS if c != "license_id")},
-    loaded_at = now();
+    {", ".join(f"{c} = excluded.{c}" for c in UPDATABLE)},
+    loaded_at = now()
+where ({", ".join(f"raw_business_licenses.{c}" for c in UPDATABLE)})
+      is distinct from ({", ".join(f"excluded.{c}" for c in UPDATABLE)});
 """
-
 
 def load(records):
     with psycopg.connect(DATABASE_URL) as conn:
         with conn.cursor() as cur:
             cur.execute(CREATE_TABLE)
+            cur.execute(MIGRATE)
             cur.executemany(UPSERT, records)
             cur.execute("select count(*) from raw_business_licenses")
             print(f"Rows in raw_business_licenses: {cur.fetchone()[0]}")
