@@ -78,7 +78,9 @@ flowchart LR
 | Intermediate | `int_spot_osm_match` | spot | Matches each spot to its OpenStreetMap place (within 150 m, sharing a name word) |
 | Mart | `dim_facilities` | inspected location | Latest inspection per licensed food location citywide |
 | Mart | **`dim_spots`** | spot | Coordinates, license status, latest inspection and hours for every spot |
+| Mart | `dim_new_places` | licensed location | Cafés and bakeries near the spots that passed their city license inspection in the last 90 days |
 | API | **`public.spots`** | spot | **What the website reads:** the app's columns from `dim_spots`, read-only through Supabase's Data API |
+| API | `public.new_places` | licensed location | The app's "New near you" list, read-only |
 
 Seeds: `spots` (the app's spots and notes), `spot_coordinates` (open-data geocodes), `spot_hours_rules` (posted park hours), `spot_match_address_overrides` (hand-checked exceptions, each with a reason).
 
@@ -100,7 +102,9 @@ Seeds: `spots` (the app's spots and notes), `spot_coordinates` (open-data geocod
 
 **6. A public API that's read-only by construction.** The website calls Supabase directly with a publishable key, which anyone can see. So the API table has row level security with a read-only policy, the raw tables are locked down, and a dbt test fails the build if any table the API can reach lacks row level security. If Supabase is unreachable, the site falls back to the daily JSON export.
 
-**7. Built to run unattended within free tiers.** Loaders are idempotent (upserts keyed on the city's IDs), retry dropped connections and broken downloads with backoff, check the API's schema before loading, and only rewrite rows that changed. The full API responses stay on disk, not in the database, which keeps it within Supabase's free 500 MB.
+**7. "New near you" from inspections, not reviews.** Chicago inspects every new food business before it opens. A passed `LICENSE` inspection in the last 90 days is the earliest public sign a café is opening, often before it shows up anywhere else. The city files most cafés as `RESTAURANT`, so restaurants count only when their name says café, coffee, bakery and the like.
+
+**8. Built to run unattended within free tiers.** Loaders are idempotent (upserts keyed on the city's IDs), retry dropped connections and broken downloads with backoff, check the API's schema before loading, and only rewrite rows that changed. The full API responses stay on disk, not in the database, which keeps it within Supabase's free 500 MB.
 
 ---
 
@@ -168,5 +172,4 @@ city-reps/
 
 ## What's next
 
-- "New near you": surface newly licensed cafés from the daily license data
 - Live CTA train arrivals for each pick

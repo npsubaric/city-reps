@@ -1,6 +1,32 @@
 version: 2
 
 models:
+  - name: dim_new_places
+    description: >
+      Cafés and bakeries near the spots that passed their city license
+      inspection in the last 90 days, minus places already in the app.
+      Feeds the app's "New near you" list.
+    columns:
+      - name: license_no
+        tests:
+          - unique
+          - not_null
+      - name: name
+        tests:
+          - not_null
+      - name: kind
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['cafe', 'bakery']
+      - name: license_passed_on
+        description: Date of the latest passed LICENSE or LICENSE RE-INSPECTION.
+        tests:
+          - not_null
+      - name: lat
+        tests:
+          - not_null
+
   - name: dim_facilities
     description: One row per licensed location, with its latest inspection.
     columns:

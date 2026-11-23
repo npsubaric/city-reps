@@ -142,6 +142,8 @@ form{display:flex;flex-direction:column;gap:12px}
 .toast{font-size:14px;color:var(--ok);min-height:1.2em}
 .log{display:flex;flex-direction:column}
 .entry{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.newp .nm{flex:1;min-width:0} .newp .n{font-weight:600;font-size:15px} .newp .m{font-size:13px;color:var(--muted);margin-top:2px}
+.newp .r{display:flex;flex-direction:column;align-items:flex-end;gap:2px;font-size:13px;white-space:nowrap} .newp .r a{color:var(--blue-ink);font-weight:600}
 .entry .dt{font-family:var(--mono);font-size:12px;color:var(--muted);width:74px;flex:none}
 .entry .what{flex:1;min-width:0}
 .entry .ty{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
@@ -200,6 +202,12 @@ form{display:flex;flex-direction:column;gap:12px}
     <div class="results" id="results"></div>
     <div class="acts"><button type="button" id="shuffle">Show different options</button></div>
     <div class="tip" id="tip"></div>
+  </section>
+
+  <section class="section" aria-labelledby="newH" id="newSec" hidden>
+    <h2 id="newH">New near you</h2>
+    <div class="sub">Cafés and bakeries within 2 miles that passed their city license inspection in the last 90 days, from Chicago's food inspection data. Newly licensed can also mean a new owner.</div>
+    <div id="newList"></div>
   </section>
 
   <section class="section" aria-labelledby="mapH" id="mapSec">
@@ -622,7 +630,7 @@ async function save(rep){
   reps.push(rep); if(!repStore.save(reps)) $("notice").hidden=false; renderAll(); return true;
 }
 
-function renderAll(){ renderTracker(); renderResults(); renderMap(); renderList(); }
+function renderAll(){ renderTracker(); renderResults(); renderMap(); renderList(); renderNew(); }
 
 document.addEventListener("submit",async e=>{
   e.preventDefault();
@@ -667,19 +675,41 @@ function toSpot(r){
     moods:r.moods||[], free:!!r.is_free, out:!!r.is_outdoors, work:!!r.good_for_work,
     min:r.time_needed||"quick", hours:r.hours_week||null, hoursSrc:r.hours_source||null, note:r.note||""};
 }
-async function loadSpots(){
+// GET one of the read-only API tables; null if Supabase isn't configured or doesn't answer
+async function supabaseGet(table){
   const cfg = window.CITY_REPS_CONFIG || {};
-  if(cfg.supabaseUrl && cfg.supabaseKey){
-    try{
-      const headers = {apikey:cfg.supabaseKey};
-      if(cfg.supabaseKey.startsWith("eyJ")) headers.Authorization = `Bearer ${cfg.supabaseKey}`; // legacy anon key
-      const res = await fetch(`${cfg.supabaseUrl}/rest/v1/spots?select=*`, {headers, signal:AbortSignal.timeout(8000)});
-      if(res.ok){ const rows = await res.json(); if(rows.length) return {rows, live:true, asOf:rows[0].refreshed_at}; }
-    }catch(_){}
-  }
+  if(!cfg.supabaseUrl || !cfg.supabaseKey) return null;
+  try{
+    const headers = {apikey:cfg.supabaseKey};
+    if(cfg.supabaseKey.startsWith("eyJ")) headers.Authorization = `Bearer ${cfg.supabaseKey}`; // legacy anon key
+    const res = await fetch(`${cfg.supabaseUrl}/rest/v1/${table}?select=*`, {headers, signal:AbortSignal.timeout(8000)});
+    return res.ok ? await res.json() : null;
+  }catch(_){ return null; }
+}
+async function loadSpots(){
+  const rows = await supabaseGet("spots");
+  if(rows && rows.length) return {rows, live:true, asOf:rows[0].refreshed_at};
   const res = await fetch("dim_spots.json", {cache:"no-cache"});
   if(!res.ok) throw new Error(`backup ${res.status}`);
   return {rows:(await res.json()).spots, live:false};
+}
+// "New near you": newly licensed cafés and bakeries (public.new_places).
+// Live only; the section stays hidden if Supabase doesn't answer.
+let NEW = [];
+async function loadNewPlaces(){
+  const rows = await supabaseGet("new_places");
+  NEW = (rows||[]).map(r=>({name:r.name, addr:r.address, kind:r.kind, lat:r.lat, lng:r.lon, on:r.license_passed_on}));
+  renderNew();
+}
+function renderNew(){
+  const near = NEW.map(p=>({...p, mi:miles(p)})).filter(p=>p.mi<=2).sort((a,b)=>a.mi-b.mi).slice(0,6);
+  $("newSec").hidden = !near.length;
+  $("newList").innerHTML = near.map(p=>`
+    <div class="entry newp"><div class="nm">
+      <div class="n">${esc(p.name)}</div>
+      <div class="m">${esc(KIND_LABEL[p.kind]||"Café")} · ${esc(p.addr)} · licensed ${esc(fmt(p.on,{month:"short",day:"numeric"}))}</div></div>
+      <div class="r"><b>${p.mi.toFixed(1)} mi</b><a href="${mapsUrl(p)}" target="_blank" rel="noopener">Directions</a></div>
+    </div>`).join("");
 }
 function sortHoods(){
   const near = {};
@@ -702,6 +732,7 @@ function showSource(data){
   sortHoods(); showSource(data);
   const saved = repStore.load(); if(saved===null) $("notice").hidden=false; else reps = saved;
   buildForm(); renderPicker(); renderDirectory(); renderAll();
+  loadNewPlaces();
   let lastTick=-1;
   setInterval(()=>{ const m=Math.floor(new Date().getMinutes()/10); if(m!==lastTick){ lastTick=m; renderPicker(); renderAll(); } },60000);
 })();
