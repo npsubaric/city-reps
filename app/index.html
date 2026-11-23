@@ -105,10 +105,11 @@ select,input[type=date],input[type=text],input[type=search]{font:inherit;color:v
 #map .dot.paid{fill:var(--blue-ink)} #map .dot.free{fill:var(--ok)}
 #map .vstar{fill:var(--red)}
 #map .ring{fill:none;stroke:var(--ink);vector-effect:non-scaling-stroke;stroke-width:2}
-#map .home{fill:var(--ink)} #map .homel{fill:var(--ink);font-family:var(--body);font-weight:700}
+#map .home{color:var(--red);stroke:var(--ink);stroke-width:1.6;stroke-linejoin:round} #map .homel{fill:var(--ink);font-family:var(--body);font-weight:700}
 #map .lab{fill:var(--ink);font-family:var(--body);font-weight:600;paint-order:stroke;stroke:var(--surface);stroke-width:3px;vector-effect:non-scaling-stroke}
 .maptools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .keyrow{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.keyrow .homekey{width:13px;height:13px;margin-right:4px;vertical-align:-2px;color:var(--red);stroke:var(--ink);stroke-width:2;stroke-linejoin:round}
 .keyrow i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
 .selcard{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:4px}
 .selcard[hidden]{display:none}
@@ -221,7 +222,7 @@ form{display:flex;flex-direction:column;gap:12px}
       <button type="button" id="setHome">Move home pin</button>
     </div>
     <div class="mapbox"><svg id="map" role="img" aria-label="Map of spots around West Town"></svg></div>
-    <div class="keyrow"><span><i style="background:var(--blue-ink)"></i>Café or bakery</span><span><i style="background:var(--ok)"></i>Free</span><span><i style="background:var(--red)"></i>Been there</span><span><i style="background:var(--ink);border-radius:2px"></i>Home</span></div>
+    <div class="keyrow"><span><i style="background:var(--blue-ink)"></i>Café or bakery</span><span><i style="background:var(--ok)"></i>Free</span><span><i style="background:var(--red)"></i>Been there</span><span><svg class="homekey" aria-hidden="true"><use href="#star"/></svg>Home</span></div>
     <div class="selcard" id="selCard" hidden></div>
   </section>
 
@@ -506,8 +507,8 @@ function renderMap(){
       (s.id===selId?`<circle class="ring" cx="${x}" cy="${y}" r="${r*2}"/>`:"")+`</g>`);
   }
   if(selId && showLabels){ const s=SPOT[selId]; parts.push(`<text class="lab" x="${X(s.lng)+r*2.4}" y="${Y(s.lat)+fs*0.35}" font-size="${fs}">${esc(s.name)}</text>`); }
-  const hx=X(home.lng), hy=Y(home.lat), hs=r*1.8;
-  parts.push(`<rect class="home" x="${hx-hs/2}" y="${hy-hs/2}" width="${hs}" height="${hs}" rx="${hs*0.15}"/><text class="homel" x="${hx+hs*0.8}" y="${hy-hs*0.6}" font-size="${fs}">Home</text>`);
+  const hx=X(home.lng), hy=Y(home.lat), hs=r*4.2;
+  parts.push(`<use href="#star" class="home" x="${hx-hs/2}" y="${hy-hs/2}" width="${hs}" height="${hs}"/><text class="homel" x="${hx+hs*0.55}" y="${hy-hs*0.25}" font-size="${fs}">Home</text>`);
   const svg=$("map"); svg.setAttribute("viewBox",`${vx} ${vy} ${vw} ${vh}`); svg.innerHTML=parts.join("");
   svg.classList.toggle("setting",settingHome);
   $("setHome").classList.toggle("on",settingHome);
