@@ -1,15 +1,11 @@
-Welcome to your new dbt project!
+# city_reps_dbt
 
-### Using the starter project
+The dbt project for City Reps. See the [main README](../README.md) for the architecture, models, design decisions and how to run it.
 
-Try running the following commands:
-- dbt run
-- dbt test
+Quick commands, from this folder:
 
-
-### Resources:
-- Learn more about dbt [in the docs](https://docs.getdbt.com/docs/introduction)
-- Check out [Discourse](https://discourse.getdbt.com/) for commonly asked questions and answers
-- Join the [chat](https://community.getdbt.com/) on Slack for live discussions and support
-- Find [dbt events](https://events.getdbt.com) near you
-- Check out [the blog](https://blog.getdbt.com/) for the latest news on dbt's development and best practices
+```bash
+dbt build                      # build every seed and model, and run every test
+dbt build -s +dim_spots        # dim_spots and everything it depends on
+dbt docs generate && dbt docs serve   # browsable docs with a lineage graph
+```
