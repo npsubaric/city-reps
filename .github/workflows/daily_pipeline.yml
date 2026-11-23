@@ -1,0 +1,67 @@
+# Runs the whole City Reps pipeline once a day:
+# load the city's data into Supabase, then rebuild and test every dbt model.
+# Also keeps the free Supabase project active (it pauses after ~a week idle).
+
+name: Daily pipeline
+
+on:
+  schedule:
+    # 11:17 UTC = 5:17 AM Chicago (CST) / 6:17 AM (CDT). Off the hour, because
+    # GitHub delays scheduled runs that start exactly on the hour.
+    - cron: "17 11 * * *"
+  # Adds a "Run workflow" button in the Actions tab for manual runs
+  workflow_dispatch:
+
+# Never let two runs overlap
+concurrency:
+  group: daily-pipeline
+  cancel-in-progress: false
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      SUPABASE_HOST: ${{ secrets.SUPABASE_HOST }}
+      SUPABASE_USER: ${{ secrets.SUPABASE_USER }}
+      SUPABASE_PASSWORD: ${{ secrets.SUPABASE_PASSWORD }}
+
+    steps:
+      - name: Check secrets are set
+        run: |
+          for s in DATABASE_URL SUPABASE_HOST SUPABASE_USER SUPABASE_PASSWORD; do
+            if [ -z "${!s}" ]; then
+              echo "::error::$s is not set. Add it under Settings > Secrets and variables > Actions."
+              exit 1
+            fi
+          done
+
+      - name: Check out the code
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Turn off dbt State
+        # dbt 1.12 ships with dbt State, which tries to sign in through a browser.
+        # A scheduled run has no browser, so switch it off.
+        run: |
+          mkdir -p ~/.dbt
+          echo "manage_state: false" > ~/.dbt/user_settings.yml
+
+      - name: Load food inspections
+        run: python ingestion/load_inspections.py
+
+      - name: Load business licenses
+        run: python ingestion/load_business_licenses.py
+
+      - name: Build and test dbt models
+        working-directory: city_reps_dbt
+        run: dbt build

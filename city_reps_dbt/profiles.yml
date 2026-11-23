@@ -8,5 +8,6 @@ city_reps_dbt:
       password: "{{ env_var('SUPABASE_PASSWORD') }}"
       port: 5432
       dbname: postgres
-      schema: analytics
+      # analytics by default; CI sets DBT_SCHEMA=ci so PR checks never touch real tables
+      schema: "{{ env_var('DBT_SCHEMA', 'analytics') }}"
       threads: 4

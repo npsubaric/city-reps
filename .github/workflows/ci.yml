@@ -1,0 +1,59 @@
+# Checks every pull request before it's merged.
+# Builds and tests all dbt models in a separate "ci" schema, reading the same
+# raw tables, so a broken model or failing test shows up on the PR and the
+# real analytics tables are never touched.
+
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+
+# A newer push to the same PR cancels the older check
+concurrency:
+  group: ci-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  dbt:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      SUPABASE_HOST: ${{ secrets.SUPABASE_HOST }}
+      SUPABASE_USER: ${{ secrets.SUPABASE_USER }}
+      SUPABASE_PASSWORD: ${{ secrets.SUPABASE_PASSWORD }}
+      DBT_SCHEMA: ci
+
+    steps:
+      - name: Check secrets are set
+        run: |
+          for s in SUPABASE_HOST SUPABASE_USER SUPABASE_PASSWORD; do
+            if [ -z "${!s}" ]; then
+              echo "::error::$s is not set. Add it under Settings > Secrets and variables > Actions."
+              exit 1
+            fi
+          done
+
+      - name: Check out the code
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Turn off dbt State
+        run: |
+          mkdir -p ~/.dbt
+          echo "manage_state: false" > ~/.dbt/user_settings.yml
+
+      - name: Check Python files compile
+        run: python -m py_compile ingestion/*.py
+
+      - name: Build and test dbt models in the ci schema
+        working-directory: city_reps_dbt
+        run: dbt build
