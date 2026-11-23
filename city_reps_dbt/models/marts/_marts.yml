@@ -41,3 +41,11 @@ models:
           - accepted_values:
               arguments:
                 values: ['current', 'on_file', 'cancelled', 'not_found', 'not_applicable']
+      - name: last_inspection_date
+        description: Date of the latest food inspection for the matched license (inspections since 2024).
+      - name: last_inspection_result
+        description: Result of that inspection, e.g. PASS, PASS W/ CONDITIONS, FAIL, OUT OF BUSINESS.
+      - name: inspector_marked_closed
+        description: True when the latest inspection result is OUT OF BUSINESS.
+        tests:
+          - not_null

@@ -28,10 +28,11 @@ COLUMNS = [
     "lat", "lon", "coord_source",
     "license_no", "license_business_name", "match_method",
     "license_expiration_date", "license_state",
+    "last_inspection_date", "last_inspection_result", "inspector_marked_closed",
 ]
 
 ATTRIBUTION = [
-    "City of Chicago open data: Business Licenses (r5kz-chrr)",
+    "City of Chicago open data: Business Licenses (r5kz-chrr), Food Inspections (4ijn-s7e5)",
     "US Census Geocoder (public domain)",
     "© OpenStreetMap contributors, ODbL (spots with coord_source = openstreetmap)",
 ]
