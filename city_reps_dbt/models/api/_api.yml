@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: public_spots
+    description: >
+      The public, read-only API behind the City Reps website, published as the table "spots". Supabase serves
+      it at /rest/v1/spots. Row level security allows reading only.
+    columns:
+      - name: spot_id
+        tests:
+          - unique
+          - not_null
+      - name: lat
+        tests:
+          - not_null
+      - name: lon
+        tests:
+          - not_null

@@ -180,6 +180,18 @@ create table if not exists raw_business_licenses (
 );
 """
 
+# Raw tables live in the public schema, which Supabase's Data API exposes.
+# Row level security with no policies means the public API key can't read
+# or change them. The pipeline connects as the table owner, which RLS skips.
+LOCK_DOWN = """
+alter table raw_business_licenses enable row level security;
+do $$ begin
+    if exists (select from pg_roles where rolname = 'anon') then
+        revoke all on raw_business_licenses from anon, authenticated;
+    end if;
+end $$;
+"""
+
 COLUMNS = [
     "license_id", "license_number", "account_number", "legal_name",
     "doing_business_as_name", "address", "zip_code", "license_description",
@@ -213,6 +225,7 @@ def load(records):
         with conn.cursor() as cur:
             cur.execute(CREATE_TABLE)
             cur.execute(MIGRATE)
+            cur.execute(LOCK_DOWN)
             cur.executemany(UPSERT, records)
             cur.execute("select count(*) from raw_business_licenses")
             print(f"Rows in raw_business_licenses: {cur.fetchone()[0]}")

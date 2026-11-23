@@ -2,7 +2,9 @@
 
 **A data pipeline behind a Chicago "where should I work from today?" app for remote workers.**
 
-City Reps is a small app that helps me get out of my apartment: it picks a café, library, park or bookstore near me based on my mood, the time and the weather, and tracks a "never miss twice" streak. This repo is the data engineering behind it. Every day it loads the City of Chicago's open data, matches it to the app's 74 hand-picked spots, and builds one tested table the app reads: `dim_spots`.
+City Reps is a small app that helps me get out of my apartment: it picks a café, library, park or bookstore near me based on my mood, the time and the weather, and tracks a "never miss twice" streak. This repo is the data engineering behind it. Every day it loads the City of Chicago's open data and OpenStreetMap, matches them to the app's 74 hand-picked spots, and builds tested tables in Supabase. The website reads them live.
+
+**Live app:** [npsubaric.github.io/city-reps](https://npsubaric.github.io/city-reps/)
 
 Built by [Nikolas Subaric](https://github.com/npsubaric), a data engineer in Chicago.
 
@@ -17,20 +19,23 @@ flowchart LR
         B[Chicago Business Licenses API]
         C[City Reps spots<br/>seeds/spots.csv]
         D[US Census Geocoder<br/>+ OpenStreetMap]
+        O[OpenStreetMap<br/>Overpass API]
     end
 
     subgraph Ingestion [Python]
         E[load_inspections.py]
         F[load_business_licenses.py]
         G[geocode_spots.py]
+        P[load_osm_places.py]
     end
 
     subgraph Supabase [Supabase Postgres]
         H[(raw_inspections)]
         I[(raw_business_licenses)]
         J[(spots +<br/>spot_coordinates)]
+        Q[(raw_osm_places)]
         subgraph dbt
-            K[staging] --> L[intermediate] --> M[marts]
+            K[staging] --> L[intermediate] --> M[marts] --> R[public.spots<br/>read-only API]
         end
     end
 
@@ -38,11 +43,12 @@ flowchart LR
     B --> F --> I
     C --> J
     D --> G --> J
-    H & I & J --> K
-    M --> N[dim_spots<br/>→ City Reps app]
+    O --> P --> Q
+    H & I & J & Q --> K
+    R --> N[City Reps website<br/>GitHub Pages]
 ```
 
-**Stack:** Python · PostgreSQL (Supabase) · dbt Core · GitHub Actions · built entirely in GitHub Codespaces
+**Stack:** Python · PostgreSQL (Supabase) · dbt Core · GitHub Actions · GitHub Pages · built entirely in GitHub Codespaces
 
 ---
 
@@ -54,6 +60,8 @@ flowchart LR
 | [Chicago Food Inspections](https://data.cityofchicago.org/d/4ijn-s7e5) | Health inspections for every food establishment | City of Chicago open data |
 | [US Census Geocoder](https://geocoding.geo.census.gov/) | Coordinates for street addresses | Public domain |
 | [OpenStreetMap](https://www.openstreetmap.org/) via Nominatim | Coordinates for places without a street address | © OpenStreetMap contributors, [ODbL](https://opendatacommons.org/licenses/odbl/) |
+| [OpenStreetMap](https://www.openstreetmap.org/) via Overpass | Opening hours | © OpenStreetMap contributors, [ODbL](https://opendatacommons.org/licenses/odbl/) |
+| Chicago Park District and City of Chicago | Posted hours for parks, the 606, Millennium Park and the Riverwalk (6 AM to 11 PM) | Public information |
 
 ---
 
@@ -63,14 +71,18 @@ flowchart LR
 | --- | --- | --- | --- |
 | Staging | `stg_inspections` | inspection | Cleans names, addresses and results; extracts license numbers |
 | Staging | `stg_business_licenses` | license term | Cleans the license data (one row per issue or renewal) |
+| Staging | `stg_osm_places` | OSM place | OpenStreetMap places that have opening hours |
 | Intermediate | `int_license_locations` | license | Latest term per license, with the address parsed into a house-number range and street |
 | Intermediate | `int_spot_license_match` | spot | Matches each spot to its business license |
+| Intermediate | `int_spot_coordinates` | spot | Best coordinates: the city's license location, else the open-data geocode |
+| Intermediate | `int_spot_osm_match` | spot | Matches each spot to its OpenStreetMap place (within 150 m, sharing a name word) |
 | Mart | `dim_facilities` | inspected location | Latest inspection per licensed food location citywide |
-| Mart | **`dim_spots`** | spot | **The app's table:** best coordinates and license status for every spot |
+| Mart | **`dim_spots`** | spot | Coordinates, license status, latest inspection and hours for every spot |
+| API | **`public.spots`** | spot | **What the website reads:** the app's columns from `dim_spots`, read-only through Supabase's Data API |
 
-Seeds: `spots` (the app's spots), `spot_coordinates` (open-data geocodes), `spot_match_address_overrides` (hand-checked exceptions, each with a reason).
+Seeds: `spots` (the app's spots and notes), `spot_coordinates` (open-data geocodes), `spot_hours_rules` (posted park hours), `spot_match_address_overrides` (hand-checked exceptions, each with a reason).
 
-**40 data tests** cover unique and non-null keys, relationships between tables, allowed values for every status and source column, and a custom test that fails if any spot's coordinates fall outside the app's neighborhoods.
+**63 data tests** cover unique and non-null keys, relationships between tables, allowed values for every status and source column, and custom tests that fail if any spot's coordinates fall outside the app's neighborhoods, if any hours are malformed, or if any table the public API can reach is missing row level security. The opening-hours parser has its own Python unit tests.
 
 ---
 
@@ -84,7 +96,11 @@ Seeds: `spots` (the app's spots), `spot_coordinates` (open-data geocodes), `spot
 
 **4. Overrides with reasons.** The few cases rules can't handle go in a seed file with a required explanation. Caffè Umbria's public address is 2545 W Armitage, but the city files its license at 2535, in the same building.
 
-**5. Built to run unattended within free tiers.** Loaders are idempotent (upserts keyed on the city's IDs), retry dropped connections and broken downloads with backoff, check the API's schema before loading, and only rewrite rows that changed. The full API responses stay on disk, not in the database, which keeps it within Supabase's free 500 MB.
+**5. Hours from open data, honestly.** Opening hours come from OpenStreetMap, whose hours are written in a small language of their own (`Mo-Fr 07:00-15:00; Sa,Su 08:00-14:00`). The loader parses the common forms into a simple week; anything it can't read confidently (holidays, seasons, "sunrise") stays unparsed, and the app says "Check hours" rather than guessing. Parks use their posted hours instead.
+
+**6. A public API that's read-only by construction.** The website calls Supabase directly with a publishable key, which anyone can see. So the API table has row level security with a read-only policy, the raw tables are locked down, and a dbt test fails the build if any table the API can reach lacks row level security. If Supabase is unreachable, the site falls back to the daily JSON export.
+
+**7. Built to run unattended within free tiers.** Loaders are idempotent (upserts keyed on the city's IDs), retry dropped connections and broken downloads with backoff, check the API's schema before loading, and only rewrite rows that changed. The full API responses stay on disk, not in the database, which keeps it within Supabase's free 500 MB.
 
 ---
 
@@ -92,8 +108,9 @@ Seeds: `spots` (the app's spots), `spot_coordinates` (open-data geocodes), `spot
 
 | Workflow | When | What it does |
 | --- | --- | --- |
-| [Daily pipeline](.github/workflows/daily_pipeline.yml) | Every day, 11:17 UTC (+ manual button) | Runs both loaders, then `dbt build` |
-| [CI](.github/workflows/ci.yml) | Every pull request | Builds and tests every model in a separate `ci` schema, so checks never touch production tables |
+| [Daily pipeline](.github/workflows/daily_pipeline.yml) | Every day, 11:17 UTC (+ manual button) | Runs the loaders, then `dbt build`, then commits the JSON export if the data changed |
+| [Deploy website](.github/workflows/pages.yml) | After each pipeline run, and on changes to the app | Publishes `app/` and the backup JSON to GitHub Pages |
+| [CI](.github/workflows/ci.yml) | Every pull request | Runs the Python tests, then builds and tests every model in separate `ci` and `ci_public` schemas, so checks never touch production tables |
 
 Every change goes through a pull request and must pass CI before merging.
 
@@ -110,6 +127,8 @@ Every change goes through a pull request and must pass CI before merging.
 | `SUPABASE_USER` | e.g. `postgres.abcdefgh` |
 | `SUPABASE_PASSWORD` | your database password |
 
+For the website, also add two Actions **variables** (Settings > Secrets and variables > Actions > Variables), from Supabase's Project Settings > API: `SUPABASE_URL` (the project URL) and `SUPABASE_PUBLISHABLE_KEY` (the publishable or anon key, which is safe in a browser). Then turn on Pages with Source: GitHub Actions.
+
 **2. Install and run**, from the repo root:
 
 ```bash
@@ -118,6 +137,7 @@ mkdir -p ~/.dbt && echo "manage_state: false" > ~/.dbt/user_settings.yml   # dbt
 
 python ingestion/load_inspections.py
 python ingestion/load_business_licenses.py
+python ingestion/load_osm_places.py
 cd city_reps_dbt && dbt build
 ```
 
@@ -129,14 +149,17 @@ cd city_reps_dbt && dbt build
 
 ```
 city-reps/
-├── .github/workflows/      daily pipeline + CI
-├── ingestion/              Python loaders and the geocoder
+├── .github/workflows/      daily pipeline, website deploy, CI
+├── app/                    the City Reps website (one HTML file)
+├── export/                 daily JSON export (the website's backup copy)
+├── ingestion/              Python loaders, geocoder, opening-hours parser
 ├── city_reps_dbt/
 │   ├── models/
 │   │   ├── staging/        cleaned copies of the raw tables
 │   │   ├── intermediate/   license locations, spot matching
-│   │   └── marts/          dim_spots, dim_facilities
-│   ├── seeds/              spots, coordinates, overrides
+│   │   ├── marts/          dim_spots, dim_facilities
+│   │   └── api/            public.spots, the website's read-only table
+│   ├── seeds/              spots, coordinates, park hours, overrides
 │   └── tests/              custom data tests
 └── requirements.txt
 ```
@@ -145,6 +168,5 @@ city-reps/
 
 ## What's next
 
-- Connect the City Reps app to `dim_spots`
 - "New near you": surface newly licensed cafés from the daily license data
 - Live CTA train arrivals for each pick

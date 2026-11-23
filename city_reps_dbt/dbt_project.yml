@@ -22,3 +22,11 @@ models:
       +materialized: view
     marts:
       +materialized: table
+    api:
+      +materialized: table
+
+seeds:
+  city_reps_dbt:
+    # Seeds are small, so rebuild them from scratch every run. That way adding
+    # a column to a CSV never needs a manual --full-refresh.
+    +full_refresh: true

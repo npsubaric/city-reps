@@ -1,0 +1,61 @@
+# Publishes the City Reps website (app/) to GitHub Pages.
+#
+# The page reads spots live from Supabase (public.spots). The project URL and
+# publishable key come from repository variables (not secrets: the browser
+# needs them, and row level security keeps the key read-only). The daily
+# export ships alongside as a backup the page uses if Supabase can't be reached.
+
+name: Deploy website
+
+on:
+  push:
+    branches: [main]
+    paths: ["app/**", "export/dim_spots.json", ".github/workflows/pages.yml"]
+  # The daily pipeline's export commit is pushed with GITHUB_TOKEN, which
+  # doesn't trigger other workflows, so redeploy when the pipeline finishes
+  workflow_run:
+    workflows: ["Daily pipeline"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    env:
+      SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+      SUPABASE_PUBLISHABLE_KEY: ${{ vars.SUPABASE_PUBLISHABLE_KEY }}
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v5
+
+      - name: Assemble the site
+        run: |
+          mkdir -p _site
+          cp app/index.html _site/
+          cp export/dim_spots.json _site/
+          if [ -n "$SUPABASE_URL" ] && [ -n "$SUPABASE_PUBLISHABLE_KEY" ]; then
+            printf 'window.CITY_REPS_CONFIG = {supabaseUrl: "%s", supabaseKey: "%s"};\n' \
+              "${SUPABASE_URL%/}" "$SUPABASE_PUBLISHABLE_KEY" > _site/config.js
+          else
+            echo "::warning::SUPABASE_URL or SUPABASE_PUBLISHABLE_KEY isn't set, so the site will use the backup JSON. Add them under Settings > Secrets and variables > Actions > Variables."
+            echo "window.CITY_REPS_CONFIG = {};" > _site/config.js
+          fi
+
+      - name: Upload the site
+        uses: actions/upload-pages-artifact@v4
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -11,7 +11,8 @@ models:
   - name: dim_spots
     description: >
       One row per City Reps spot, with the best available coordinates and the
-      city's license status. This is the table the app reads.
+      city's license status, latest inspection and hours. models/api/public_spots
+      publishes the app's columns from it.
     columns:
       - name: spot_id
         tests:
@@ -49,3 +50,13 @@ models:
         description: True when the latest inspection result is OUT OF BUSINESS.
         tests:
           - not_null
+      - name: hours_week
+        description: >
+          7 days, Sunday first. Each day is [open, close] in decimal hours (a
+          close past 24 runs past midnight) or null for closed. Null overall
+          when no source has readable hours.
+      - name: hours_source
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['openstreetmap', 'park_district', 'city_of_chicago', 'public_street']

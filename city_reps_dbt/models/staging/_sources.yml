@@ -10,6 +10,11 @@ sources:
           Chicago Business Licenses (data.cityofchicago.org, r5kz-chrr), loaded by
           ingestion/load_business_licenses.py. Retail food and limited business
           licenses expiring on or after 2022-01-01.
+      - name: raw_osm_places
+        description: >
+          OpenStreetMap places with an opening_hours tag near the spots, loaded
+          by ingestion/load_osm_places.py from the Overpass API. Replaced with a
+          fresh snapshot on every run. © OpenStreetMap contributors, ODbL.
 
 models:
   - name: stg_inspections
@@ -35,3 +40,12 @@ models:
           - accepted_values:
               arguments:
                 values: ['AAI', 'AAC', 'REV', 'REA']
+
+  - name: stg_osm_places
+    description: One row per OpenStreetMap place with opening hours.
+    columns:
+      - name: osm_key
+        description: osm_type/osm_id, e.g. node/123456.
+        tests:
+          - unique
+          - not_null
