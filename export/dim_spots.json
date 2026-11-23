@@ -2,7 +2,8 @@
   "attribution": [
     "City of Chicago open data: Business Licenses (r5kz-chrr), Food Inspections (4ijn-s7e5)",
     "US Census Geocoder (public domain)",
-    "© OpenStreetMap contributors, ODbL (spots with coord_source = openstreetmap)"
+    "© OpenStreetMap contributors, ODbL (spots with coord_source or hours_source = openstreetmap)",
+    "Posted park hours: Chicago Park District and City of Chicago"
   ],
   "count": 74,
   "spots": [
@@ -14,6 +15,14 @@
       "kind": "trail",
       "is_free": true,
       "good_for_work": false,
+      "is_outdoors": true,
+      "moods": [
+        "move",
+        "recharge",
+        "people"
+      ],
+      "time_needed": "quick",
+      "note": "Elevated trail on an old rail line. Walk out and back from the Ashland trailhead.",
       "lat": 41.914385,
       "lon": -87.667881,
       "coord_source": "census",
@@ -24,7 +33,39 @@
       "license_state": "not_applicable",
       "last_inspection_date": null,
       "last_inspection_result": null,
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ]
+      ],
+      "hours_source": "park_district",
+      "osm_key": null
     },
     {
       "spot_id": "after-words",
@@ -34,6 +75,13 @@
       "kind": "books",
       "is_free": true,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "explore",
+        "recharge"
+      ],
+      "time_needed": "couple",
+      "note": "New and used bookstore with a big basement.",
       "lat": 41.890772,
       "lon": -87.627041,
       "coord_source": "city_license",
@@ -44,7 +92,10 @@
       "license_state": "current",
       "last_inspection_date": null,
       "last_inspection_result": null,
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": null,
+      "hours_source": null,
+      "osm_key": null
     },
     {
       "spot_id": "altar",
@@ -54,6 +105,13 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "recharge",
+        "focus"
+      ],
+      "time_needed": "quick",
+      "note": "Coffee bar inside a home goods shop on Chicago Ave.",
       "lat": 41.896063,
       "lon": -87.674493,
       "coord_source": "city_license",
@@ -64,7 +122,39 @@
       "license_state": "current",
       "last_inspection_date": "2025-12-16",
       "last_inspection_result": "PASS W/ CONDITIONS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          8.0,
+          17.0
+        ],
+        [
+          7.0,
+          19.0
+        ],
+        [
+          7.0,
+          19.0
+        ],
+        [
+          7.0,
+          19.0
+        ],
+        [
+          7.0,
+          19.0
+        ],
+        [
+          7.0,
+          19.0
+        ],
+        [
+          8.0,
+          18.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "node/12842665501"
     },
     {
       "spot_id": "arwa",
@@ -74,6 +164,13 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "explore",
+        "people"
+      ],
+      "time_needed": "quick",
+      "note": "Yemeni coffee house on Milwaukee.",
       "lat": 41.917041,
       "lon": -87.687534,
       "coord_source": "city_license",
@@ -84,7 +181,39 @@
       "license_state": "current",
       "last_inspection_date": "2026-10-20",
       "last_inspection_result": "PASS W/ CONDITIONS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          8.0,
+          22.0
+        ],
+        [
+          7.0,
+          22.0
+        ],
+        [
+          7.0,
+          22.0
+        ],
+        [
+          7.0,
+          22.0
+        ],
+        [
+          7.0,
+          22.0
+        ],
+        [
+          7.0,
+          25.0
+        ],
+        [
+          7.0,
+          25.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "node/11289313459"
     },
     {
       "spot_id": "bn-wicker",
@@ -94,6 +223,13 @@
       "kind": "books",
       "is_free": true,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "recharge",
+        "explore"
+      ],
+      "time_needed": "quick",
+      "note": "Barnes & Noble in the old bank building at Milwaukee, North, and Damen.",
       "lat": 41.910608,
       "lon": -87.677577,
       "coord_source": "city_license",
@@ -104,7 +240,39 @@
       "license_state": "current",
       "last_inspection_date": null,
       "last_inspection_result": null,
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          11.0,
+          19.0
+        ],
+        [
+          10.0,
+          21.0
+        ],
+        [
+          10.0,
+          21.0
+        ],
+        [
+          10.0,
+          21.0
+        ],
+        [
+          10.0,
+          21.0
+        ],
+        [
+          10.0,
+          21.0
+        ],
+        [
+          10.0,
+          21.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "node/12299945973"
     },
     {
       "spot_id": "bru",
@@ -114,6 +282,13 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "people",
+        "focus"
+      ],
+      "time_needed": "quick",
+      "note": "Coffee, breakfast, and desserts on Milwaukee.",
       "lat": 41.909809,
       "lon": -87.676803,
       "coord_source": "city_license",
@@ -124,7 +299,10 @@
       "license_state": "current",
       "last_inspection_date": "2025-08-26",
       "last_inspection_result": "PASS W/ CONDITIONS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": null,
+      "hours_source": null,
+      "osm_key": null
     },
     {
       "spot_id": "bwp-library",
@@ -134,6 +312,13 @@
       "kind": "library",
       "is_free": true,
       "good_for_work": true,
+      "is_outdoors": false,
+      "moods": [
+        "focus",
+        "recharge"
+      ],
+      "time_needed": "quick",
+      "note": "Bucktown-Wicker Park branch of the Chicago Public Library.",
       "lat": 41.912329,
       "lon": -87.680366,
       "coord_source": "census",
@@ -144,7 +329,39 @@
       "license_state": "not_applicable",
       "last_inspection_date": null,
       "last_inspection_result": null,
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          13.0,
+          17.0
+        ],
+        [
+          12.0,
+          20.0
+        ],
+        [
+          10.0,
+          18.0
+        ],
+        [
+          12.0,
+          20.0
+        ],
+        [
+          10.0,
+          18.0
+        ],
+        [
+          9.0,
+          17.0
+        ],
+        [
+          9.0,
+          17.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "way/112927533"
     },
     {
       "spot_id": "cafe-gimme",
@@ -154,6 +371,12 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "recharge"
+      ],
+      "time_needed": "quick",
+      "note": "Small café on Damen near Armitage.",
       "lat": 41.92018,
       "lon": -87.677563,
       "coord_source": "city_license",
@@ -164,7 +387,10 @@
       "license_state": "current",
       "last_inspection_date": "2026-07-13",
       "last_inspection_result": "PASS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": null,
+      "hours_source": null,
+      "osm_key": null
     },
     {
       "spot_id": "cafe-mustache",
@@ -174,6 +400,12 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "people"
+      ],
+      "time_needed": "quick",
+      "note": "Café by day and bar at night, on Milwaukee.",
       "lat": 41.923356,
       "lon": -87.69785,
       "coord_source": "city_license",
@@ -184,7 +416,10 @@
       "license_state": "current",
       "last_inspection_date": "2026-10-15",
       "last_inspection_result": "PASS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": null,
+      "hours_source": null,
+      "osm_key": null
     },
     {
       "spot_id": "calida",
@@ -194,6 +429,13 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": true,
+      "is_outdoors": false,
+      "moods": [
+        "focus",
+        "recharge"
+      ],
+      "time_needed": "quick",
+      "note": "Café on North Ave with breakfast tacos.",
       "lat": 41.909913,
       "lon": -87.714218,
       "coord_source": "city_license",
@@ -204,7 +446,10 @@
       "license_state": "current",
       "last_inspection_date": "2025-12-23",
       "last_inspection_result": "PASS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": null,
+      "hours_source": null,
+      "osm_key": null
     },
     {
       "spot_id": "candor",
@@ -214,6 +459,12 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "recharge"
+      ],
+      "time_needed": "quick",
+      "note": "Café on Division with a back patio.",
       "lat": 41.903169,
       "lon": -87.671645,
       "coord_source": "city_license",
@@ -224,7 +475,39 @@
       "license_state": "current",
       "last_inspection_date": "2025-07-21",
       "last_inspection_result": "PASS W/ CONDITIONS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          7.0,
+          17.0
+        ],
+        [
+          7.0,
+          17.0
+        ],
+        [
+          7.0,
+          17.0
+        ],
+        [
+          7.0,
+          17.0
+        ],
+        [
+          7.0,
+          17.0
+        ],
+        [
+          7.0,
+          17.0
+        ],
+        [
+          7.0,
+          17.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "node/6301631402"
     },
     {
       "spot_id": "center-order",
@@ -234,6 +517,13 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "explore",
+        "recharge"
+      ],
+      "time_needed": "quick",
+      "note": "Coffee shop and gift shop in one, on Grand.",
       "lat": 41.890868,
       "lon": -87.67075,
       "coord_source": "census",
@@ -244,7 +534,10 @@
       "license_state": "not_found",
       "last_inspection_date": null,
       "last_inspection_result": null,
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": null,
+      "hours_source": null,
+      "osm_key": null
     },
     {
       "spot_id": "chique",
@@ -254,6 +547,13 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": true,
+      "is_outdoors": false,
+      "moods": [
+        "focus",
+        "people"
+      ],
+      "time_needed": "quick",
+      "note": "Small café on Milwaukee in Logan Square.",
       "lat": 41.929868,
       "lon": -87.708484,
       "coord_source": "city_license",
@@ -264,7 +564,10 @@
       "license_state": "current",
       "last_inspection_date": null,
       "last_inspection_result": null,
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": null,
+      "hours_source": null,
+      "osm_key": null
     },
     {
       "spot_id": "chucherias",
@@ -274,6 +577,12 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "explore"
+      ],
+      "time_needed": "quick",
+      "note": "Café on Division with tropical drinks and brunch.",
       "lat": 41.902849,
       "lon": -87.693068,
       "coord_source": "city_license",
@@ -284,7 +593,10 @@
       "license_state": "current",
       "last_inspection_date": "2025-08-28",
       "last_inspection_result": "PASS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": null,
+      "hours_source": null,
+      "osm_key": null
     },
     {
       "spot_id": "city-lit",
@@ -294,6 +606,13 @@
       "kind": "books",
       "is_free": true,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "explore",
+        "recharge"
+      ],
+      "time_needed": "quick",
+      "note": "Independent bookstore on Kedzie Boulevard.",
       "lat": 41.927149,
       "lon": -87.707141,
       "coord_source": "city_license",
@@ -304,7 +623,10 @@
       "license_state": "current",
       "last_inspection_date": null,
       "last_inspection_result": null,
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": null,
+      "hours_source": null,
+      "osm_key": null
     },
     {
       "spot_id": "colao",
@@ -314,6 +636,13 @@
       "kind": "bakery",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "explore",
+        "people"
+      ],
+      "time_needed": "quick",
+      "note": "Puerto Rican bakery café on Paseo Boricua.",
       "lat": 41.903064,
       "lon": -87.69353,
       "coord_source": "city_license",
@@ -324,7 +653,36 @@
       "license_state": "current",
       "last_inspection_date": "2026-11-03",
       "last_inspection_result": "PASS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        null,
+        [
+          8.0,
+          15.0
+        ],
+        [
+          8.0,
+          15.0
+        ],
+        [
+          8.0,
+          15.0
+        ],
+        [
+          8.0,
+          15.0
+        ],
+        [
+          8.0,
+          15.0
+        ],
+        [
+          8.0,
+          15.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "node/4697800145"
     },
     {
       "spot_id": "colectivo",
@@ -334,6 +692,13 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": true,
+      "is_outdoors": false,
+      "moods": [
+        "focus",
+        "people"
+      ],
+      "time_needed": "quick",
+      "note": "Colectivo on Milwaukee in Logan Square.",
       "lat": 41.922194,
       "lon": -87.695972,
       "coord_source": "city_license",
@@ -344,7 +709,10 @@
       "license_state": "current",
       "last_inspection_date": "2026-10-14",
       "last_inspection_result": "PASS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": null,
+      "hours_source": null,
+      "osm_key": null
     },
     {
       "spot_id": "colectivo-wp",
@@ -354,6 +722,13 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": true,
+      "is_outdoors": false,
+      "moods": [
+        "focus",
+        "people"
+      ],
+      "time_needed": "quick",
+      "note": "Colectivo on Damen, just south of Division.",
       "lat": 41.903589,
       "lon": -87.677122,
       "coord_source": "city_license",
@@ -364,7 +739,10 @@
       "license_state": "current",
       "last_inspection_date": "2025-09-24",
       "last_inspection_result": "PASS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": null,
+      "hours_source": null,
+      "osm_key": null
     },
     {
       "spot_id": "cultural-center",
@@ -374,6 +752,14 @@
       "kind": "public",
       "is_free": true,
       "good_for_work": true,
+      "is_outdoors": false,
+      "moods": [
+        "explore",
+        "focus",
+        "people"
+      ],
+      "time_needed": "couple",
+      "note": "Free landmark building with a Tiffany dome, exhibits, and public seating.",
       "lat": 41.883281,
       "lon": -87.625068,
       "coord_source": "census",
@@ -384,7 +770,36 @@
       "license_state": "not_applicable",
       "last_inspection_date": null,
       "last_inspection_result": null,
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        null,
+        [
+          10.0,
+          18.0
+        ],
+        [
+          10.0,
+          18.0
+        ],
+        [
+          10.0,
+          18.0
+        ],
+        [
+          10.0,
+          18.0
+        ],
+        [
+          10.0,
+          18.0
+        ],
+        [
+          10.0,
+          18.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "node/5838821212"
     },
     {
       "spot_id": "discourse",
@@ -394,6 +809,12 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "explore"
+      ],
+      "time_needed": "quick",
+      "note": "Specialty coffee shop on Fulton with unusual lattes.",
       "lat": 41.886806,
       "lon": -87.651413,
       "coord_source": "census",
@@ -404,7 +825,39 @@
       "license_state": "not_found",
       "last_inspection_date": null,
       "last_inspection_result": null,
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          7.5,
+          16.5
+        ],
+        [
+          7.5,
+          16.5
+        ],
+        [
+          7.5,
+          16.5
+        ],
+        [
+          7.5,
+          16.5
+        ],
+        [
+          7.5,
+          16.5
+        ],
+        [
+          7.5,
+          16.5
+        ],
+        [
+          7.5,
+          16.5
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "node/12887004390"
     },
     {
       "spot_id": "dm-mothership",
@@ -414,6 +867,12 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "people"
+      ],
+      "time_needed": "quick",
+      "note": "The original Dark Matter café, on Western.",
       "lat": 41.894997,
       "lon": -87.686971,
       "coord_source": "city_license",
@@ -424,7 +883,39 @@
       "license_state": "current",
       "last_inspection_date": "2025-09-05",
       "last_inspection_result": "PASS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          7.0,
+          17.0
+        ],
+        [
+          7.0,
+          17.0
+        ],
+        [
+          7.0,
+          17.0
+        ],
+        [
+          7.0,
+          17.0
+        ],
+        [
+          7.0,
+          17.0
+        ],
+        [
+          7.0,
+          17.0
+        ],
+        [
+          7.0,
+          17.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "node/6284202956"
     },
     {
       "spot_id": "dm-soft-parade",
@@ -434,6 +925,12 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "move"
+      ],
+      "time_needed": "quick",
+      "note": "Small Dark Matter coffee bar on Grand.",
       "lat": 41.890703,
       "lon": -87.677559,
       "coord_source": "city_license",
@@ -444,7 +941,39 @@
       "license_state": "current",
       "last_inspection_date": "2025-11-10",
       "last_inspection_result": "PASS W/ CONDITIONS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          8.0,
+          12.0
+        ],
+        [
+          8.0,
+          12.0
+        ],
+        [
+          8.0,
+          12.0
+        ],
+        [
+          8.0,
+          12.0
+        ],
+        [
+          8.0,
+          12.0
+        ],
+        [
+          8.0,
+          12.0
+        ],
+        [
+          8.0,
+          12.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "way/209829321"
     },
     {
       "spot_id": "dm-star",
@@ -454,6 +983,13 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": true,
+      "is_outdoors": false,
+      "moods": [
+        "people",
+        "focus"
+      ],
+      "time_needed": "quick",
+      "note": "Dark Matter café on Chicago Ave, with murals and a patio.",
       "lat": 41.895598,
       "lon": -87.690161,
       "coord_source": "city_license",
@@ -464,7 +1000,10 @@
       "license_state": "current",
       "last_inspection_date": "2025-12-17",
       "last_inspection_result": "PASS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": null,
+      "hours_source": null,
+      "osm_key": null
     },
     {
       "spot_id": "drip",
@@ -474,6 +1013,12 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "people"
+      ],
+      "time_needed": "quick",
+      "note": "Coffee shop on Racine with inventive lattes.",
       "lat": 41.885157,
       "lon": -87.656933,
       "coord_source": "city_license",
@@ -484,7 +1029,39 @@
       "license_state": "on_file",
       "last_inspection_date": null,
       "last_inspection_result": null,
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          8.0,
+          14.0
+        ],
+        [
+          8.0,
+          16.0
+        ],
+        [
+          8.0,
+          16.0
+        ],
+        [
+          8.0,
+          16.0
+        ],
+        [
+          8.0,
+          16.0
+        ],
+        [
+          8.0,
+          16.0
+        ],
+        [
+          10.0,
+          18.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "node/11992882059"
     },
     {
       "spot_id": "eckhart",
@@ -494,6 +1071,13 @@
       "kind": "park",
       "is_free": true,
       "good_for_work": false,
+      "is_outdoors": true,
+      "moods": [
+        "recharge",
+        "move"
+      ],
+      "time_needed": "quick",
+      "note": "Park District park with a big lawn, shade trees, and benches.",
       "lat": 41.896233,
       "lon": -87.660755,
       "coord_source": "census",
@@ -504,7 +1088,39 @@
       "license_state": "not_applicable",
       "last_inspection_date": null,
       "last_inspection_result": null,
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ]
+      ],
+      "hours_source": "park_district",
+      "osm_key": "node/2359403112"
     },
     {
       "spot_id": "engine",
@@ -514,6 +1130,12 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "recharge"
+      ],
+      "time_needed": "quick",
+      "note": "Small coffee shop on Ashland, just south of Division.",
       "lat": 41.901812,
       "lon": -87.667307,
       "coord_source": "city_license",
@@ -524,7 +1146,39 @@
       "license_state": "on_file",
       "last_inspection_date": "2025-05-21",
       "last_inspection_result": "PASS W/ CONDITIONS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          7.0,
+          15.0
+        ],
+        [
+          7.0,
+          15.0
+        ],
+        [
+          7.0,
+          15.0
+        ],
+        [
+          7.0,
+          15.0
+        ],
+        [
+          7.0,
+          15.0
+        ],
+        [
+          7.0,
+          15.0
+        ],
+        [
+          7.0,
+          15.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "node/12059942361"
     },
     {
       "spot_id": "fulton-walk",
@@ -534,6 +1188,14 @@
       "kind": "walk",
       "is_free": true,
       "good_for_work": false,
+      "is_outdoors": true,
+      "moods": [
+        "explore",
+        "people",
+        "move"
+      ],
+      "time_needed": "quick",
+      "note": "Walk Randolph and Fulton from Halsted to Ogden. Restaurants, murals, people-watching.",
       "lat": 41.887285,
       "lon": -87.652579,
       "coord_source": "openstreetmap",
@@ -544,7 +1206,39 @@
       "license_state": "not_applicable",
       "last_inspection_date": null,
       "last_inspection_result": null,
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          0,
+          24
+        ],
+        [
+          0,
+          24
+        ],
+        [
+          0,
+          24
+        ],
+        [
+          0,
+          24
+        ],
+        [
+          0,
+          24
+        ],
+        [
+          0,
+          24
+        ],
+        [
+          0,
+          24
+        ]
+      ],
+      "hours_source": "public_street",
+      "osm_key": null
     },
     {
       "spot_id": "gallery-cafe",
@@ -554,6 +1248,12 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "focus"
+      ],
+      "time_needed": "quick",
+      "note": "Coffee shop on Milwaukee in River West.",
       "lat": 41.895133,
       "lon": -87.653907,
       "coord_source": "city_license",
@@ -564,7 +1264,10 @@
       "license_state": "current",
       "last_inspection_date": "2025-12-16",
       "last_inspection_result": "PASS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": null,
+      "hours_source": null,
+      "osm_key": null
     },
     {
       "spot_id": "garfield-cons",
@@ -574,6 +1277,13 @@
       "kind": "museum",
       "is_free": true,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "recharge",
+        "explore"
+      ],
+      "time_needed": "couple",
+      "note": "Large glass conservatory, warm inside year-round. Check its site for timed entry.",
       "lat": 41.887644,
       "lon": -87.716236,
       "coord_source": "census",
@@ -584,7 +1294,10 @@
       "license_state": "not_applicable",
       "last_inspection_date": null,
       "last_inspection_result": null,
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": null,
+      "hours_source": null,
+      "osm_key": null
     },
     {
       "spot_id": "gaslight",
@@ -594,6 +1307,12 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": true,
+      "is_outdoors": false,
+      "moods": [
+        "focus"
+      ],
+      "time_needed": "quick",
+      "note": "Coffee roastery on Milwaukee.",
       "lat": 41.924668,
       "lon": -87.699992,
       "coord_source": "city_license",
@@ -604,7 +1323,39 @@
       "license_state": "on_file",
       "last_inspection_date": "2026-07-27",
       "last_inspection_result": "PASS W/ CONDITIONS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          8.0,
+          17.0
+        ],
+        [
+          8.0,
+          17.0
+        ],
+        [
+          8.0,
+          17.0
+        ],
+        [
+          8.0,
+          17.0
+        ],
+        [
+          8.0,
+          17.0
+        ],
+        [
+          8.0,
+          17.0
+        ],
+        [
+          8.0,
+          17.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "node/2403040378"
     },
     {
       "spot_id": "goddess-bucktown",
@@ -614,6 +1365,12 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "focus"
+      ],
+      "time_needed": "quick",
+      "note": "Café and market on Damen.",
       "lat": 41.911971,
       "lon": -87.677352,
       "coord_source": "city_license",
@@ -624,7 +1381,39 @@
       "license_state": "current",
       "last_inspection_date": "2026-01-21",
       "last_inspection_result": "PASS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          7.0,
+          20.0
+        ],
+        [
+          7.0,
+          20.0
+        ],
+        [
+          7.0,
+          20.0
+        ],
+        [
+          7.0,
+          20.0
+        ],
+        [
+          7.0,
+          20.0
+        ],
+        [
+          7.0,
+          20.0
+        ],
+        [
+          7.0,
+          20.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "node/6291896890"
     },
     {
       "spot_id": "goddess-fulton",
@@ -634,6 +1423,12 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "people"
+      ],
+      "time_needed": "quick",
+      "note": "Café and market on Randolph.",
       "lat": 41.884249,
       "lon": -87.650264,
       "coord_source": "city_license",
@@ -644,7 +1439,39 @@
       "license_state": "current",
       "last_inspection_date": "2026-06-22",
       "last_inspection_result": "PASS W/ CONDITIONS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          7.0,
+          20.0
+        ],
+        [
+          7.0,
+          20.0
+        ],
+        [
+          7.0,
+          20.0
+        ],
+        [
+          7.0,
+          20.0
+        ],
+        [
+          7.0,
+          20.0
+        ],
+        [
+          7.0,
+          20.0
+        ],
+        [
+          7.0,
+          20.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "node/1657357234"
     },
     {
       "spot_id": "guillotine",
@@ -654,6 +1481,12 @@
       "kind": "bakery",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "explore"
+      ],
+      "time_needed": "quick",
+      "note": "Small bakery on Chicago Ave.",
       "lat": 41.895916,
       "lon": -87.670181,
       "coord_source": "city_license",
@@ -664,7 +1497,10 @@
       "license_state": "current",
       "last_inspection_date": "2026-05-28",
       "last_inspection_result": "PASS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": null,
+      "hours_source": null,
+      "osm_key": null
     },
     {
       "spot_id": "happy-thoughts",
@@ -674,6 +1510,12 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "people"
+      ],
+      "time_needed": "quick",
+      "note": "Small café on North Ave with a back patio.",
       "lat": 41.910203,
       "lon": -87.687871,
       "coord_source": "city_license",
@@ -684,7 +1526,10 @@
       "license_state": "on_file",
       "last_inspection_date": "2025-12-17",
       "last_inspection_result": "PASS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": null,
+      "hours_source": null,
+      "osm_key": null
     },
     {
       "spot_id": "heyday",
@@ -694,6 +1539,12 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "people"
+      ],
+      "time_needed": "quick",
+      "note": "Coffee and brunch on Division.",
       "lat": 41.903232,
       "lon": -87.667893,
       "coord_source": "city_license",
@@ -704,7 +1555,39 @@
       "license_state": "current",
       "last_inspection_date": "2025-07-24",
       "last_inspection_result": "PASS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          8.0,
+          16.0
+        ],
+        [
+          8.0,
+          16.0
+        ],
+        [
+          8.0,
+          16.0
+        ],
+        [
+          8.0,
+          16.0
+        ],
+        [
+          8.0,
+          16.0
+        ],
+        [
+          8.0,
+          16.0
+        ],
+        [
+          8.0,
+          16.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "node/14152329587"
     },
     {
       "spot_id": "hp-library",
@@ -714,6 +1597,12 @@
       "kind": "library",
       "is_free": true,
       "good_for_work": true,
+      "is_outdoors": false,
+      "moods": [
+        "focus"
+      ],
+      "time_needed": "quick",
+      "note": "Humboldt Park branch of the Chicago Public Library.",
       "lat": 41.910579,
       "lon": -87.705596,
       "coord_source": "census",
@@ -724,7 +1613,39 @@
       "license_state": "not_applicable",
       "last_inspection_date": null,
       "last_inspection_result": null,
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          13.0,
+          17.0
+        ],
+        [
+          12.0,
+          20.0
+        ],
+        [
+          10.0,
+          18.0
+        ],
+        [
+          12.0,
+          20.0
+        ],
+        [
+          10.0,
+          18.0
+        ],
+        [
+          9.0,
+          17.0
+        ],
+        [
+          9.0,
+          17.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "way/163887238"
     },
     {
       "spot_id": "humboldt-park",
@@ -734,6 +1655,14 @@
       "kind": "park",
       "is_free": true,
       "good_for_work": false,
+      "is_outdoors": true,
+      "moods": [
+        "move",
+        "recharge",
+        "explore"
+      ],
+      "time_needed": "couple",
+      "note": "Large park with a lagoon, boathouse, and prairie paths.",
       "lat": 41.905486,
       "lon": -87.701626,
       "coord_source": "census",
@@ -744,7 +1673,39 @@
       "license_state": "not_applicable",
       "last_inspection_date": null,
       "last_inspection_result": null,
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ]
+      ],
+      "hours_source": "park_district",
+      "osm_key": null
     },
     {
       "spot_id": "hwlc",
@@ -754,6 +1715,13 @@
       "kind": "library",
       "is_free": true,
       "good_for_work": true,
+      "is_outdoors": false,
+      "moods": [
+        "focus",
+        "explore"
+      ],
+      "time_needed": "couple",
+      "note": "Harold Washington Library, the main branch. The Winter Garden is on the 9th floor.",
       "lat": 41.876872,
       "lon": -87.627727,
       "coord_source": "census",
@@ -764,7 +1732,39 @@
       "license_state": "not_applicable",
       "last_inspection_date": null,
       "last_inspection_result": null,
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          13.0,
+          17.0
+        ],
+        [
+          9.0,
+          20.0
+        ],
+        [
+          9.0,
+          20.0
+        ],
+        [
+          9.0,
+          20.0
+        ],
+        [
+          9.0,
+          20.0
+        ],
+        [
+          9.0,
+          17.0
+        ],
+        [
+          9.0,
+          17.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "way/28292694"
     },
     {
       "spot_id": "ipsento",
@@ -774,6 +1774,13 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": true,
+      "is_outdoors": false,
+      "moods": [
+        "focus",
+        "people"
+      ],
+      "time_needed": "quick",
+      "note": "Coffee shop on Milwaukee, steps from the 606.",
       "lat": 41.914351,
       "lon": -87.683377,
       "coord_source": "city_license",
@@ -784,7 +1791,39 @@
       "license_state": "current",
       "last_inspection_date": "2024-12-27",
       "last_inspection_result": "PASS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          7.0,
+          18.0
+        ],
+        [
+          7.0,
+          18.0
+        ],
+        [
+          7.0,
+          18.0
+        ],
+        [
+          7.0,
+          18.0
+        ],
+        [
+          7.0,
+          18.0
+        ],
+        [
+          7.0,
+          18.0
+        ],
+        [
+          7.0,
+          18.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "node/5025496847"
     },
     {
       "spot_id": "la-boulangerie",
@@ -794,6 +1833,12 @@
       "kind": "bakery",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "recharge"
+      ],
+      "time_needed": "quick",
+      "note": "French bakery café on California.",
       "lat": 41.898555,
       "lon": -87.696921,
       "coord_source": "city_license",
@@ -804,7 +1849,10 @@
       "license_state": "current",
       "last_inspection_date": "2026-10-05",
       "last_inspection_result": "PASS W/ CONDITIONS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": null,
+      "hours_source": null,
+      "osm_key": null
     },
     {
       "spot_id": "la-colombe",
@@ -814,6 +1862,13 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": true,
+      "is_outdoors": false,
+      "moods": [
+        "people",
+        "focus"
+      ],
+      "time_needed": "quick",
+      "note": "Large La Colombe café on Randolph.",
       "lat": 41.884219,
       "lon": -87.651954,
       "coord_source": "city_license",
@@ -824,7 +1879,39 @@
       "license_state": "current",
       "last_inspection_date": "2025-07-02",
       "last_inspection_result": "PASS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          7.0,
+          19.0
+        ],
+        [
+          6.5,
+          19.0
+        ],
+        [
+          6.5,
+          19.0
+        ],
+        [
+          6.5,
+          19.0
+        ],
+        [
+          6.5,
+          19.0
+        ],
+        [
+          6.5,
+          19.0
+        ],
+        [
+          7.0,
+          19.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "node/4076939314"
     },
     {
       "spot_id": "letizias",
@@ -834,6 +1921,12 @@
       "kind": "bakery",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "recharge"
+      ],
+      "time_needed": "quick",
+      "note": "Long-running bakery café at Division and Leavitt.",
       "lat": 41.903227,
       "lon": -87.681491,
       "coord_source": "city_license",
@@ -844,7 +1937,39 @@
       "license_state": "current",
       "last_inspection_date": "2026-10-26",
       "last_inspection_result": "PASS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          7.0,
+          17.0
+        ],
+        [
+          7.0,
+          15.0
+        ],
+        [
+          7.0,
+          15.0
+        ],
+        [
+          7.0,
+          17.0
+        ],
+        [
+          7.0,
+          17.0
+        ],
+        [
+          7.0,
+          17.0
+        ],
+        [
+          7.0,
+          17.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "node/3575070894"
     },
     {
       "spot_id": "logan-collective",
@@ -854,6 +1979,12 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "recharge"
+      ],
+      "time_needed": "quick",
+      "note": "Café on Armitage that roasts its own coffee.",
       "lat": 41.91754,
       "lon": -87.703641,
       "coord_source": "city_license",
@@ -864,7 +1995,10 @@
       "license_state": "current",
       "last_inspection_date": "2025-12-16",
       "last_inspection_result": "PASS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": null,
+      "hours_source": null,
+      "osm_key": null
     },
     {
       "spot_id": "loop-coffee",
@@ -874,6 +2008,12 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "explore"
+      ],
+      "time_needed": "quick",
+      "note": "Coffee shop on Washington with house-made syrups.",
       "lat": 41.883246,
       "lon": -87.647959,
       "coord_source": "city_license",
@@ -884,7 +2024,10 @@
       "license_state": "current",
       "last_inspection_date": "2026-05-13",
       "last_inspection_result": "PASS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": null,
+      "hours_source": null,
+      "osm_key": null
     },
     {
       "spot_id": "lp-cons",
@@ -894,6 +2037,13 @@
       "kind": "museum",
       "is_free": true,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "recharge",
+        "explore"
+      ],
+      "time_needed": "couple",
+      "note": "Victorian glass conservatory next to Lincoln Park Zoo.",
       "lat": 41.925541,
       "lon": -87.635929,
       "coord_source": "census",
@@ -904,7 +2054,39 @@
       "license_state": "not_applicable",
       "last_inspection_date": null,
       "last_inspection_result": null,
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          9.0,
+          17.0
+        ],
+        [
+          9.0,
+          17.0
+        ],
+        [
+          9.0,
+          17.0
+        ],
+        [
+          9.0,
+          17.0
+        ],
+        [
+          9.0,
+          17.0
+        ],
+        [
+          9.0,
+          17.0
+        ],
+        [
+          9.0,
+          17.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "way/23986733"
     },
     {
       "spot_id": "ls-library",
@@ -914,6 +2096,12 @@
       "kind": "library",
       "is_free": true,
       "good_for_work": true,
+      "is_outdoors": false,
+      "moods": [
+        "focus"
+      ],
+      "time_needed": "quick",
+      "note": "Logan Square branch of the Chicago Public Library.",
       "lat": 41.92481,
       "lon": -87.703377,
       "coord_source": "census",
@@ -924,7 +2112,39 @@
       "license_state": "not_applicable",
       "last_inspection_date": null,
       "last_inspection_result": null,
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          13.0,
+          17.0
+        ],
+        [
+          10.0,
+          18.0
+        ],
+        [
+          12.0,
+          20.0
+        ],
+        [
+          10.0,
+          18.0
+        ],
+        [
+          12.0,
+          20.0
+        ],
+        [
+          9.0,
+          17.0
+        ],
+        [
+          9.0,
+          17.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "way/209457649"
     },
     {
       "spot_id": "mano",
@@ -934,6 +2154,13 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "focus",
+        "people"
+      ],
+      "time_needed": "quick",
+      "note": "Filipino-inspired café on Ashland.",
       "lat": 41.89758,
       "lon": -87.667186,
       "coord_source": "city_license",
@@ -944,7 +2171,39 @@
       "license_state": "current",
       "last_inspection_date": "2026-10-15",
       "last_inspection_result": "PASS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          8.0,
+          18.0
+        ],
+        [
+          7.0,
+          15.0
+        ],
+        [
+          7.0,
+          15.0
+        ],
+        [
+          7.0,
+          15.0
+        ],
+        [
+          7.0,
+          15.0
+        ],
+        [
+          8.0,
+          18.0
+        ],
+        [
+          8.0,
+          18.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "node/3596874096"
     },
     {
       "spot_id": "mate",
@@ -954,6 +2213,13 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "explore",
+        "recharge"
+      ],
+      "time_needed": "quick",
+      "note": "Yerba mate café on Milwaukee.",
       "lat": 41.931774,
       "lon": -87.711605,
       "coord_source": "city_license",
@@ -964,7 +2230,10 @@
       "license_state": "current",
       "last_inspection_date": "2026-08-13",
       "last_inspection_result": "PASS W/ CONDITIONS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": null,
+      "hours_source": null,
+      "osm_key": null
     },
     {
       "spot_id": "millennium",
@@ -974,6 +2243,14 @@
       "kind": "park",
       "is_free": true,
       "good_for_work": false,
+      "is_outdoors": true,
+      "moods": [
+        "explore",
+        "people",
+        "recharge"
+      ],
+      "time_needed": "couple",
+      "note": "The Bean, Lurie Garden, then Maggie Daley Park next door.",
       "lat": 41.884291,
       "lon": -87.623853,
       "coord_source": "census",
@@ -984,7 +2261,39 @@
       "license_state": "not_applicable",
       "last_inspection_date": null,
       "last_inspection_result": null,
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ]
+      ],
+      "hours_source": "city_of_chicago",
+      "osm_key": null
     },
     {
       "spot_id": "move-along",
@@ -994,6 +2303,12 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "move"
+      ],
+      "time_needed": "quick",
+      "note": "Walk-up coffee window on Grand. No seating.",
       "lat": 41.890961,
       "lon": -87.658422,
       "coord_source": "city_license",
@@ -1004,7 +2319,36 @@
       "license_state": "current",
       "last_inspection_date": "2025-04-28",
       "last_inspection_result": "NO ENTRY",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          8.0,
+          16.0
+        ],
+        null,
+        [
+          8.0,
+          16.0
+        ],
+        [
+          8.0,
+          16.0
+        ],
+        [
+          8.0,
+          16.0
+        ],
+        [
+          8.0,
+          16.0
+        ],
+        [
+          8.0,
+          16.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "node/6298799785"
     },
     {
       "spot_id": "myopic",
@@ -1014,6 +2358,13 @@
       "kind": "books",
       "is_free": true,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "explore",
+        "recharge"
+      ],
+      "time_needed": "quick",
+      "note": "Used bookstore on three floors.",
       "lat": 41.909844,
       "lon": -87.676859,
       "coord_source": "city_license",
@@ -1024,7 +2375,39 @@
       "license_state": "on_file",
       "last_inspection_date": null,
       "last_inspection_result": null,
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          12.0,
+          20.0
+        ],
+        [
+          12.0,
+          20.0
+        ],
+        [
+          12.0,
+          20.0
+        ],
+        [
+          12.0,
+          20.0
+        ],
+        [
+          12.0,
+          20.0
+        ],
+        [
+          12.0,
+          20.0
+        ],
+        [
+          12.0,
+          20.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "node/3575354970"
     },
     {
       "spot_id": "nmma",
@@ -1034,6 +2417,12 @@
       "kind": "museum",
       "is_free": true,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "explore"
+      ],
+      "time_needed": "couple",
+      "note": "National Museum of Mexican Art, free. 18th Street's murals are nearby.",
       "lat": 41.855942,
       "lon": -87.672344,
       "coord_source": "census",
@@ -1044,7 +2433,10 @@
       "license_state": "not_applicable",
       "last_inspection_date": null,
       "last_inspection_result": null,
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": null,
+      "hours_source": null,
+      "osm_key": "way/202372249"
     },
     {
       "spot_id": "oud",
@@ -1054,6 +2446,13 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": true,
+      "is_outdoors": false,
+      "moods": [
+        "focus",
+        "people"
+      ],
+      "time_needed": "quick",
+      "note": "Palestinian café on Division with a large seating area.",
       "lat": 41.903019,
       "lon": -87.680803,
       "coord_source": "city_license",
@@ -1064,7 +2463,10 @@
       "license_state": "current",
       "last_inspection_date": "2025-07-17",
       "last_inspection_result": "PASS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": null,
+      "hours_source": null,
+      "osm_key": null
     },
     {
       "spot_id": "plena",
@@ -1074,6 +2476,12 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "explore"
+      ],
+      "time_needed": "quick",
+      "note": "Small coffee shop on Paseo Boricua.",
       "lat": 41.903068,
       "lon": -87.693148,
       "coord_source": "city_license",
@@ -1084,7 +2492,33 @@
       "license_state": "current",
       "last_inspection_date": "2025-02-05",
       "last_inspection_result": "PASS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          10.0,
+          16.0
+        ],
+        [
+          10.0,
+          15.0
+        ],
+        [
+          10.0,
+          15.0
+        ],
+        [
+          10.0,
+          15.0
+        ],
+        [
+          10.0,
+          15.0
+        ],
+        null,
+        null
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "node/14349857077"
     },
     {
       "spot_id": "pqb",
@@ -1094,6 +2528,13 @@
       "kind": "bakery",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "explore",
+        "people"
+      ],
+      "time_needed": "quick",
+      "note": "Bakery café from the Publican team. Bread, pastries, and coffee.",
       "lat": 41.890798,
       "lon": -87.671795,
       "coord_source": "city_license",
@@ -1104,7 +2545,39 @@
       "license_state": "current",
       "last_inspection_date": "2026-04-20",
       "last_inspection_result": "PASS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          7.0,
+          15.0
+        ],
+        [
+          7.0,
+          15.0
+        ],
+        [
+          7.0,
+          15.0
+        ],
+        [
+          7.0,
+          15.0
+        ],
+        [
+          7.0,
+          15.0
+        ],
+        [
+          7.0,
+          15.0
+        ],
+        [
+          7.0,
+          15.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "node/10981159805"
     },
     {
       "spot_id": "prequel",
@@ -1114,6 +2587,13 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": true,
+      "is_outdoors": false,
+      "moods": [
+        "focus",
+        "recharge"
+      ],
+      "time_needed": "quick",
+      "note": "Coffee shop on Chicago Ave that also shows local art.",
       "lat": 41.895805,
       "lon": -87.676909,
       "coord_source": "city_license",
@@ -1124,7 +2604,39 @@
       "license_state": "on_file",
       "last_inspection_date": "2025-05-21",
       "last_inspection_result": "PASS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          7.0,
+          15.0
+        ],
+        [
+          7.0,
+          15.0
+        ],
+        [
+          7.0,
+          15.0
+        ],
+        [
+          7.0,
+          15.0
+        ],
+        [
+          7.0,
+          15.0
+        ],
+        [
+          7.0,
+          15.0
+        ],
+        [
+          7.0,
+          15.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "node/5952502359"
     },
     {
       "spot_id": "prequel-wp",
@@ -1134,6 +2646,13 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "focus",
+        "recharge"
+      ],
+      "time_needed": "quick",
+      "note": "The second Prequel, on Division.",
       "lat": 41.903275,
       "lon": -87.678672,
       "coord_source": "city_license",
@@ -1144,7 +2663,39 @@
       "license_state": "on_file",
       "last_inspection_date": "2026-10-28",
       "last_inspection_result": "PASS W/ CONDITIONS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          7.0,
+          14.0
+        ],
+        [
+          7.0,
+          14.0
+        ],
+        [
+          7.0,
+          14.0
+        ],
+        [
+          7.0,
+          14.0
+        ],
+        [
+          7.0,
+          14.0
+        ],
+        [
+          7.0,
+          14.0
+        ],
+        [
+          7.0,
+          14.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "node/9543486017"
     },
     {
       "spot_id": "quimbys",
@@ -1154,6 +2705,13 @@
       "kind": "books",
       "is_free": true,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "explore",
+        "recharge"
+      ],
+      "time_needed": "quick",
+      "note": "Bookstore for zines, comics, and small-press books.",
       "lat": 41.910637,
       "lon": -87.674791,
       "coord_source": "city_license",
@@ -1164,7 +2722,10 @@
       "license_state": "current",
       "last_inspection_date": null,
       "last_inspection_result": null,
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": null,
+      "hours_source": null,
+      "osm_key": null
     },
     {
       "spot_id": "riverwalk",
@@ -1174,6 +2735,14 @@
       "kind": "walk",
       "is_free": true,
       "good_for_work": false,
+      "is_outdoors": true,
+      "moods": [
+        "move",
+        "people",
+        "explore"
+      ],
+      "time_needed": "couple",
+      "note": "Walk the river east toward the lake.",
       "lat": 41.887234,
       "lon": -87.627226,
       "coord_source": "openstreetmap",
@@ -1184,7 +2753,39 @@
       "license_state": "not_applicable",
       "last_inspection_date": null,
       "last_inspection_result": null,
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ]
+      ],
+      "hours_source": "city_of_chicago",
+      "osm_key": "node/12155932011"
     },
     {
       "spot_id": "sawada",
@@ -1194,6 +2795,13 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": true,
+      "is_outdoors": false,
+      "moods": [
+        "people",
+        "explore"
+      ],
+      "time_needed": "quick",
+      "note": "Coffee shop in a large industrial space in Fulton Market.",
       "lat": 41.883554,
       "lon": -87.648726,
       "coord_source": "city_license",
@@ -1204,7 +2812,39 @@
       "license_state": "current",
       "last_inspection_date": "2026-08-25",
       "last_inspection_result": "PASS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          8.0,
+          16.0
+        ],
+        [
+          8.0,
+          16.0
+        ],
+        [
+          8.0,
+          16.0
+        ],
+        [
+          8.0,
+          16.0
+        ],
+        [
+          8.0,
+          16.0
+        ],
+        [
+          8.0,
+          16.0
+        ],
+        [
+          8.0,
+          16.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "node/6297633445"
     },
     {
       "spot_id": "shokolad",
@@ -1214,6 +2854,13 @@
       "kind": "bakery",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "explore",
+        "recharge"
+      ],
+      "time_needed": "quick",
+      "note": "Ukrainian pastry café on Chicago Ave.",
       "lat": 41.895815,
       "lon": -87.690482,
       "coord_source": "city_license",
@@ -1224,7 +2871,36 @@
       "license_state": "current",
       "last_inspection_date": "2026-08-05",
       "last_inspection_result": "PASS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          10.0,
+          16.0
+        ],
+        null,
+        [
+          10.0,
+          17.0
+        ],
+        [
+          10.0,
+          17.0
+        ],
+        [
+          10.0,
+          17.0
+        ],
+        [
+          10.0,
+          17.0
+        ],
+        [
+          9.0,
+          17.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "node/1786793074"
     },
     {
       "spot_id": "smith-park",
@@ -1234,6 +2910,13 @@
       "kind": "park",
       "is_free": true,
       "good_for_work": false,
+      "is_outdoors": true,
+      "moods": [
+        "move",
+        "recharge"
+      ],
+      "time_needed": "quick",
+      "note": "Park District park with a walking path around it.",
       "lat": 41.891672,
       "lon": -87.689834,
       "coord_source": "census",
@@ -1244,7 +2927,39 @@
       "license_state": "not_applicable",
       "last_inspection_date": null,
       "last_inspection_result": null,
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ]
+      ],
+      "hours_source": "park_district",
+      "osm_key": "node/6863970442"
     },
     {
       "spot_id": "soloway",
@@ -1254,6 +2969,13 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "move",
+        "people"
+      ],
+      "time_needed": "quick",
+      "note": "Coffee shop and running store on Damen, near the 606.",
       "lat": 41.912595,
       "lon": -87.677659,
       "coord_source": "city_license",
@@ -1264,7 +2986,10 @@
       "license_state": "current",
       "last_inspection_date": "2026-02-02",
       "last_inspection_result": "PASS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": null,
+      "hours_source": null,
+      "osm_key": null
     },
     {
       "spot_id": "standing-passengers",
@@ -1274,6 +2999,13 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": true,
+      "is_outdoors": false,
+      "moods": [
+        "people",
+        "explore"
+      ],
+      "time_needed": "quick",
+      "note": "Coffee shop on Chicago Ave with records and arcade games.",
       "lat": 41.896223,
       "lon": -87.664721,
       "coord_source": "city_license",
@@ -1284,7 +3016,10 @@
       "license_state": "current",
       "last_inspection_date": "2025-12-03",
       "last_inspection_result": "PASS W/ CONDITIONS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": null,
+      "hours_source": null,
+      "osm_key": null
     },
     {
       "spot_id": "tasa",
@@ -1294,6 +3029,12 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "focus"
+      ],
+      "time_needed": "quick",
+      "note": "Café on North Ave with a full food menu. Farther west.",
       "lat": 41.909943,
       "lon": -87.73025,
       "coord_source": "city_license",
@@ -1304,7 +3045,10 @@
       "license_state": "current",
       "last_inspection_date": null,
       "last_inspection_result": null,
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": null,
+      "hours_source": null,
+      "osm_key": null
     },
     {
       "spot_id": "tous-les-jours",
@@ -1314,6 +3058,12 @@
       "kind": "bakery",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "people"
+      ],
+      "time_needed": "quick",
+      "note": "Korean-French bakery café on Division.",
       "lat": 41.903396,
       "lon": -87.671133,
       "coord_source": "city_license",
@@ -1324,7 +3074,10 @@
       "license_state": "current",
       "last_inspection_date": "2025-09-02",
       "last_inspection_result": "PASS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": null,
+      "hours_source": null,
+      "osm_key": null
     },
     {
       "spot_id": "truce",
@@ -1334,6 +3087,13 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "people",
+        "explore"
+      ],
+      "time_needed": "quick",
+      "note": "Café on Damen that also runs as a cocktail bar.",
       "lat": 41.91691,
       "lon": -87.677449,
       "coord_source": "city_license",
@@ -1344,7 +3104,39 @@
       "license_state": "current",
       "last_inspection_date": null,
       "last_inspection_result": null,
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          8.0,
+          24.0
+        ],
+        [
+          8.0,
+          15.0
+        ],
+        [
+          8.0,
+          15.0
+        ],
+        [
+          8.0,
+          24.0
+        ],
+        [
+          8.0,
+          24.0
+        ],
+        [
+          8.0,
+          25.0
+        ],
+        [
+          8.0,
+          25.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "node/6258328991"
     },
     {
       "spot_id": "uima",
@@ -1354,6 +3146,12 @@
       "kind": "museum",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "explore"
+      ],
+      "time_needed": "quick",
+      "note": "Ukrainian Institute of Modern Art. A small museum with rotating shows.",
       "lat": 41.895832,
       "lon": -87.684943,
       "coord_source": "census",
@@ -1364,7 +3162,33 @@
       "license_state": "not_applicable",
       "last_inspection_date": null,
       "last_inspection_result": null,
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          12.0,
+          16.0
+        ],
+        null,
+        null,
+        [
+          12.0,
+          16.0
+        ],
+        [
+          12.0,
+          16.0
+        ],
+        [
+          12.0,
+          16.0
+        ],
+        [
+          12.0,
+          16.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "way/209389536"
     },
     {
       "spot_id": "umbria",
@@ -1374,6 +3198,13 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": true,
+      "is_outdoors": false,
+      "moods": [
+        "focus",
+        "recharge"
+      ],
+      "time_needed": "quick",
+      "note": "Caffè Umbria on Armitage, with several seating areas.",
       "lat": 41.917432,
       "lon": -87.691272,
       "coord_source": "city_license",
@@ -1384,7 +3215,10 @@
       "license_state": "current",
       "last_inspection_date": "2024-12-17",
       "last_inspection_result": "PASS W/ CONDITIONS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": null,
+      "hours_source": null,
+      "osm_key": null
     },
     {
       "spot_id": "wake-n-bakery",
@@ -1394,6 +3228,12 @@
       "kind": "bakery",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "people"
+      ],
+      "time_needed": "quick",
+      "note": "Bakery café on Division.",
       "lat": 41.903198,
       "lon": -87.669795,
       "coord_source": "city_license",
@@ -1404,7 +3244,10 @@
       "license_state": "current",
       "last_inspection_date": "2024-12-09",
       "last_inspection_result": "PASS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": null,
+      "hours_source": null,
+      "osm_key": null
     },
     {
       "spot_id": "west-town-bakery",
@@ -1414,6 +3257,12 @@
       "kind": "bakery",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "people"
+      ],
+      "time_needed": "quick",
+      "note": "Bakery café on Chicago Ave with breakfast and pastries.",
       "lat": 41.896049,
       "lon": -87.675351,
       "coord_source": "city_license",
@@ -1424,7 +3273,10 @@
       "license_state": "current",
       "last_inspection_date": "2026-08-14",
       "last_inspection_result": "PASS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": null,
+      "hours_source": null,
+      "osm_key": null
     },
     {
       "spot_id": "wicker-park-park",
@@ -1434,6 +3286,13 @@
       "kind": "park",
       "is_free": true,
       "good_for_work": false,
+      "is_outdoors": true,
+      "moods": [
+        "recharge",
+        "people"
+      ],
+      "time_needed": "quick",
+      "note": "Neighborhood park with a fountain, gardens, and benches.",
       "lat": 41.907445,
       "lon": -87.677304,
       "coord_source": "census",
@@ -1444,7 +3303,39 @@
       "license_state": "not_applicable",
       "last_inspection_date": null,
       "last_inspection_result": null,
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ],
+        [
+          6,
+          23
+        ]
+      ],
+      "hours_source": "park_district",
+      "osm_key": null
     },
     {
       "spot_id": "wormhole",
@@ -1454,6 +3345,13 @@
       "kind": "cafe",
       "is_free": false,
       "good_for_work": false,
+      "is_outdoors": false,
+      "moods": [
+        "people",
+        "explore"
+      ],
+      "time_needed": "quick",
+      "note": "Coffee shop on Milwaukee with an '80s sci-fi theme.",
       "lat": 41.908378,
       "lon": -87.674569,
       "coord_source": "city_license",
@@ -1464,7 +3362,39 @@
       "license_state": "current",
       "last_inspection_date": "2025-08-07",
       "last_inspection_result": "PASS",
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          7.0,
+          23.0
+        ],
+        [
+          7.0,
+          23.0
+        ],
+        [
+          7.0,
+          23.0
+        ],
+        [
+          7.0,
+          23.0
+        ],
+        [
+          7.0,
+          23.0
+        ],
+        [
+          7.0,
+          23.0
+        ],
+        [
+          7.0,
+          23.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "node/3080898768"
     },
     {
       "spot_id": "wt-library",
@@ -1474,6 +3404,13 @@
       "kind": "library",
       "is_free": true,
       "good_for_work": true,
+      "is_outdoors": false,
+      "moods": [
+        "focus",
+        "recharge"
+      ],
+      "time_needed": "quick",
+      "note": "Chicago Public Library branch on Chicago Ave. Free wifi and tables.",
       "lat": 41.895993,
       "lon": -87.668694,
       "coord_source": "census",
@@ -1484,7 +3421,39 @@
       "license_state": "not_applicable",
       "last_inspection_date": null,
       "last_inspection_result": null,
-      "inspector_marked_closed": false
+      "inspector_marked_closed": false,
+      "hours_week": [
+        [
+          13.0,
+          17.0
+        ],
+        [
+          10.0,
+          18.0
+        ],
+        [
+          12.0,
+          20.0
+        ],
+        [
+          10.0,
+          18.0
+        ],
+        [
+          12.0,
+          20.0
+        ],
+        [
+          9.0,
+          17.0
+        ],
+        [
+          9.0,
+          17.0
+        ]
+      ],
+      "hours_source": "openstreetmap",
+      "osm_key": "way/209838507"
     }
   ]
 }
