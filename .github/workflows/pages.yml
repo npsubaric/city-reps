@@ -4,13 +4,14 @@
 # publishable key come from repository variables (not secrets: the browser
 # needs them, and row level security keeps the key read-only). The daily
 # export ships alongside as a backup the page uses if Supabase can't be reached.
+# The dbt docs site (models, tests, lineage) is published at /docs.
 
 name: Deploy website
 
 on:
   push:
     branches: [main]
-    paths: ["app/**", "export/dim_spots.json", ".github/workflows/pages.yml"]
+    paths: ["app/**", "export/dim_spots.json", "city_reps_dbt/**", ".github/workflows/pages.yml"]
   # The daily pipeline's export commit is pushed with GITHUB_TOKEN, which
   # doesn't trigger other workflows, so redeploy when the pipeline finishes
   workflow_run:
@@ -36,15 +37,38 @@ jobs:
     env:
       SUPABASE_URL: ${{ vars.SUPABASE_URL }}
       SUPABASE_PUBLISHABLE_KEY: ${{ vars.SUPABASE_PUBLISHABLE_KEY }}
+      # dbt docs reads column types from the database
+      SUPABASE_HOST: ${{ secrets.SUPABASE_HOST }}
+      SUPABASE_USER: ${{ secrets.SUPABASE_USER }}
+      SUPABASE_PASSWORD: ${{ secrets.SUPABASE_PASSWORD }}
     steps:
       - name: Check out the code
         uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build the dbt docs site
+        working-directory: city_reps_dbt
+        run: |
+          mkdir -p ~/.dbt
+          echo "manage_state: false" > ~/.dbt/user_settings.yml
+          # --static bundles the docs into one HTML file
+          dbt docs generate --static
 
       - name: Assemble the site
         run: |
           mkdir -p _site
           cp app/index.html _site/
           cp export/dim_spots.json _site/
+          mkdir -p _site/docs
+          cp city_reps_dbt/target/static_index.html _site/docs/index.html
           if [ -n "$SUPABASE_URL" ] && [ -n "$SUPABASE_PUBLISHABLE_KEY" ]; then
             printf 'window.CITY_REPS_CONFIG = {supabaseUrl: "%s", supabaseKey: "%s"};\n' \
               "${SUPABASE_URL%/}" "$SUPABASE_PUBLISHABLE_KEY" > _site/config.js
