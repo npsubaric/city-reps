@@ -52,7 +52,7 @@ jobs:
           echo "manage_state: false" > ~/.dbt/user_settings.yml
 
       - name: Check Python files compile
-        run: python -m py_compile ingestion/*.py
+        run: python -m py_compile ingestion/*.py export/*.py
 
       - name: Build and test dbt models in the ci schema
         working-directory: city_reps_dbt
