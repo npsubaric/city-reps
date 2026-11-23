@@ -6,11 +6,13 @@ seeds:
       The hand-picked City Reps spots, exported from the app. One row per
       place: cafés, bakeries, libraries, parks, bookstores and sights.
       Coordinates come from open data via ingestion/geocode_spots.py and
-      live in a separate seed, spot_coordinates.
+      live in a separate seed, spot_coordinates. Notes are written for this
+      project; hours come from spot_hours_rules and OpenStreetMap.
     config:
       column_types:
         is_free: boolean
         good_for_work: boolean
+        is_outdoors: boolean
     columns:
       - name: spot_id
         description: Stable ID used by the app.
@@ -28,6 +30,26 @@ seeds:
           - accepted_values:
               arguments:
                 values: ['cafe', 'bakery', 'library', 'park', 'trail', 'walk', 'museum', 'books', 'public']
+      - name: is_outdoors
+        description: Outdoors, so the app skips it in rain or snow.
+        tests:
+          - not_null
+      - name: moods
+        description: >
+          Space-separated moods the spot suits, for the picker: focus,
+          recharge, explore, move, people. dim_spots turns this into an array.
+        tests:
+          - not_null
+      - name: time_needed
+        description: The least time a visit takes.
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['quick', 'couple', 'half']
+      - name: note
+        description: One line about the spot, in our own words.
+        tests:
+          - not_null
 
   - name: spot_coordinates
     description: >
@@ -80,3 +102,28 @@ seeds:
       - name: reason
         tests:
           - not_null
+
+  - name: spot_hours_rules
+    description: >
+      Posted hours for parks and public spaces, which rarely have hours in
+      OpenStreetMap. Same hours every day; dim_spots prefers these over OSM.
+      Chicago Park District parks and the 606, Millennium Park, and the
+      Riverwalk are all posted 6 AM to 11 PM. A public street is always open.
+    config:
+      column_types:
+        open_hour: numeric
+        close_hour: numeric
+    columns:
+      - name: spot_id
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('spots')
+                field: spot_id
+      - name: source
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['park_district', 'city_of_chicago', 'public_street']

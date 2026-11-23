@@ -65,6 +65,12 @@ jobs:
       - name: Load business licenses
         run: python ingestion/load_business_licenses.py
 
+      - name: Load opening hours from OpenStreetMap
+        # Hours change rarely. If Overpass is busy, keep yesterday's hours
+        # and let the rest of the pipeline run.
+        continue-on-error: true
+        run: python ingestion/load_osm_places.py
+
       - name: Build and test dbt models
         working-directory: city_reps_dbt
         run: dbt build

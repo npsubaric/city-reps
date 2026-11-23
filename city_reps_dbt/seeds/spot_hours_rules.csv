@@ -1,0 +1,9 @@
+spot_id,open_hour,close_hour,source,source_url
+eckhart,6,23,park_district,https://www.chicagoparkdistrict.com/park-finder
+smith-park,6,23,park_district,https://www.chicagoparkdistrict.com/park-finder
+wicker-park-park,6,23,park_district,https://www.chicagoparkdistrict.com/park-finder
+humboldt-park,6,23,park_district,https://www.chicagoparkdistrict.com/park-finder
+606-east,6,23,park_district,https://www.chicagoparkdistrict.com/park-finder
+millennium,6,23,city_of_chicago,https://www.chicago.gov/city/en/depts/dca/supp_info/millennium_park_-planyourvisit.html
+riverwalk,6,23,city_of_chicago,https://chicago.gov/city/en/sites/chicagoriverwalk/home/faq.html
+fulton-walk,0,24,public_street,

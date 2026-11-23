@@ -23,6 +23,8 @@ jobs:
       SUPABASE_USER: ${{ secrets.SUPABASE_USER }}
       SUPABASE_PASSWORD: ${{ secrets.SUPABASE_PASSWORD }}
       DBT_SCHEMA: ci
+      # The public API table goes to ci_public, which Supabase doesn't serve
+      DBT_API_SCHEMA: ci_public
 
     steps:
       - name: Check secrets are set
@@ -53,6 +55,9 @@ jobs:
 
       - name: Check Python files compile
         run: python -m py_compile ingestion/*.py export/*.py
+
+      - name: Test the opening hours parser
+        run: python -m pytest -q ingestion
 
       - name: Build and test dbt models in the ci schema
         working-directory: city_reps_dbt

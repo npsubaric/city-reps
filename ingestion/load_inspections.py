@@ -152,6 +152,18 @@ alter table raw_inspections add column if not exists aka_name text;
 alter table raw_inspections drop column if exists raw cascade;
 """
 
+# Raw tables live in the public schema, which Supabase's Data API exposes.
+# Row level security with no policies means the public API key can't read
+# or change them. The pipeline connects as the table owner, which RLS skips.
+LOCK_DOWN = """
+alter table raw_inspections enable row level security;
+do $$ begin
+    if exists (select from pg_roles where rolname = 'anon') then
+        revoke all on raw_inspections from anon, authenticated;
+    end if;
+end $$;
+"""
+
 COLUMNS = [
     "inspection_id", "license_number", "dba_name", "aka_name", "facility_type",
     "risk", "address", "zip", "inspection_date", "inspection_type", "results",
@@ -178,6 +190,7 @@ def load(records):
         with conn.cursor() as cur:
             cur.execute(CREATE_TABLE)
             cur.execute(MIGRATE)
+            cur.execute(LOCK_DOWN)
             cur.executemany(UPSERT, records)
             cur.execute("select count(*) from raw_inspections")
             print(f"Rows in raw_inspections: {cur.fetchone()[0]}")

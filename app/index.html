@@ -1,0 +1,710 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>City Reps</title>
+<meta name="description" content="Pick a spot to get out of the house in Chicago. Live data from the city-reps pipeline.">
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one narrow column, like a transit card. Chicago-flag blue bands frame it; the red six-point star marks every rep. */
+:root{
+  --bg:#f4f8fb; --surface:#ffffff; --ink:#14212b; --muted:#5c6f7d; --line:#d6e2ea; --street:#e6eef3;
+  --blue:#7cc4e8; --blue-ink:#2b7fae; --blue-soft:#e3f2fa; --red:#d7262e; --red-soft:#fde8e9;
+  --ok:#1f7a4d; --ok-soft:#e2f4ea; --warn:#a15c00; --warn-soft:#fdf0dc;
+  --display:"Archivo","Arial Narrow",sans-serif; --body:"Public Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0e161c; --surface:#16222b; --ink:#e7f0f5; --muted:#93a7b4; --line:#26353f; --street:#1f2d37;
+  --blue:#5aa9d1; --blue-ink:#7cc4e8; --blue-soft:#15303f; --red:#f0484f; --red-soft:#3a1a1d;
+  --ok:#57c48c; --ok-soft:#14301f; --warn:#f0a945; --warn-soft:#3a2a12; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e161c; --surface:#16222b; --ink:#e7f0f5; --muted:#93a7b4; --line:#26353f; --street:#1f2d37;
+  --blue:#5aa9d1; --blue-ink:#7cc4e8; --blue-soft:#15303f; --red:#f0484f; --red-soft:#3a1a1d;
+  --ok:#57c48c; --ok-soft:#14301f; --warn:#f0a945; --warn-soft:#3a2a12; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:640px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:32px}
+h1,h2{font-family:var(--display);margin:0;text-wrap:balance}
+h1{font-size:44px;font-weight:900;font-stretch:72%;letter-spacing:-.01em;line-height:.95;text-transform:uppercase}
+h2{font-size:22px;font-weight:800;font-stretch:80%;text-transform:uppercase;letter-spacing:.01em}
+.flag{display:flex;flex-direction:column;gap:6px}
+.band{height:8px;background:var(--blue);border-radius:2px}
+.stars{display:flex;gap:6px;color:var(--red)}
+.stars svg{width:16px;height:16px}
+.mast{display:flex;flex-direction:column;gap:10px}
+.tag{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.mut{color:var(--muted)}
+.lic{font-size:12px;color:var(--muted)}
+.lic.current{color:var(--ok)}
+.lic.cancelled{color:var(--red);font-weight:600}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.section{display:flex;flex-direction:column;gap:12px}
+.sub{font-size:14px;color:var(--muted);margin-top:-4px}
+
+.today{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.today-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.dayname{font-family:var(--display);font-weight:900;font-stretch:75%;font-size:30px;text-transform:uppercase;line-height:1}
+.plan{font-size:15px;margin-top:4px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:4px 10px;border-radius:999px;white-space:nowrap}
+.chip.ok{background:var(--ok-soft);color:var(--ok)} .chip.warn{background:var(--warn-soft);color:var(--warn)} .chip.bad{background:var(--red-soft);color:var(--red)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;border-top:1px solid var(--line);padding-top:12px}
+.stat b{display:block;font-family:var(--display);font-weight:800;font-stretch:80%;font-size:28px;line-height:1}
+.stat span{font-size:12px;color:var(--muted)}
+
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.dcell{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 2px;border-radius:8px;background:var(--surface);border:1px solid var(--line);min-width:0}
+.dcell.out{border-color:var(--blue);background:var(--blue-soft)}
+.dcell.is-today{outline:2px solid var(--ink);outline-offset:-2px}
+.dcell .d{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.dcell .p{font-size:11px;font-weight:600;text-align:center;line-height:1.2}
+.dcell .mark{height:18px;width:18px;color:var(--red)}
+.dcell .mark.miss{color:var(--muted);font-family:var(--mono);font-size:13px;text-align:center}
+.legend{font-size:12px;color:var(--muted)}
+
+.q{display:flex;flex-direction:column;gap:6px}
+.qs{display:flex;flex-direction:column;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px}
+.now{font-size:13px;color:var(--muted)}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg label{padding:6px 12px;border:1px solid var(--line);border-radius:999px;font-size:14px;cursor:pointer;background:var(--surface)}
+.seg input:checked+label{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.seg input:focus-visible+label{outline:2px solid var(--blue);outline-offset:2px}
+.lbl{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block}
+
+.results{display:flex;flex-direction:column;gap:10px}
+.pick{background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--blue);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.pick.top{border-left-color:var(--red)}
+.pick .name{font-family:var(--display);font-weight:800;font-stretch:85%;font-size:22px;line-height:1.1}
+.meta{font-size:13px;color:var(--muted)}
+.travel{font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums}
+.why{display:flex;flex-wrap:wrap;gap:4px}
+.why span{font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--blue-soft);color:var(--ink)}
+.why span.free{background:var(--ok-soft);color:var(--ok)}
+.why span.hint{background:var(--warn-soft);color:var(--warn)}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;align-items:center}
+.tip{font-size:13px;color:var(--muted)}
+
+button,.btn{font:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:8px 13px;font-weight:600;font-size:14px;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.btn.maps{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button.on{background:var(--warn-soft);border-color:var(--warn);color:var(--warn)}
+button.primary{background:var(--red);border-color:var(--red);color:#fff;font-family:var(--display);font-stretch:85%;font-weight:800;text-transform:uppercase;letter-spacing:.03em;font-size:16px;padding:11px 16px;justify-content:center}
+button:focus-visible,.btn:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+select,input[type=date],input[type=text],input[type=search]{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 10px;width:100%}
+
+/* map */
+.mapbox{position:relative}
+#map{width:100%;max-width:100%;aspect-ratio:5/4;display:block;background:var(--surface);border:1px solid var(--line);border-radius:10px;touch-action:manipulation;cursor:pointer}
+#map.setting{cursor:crosshair;border-color:var(--warn)}
+#map .st{stroke:var(--street);fill:none;vector-effect:non-scaling-stroke}
+#map .mil{stroke:var(--street);fill:none;vector-effect:non-scaling-stroke}
+#map .sl{fill:var(--muted);font-family:var(--mono)}
+#map .dot{stroke:var(--surface);vector-effect:non-scaling-stroke}
+#map .dot.paid{fill:var(--blue-ink)} #map .dot.free{fill:var(--ok)}
+#map .vstar{fill:var(--red)}
+#map .ring{fill:none;stroke:var(--ink);vector-effect:non-scaling-stroke;stroke-width:2}
+#map .home{fill:var(--ink)} #map .homel{fill:var(--ink);font-family:var(--body);font-weight:700}
+#map .lab{fill:var(--ink);font-family:var(--body);font-weight:600;paint-order:stroke;stroke:var(--surface);stroke-width:3px;vector-effect:non-scaling-stroke}
+.maptools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.keyrow{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.keyrow i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.selcard{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:4px}
+.selcard[hidden]{display:none}
+.selcard .name{font-family:var(--display);font-weight:800;font-stretch:85%;font-size:20px;line-height:1.1}
+
+/* directory */
+.dirtools{display:flex;flex-direction:column;gap:10px}
+.dirrow2{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.dirrow2 select{width:auto;flex:0 0 auto}
+.count{font-size:13px;color:var(--muted)}
+.dlist{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.ditem{border-bottom:1px solid var(--line)}
+.dhead{all:unset;box-sizing:border-box;display:flex;gap:10px;align-items:center;width:100%;padding:10px 2px;cursor:pointer}
+.dhead:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.dhead .mk{width:14px;height:14px;flex:none;color:var(--red)}
+.dhead .mk.empty{color:var(--line)}
+.dhead .txt{flex:1;min-width:0}
+.dhead .n{font-weight:600;line-height:1.3}
+.dhead .m{font-size:12px;color:var(--muted)}
+.dhead .r{text-align:right;flex:none}
+.dhead .r b{display:block;font-family:var(--mono);font-size:13px;font-weight:500}
+.dhead .r span{font-size:11px;color:var(--muted)}
+.dhead .r span.open{color:var(--ok)}
+.dbody{padding:0 2px 12px 24px;display:flex;flex-direction:column;gap:4px}
+
+form{display:flex;flex-direction:column;gap:12px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.row>*{flex:1 1 160px;min-width:0}
+.rpill{display:inline-block;font-family:var(--mono);font-size:11px;padding:1px 7px;border-radius:999px;background:var(--blue-soft);color:var(--ink);margin-left:4px;white-space:nowrap}
+.hint2{font-size:12px;color:var(--muted);margin-top:4px}
+.toast{font-size:14px;color:var(--ok);min-height:1.2em}
+.log{display:flex;flex-direction:column}
+.entry{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.entry .dt{font-family:var(--mono);font-size:12px;color:var(--muted);width:74px;flex:none}
+.entry .what{flex:1;min-width:0}
+.entry .ty{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.entry button{padding:4px 8px;font-size:12px;font-weight:500;color:var(--muted)}
+.empty-note{color:var(--muted);font-size:14px;padding:8px 0}
+.notice{font-size:13px;background:var(--warn-soft);color:var(--warn);padding:8px 12px;border-radius:8px}
+.rules{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:4px;border-top:1px solid var(--line);padding-top:16px}
+.rules b{color:var(--ink)}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs><symbol id="star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 1.5l2.6 6 6.5-.6-3.9 5.1 3.9 5.1-6.5-.6-2.6 6-2.6-6-6.5.6 3.9-5.1-3.9-5.1 6.5.6z"/></symbol></defs>
+</svg>
+
+<div class="wrap">
+  <header class="mast">
+    <div class="flag"><div class="band"></div>
+      <div class="stars"><svg><use href="#star"/></svg><svg><use href="#star"/></svg><svg><use href="#star"/></svg><svg><use href="#star"/></svg></div>
+      <div class="band"></div></div>
+    <h1>City Reps</h1>
+    <div class="tag">Never miss twice · West Town, Chicago</div>
+  </header>
+
+  <div id="loadError" class="notice" hidden>Couldn't load the spots right now. Try again in a minute.</div>
+  <div id="notice" class="notice" hidden>Saving isn't available in this browser (private mode?), so reps you log here won't be kept.</div>
+
+  <section class="today" aria-labelledby="todayH">
+    <div class="today-top">
+      <div>
+        <div class="tag" id="todayDate"></div>
+        <div class="dayname" id="todayH"></div>
+        <div class="plan" id="todayPlan"></div>
+      </div>
+      <span class="chip ok" id="status"></span>
+    </div>
+    <div class="stats">
+      <div class="stat"><b id="sWeek" class="mono">0/3</b><span>target days hit</span></div>
+      <div class="stat"><b id="sTotal" class="mono">0</b><span>reps logged</span></div>
+      <div class="stat"><b id="sSpots" class="mono">0</b><span>spots explored</span></div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="goH">
+    <h2 id="goH">Where should I go?</h2>
+    <div class="qs">
+      <div class="now" id="nowLine"></div>
+      <div class="q"><span class="lbl">How are you feeling?</span><div class="seg" data-q="feel"></div></div>
+      <div class="q"><span class="lbl">Energy</span><div class="seg" data-q="energy"></div></div>
+      <div class="q"><span class="lbl">How much time?</span><div class="seg" data-q="time"></div></div>
+      <div class="q"><span class="lbl">How far?</span><div class="seg" data-q="dist"></div></div>
+      <div class="q"><span class="lbl">Weather</span><div class="seg" data-q="wx"></div></div>
+      <div class="q"><span class="lbl">Spend</span><div class="seg" data-q="spend"></div></div>
+    </div>
+    <div class="results" id="results"></div>
+    <div class="acts"><button type="button" id="shuffle">Show different options</button></div>
+    <div class="tip" id="tip"></div>
+  </section>
+
+  <section class="section" aria-labelledby="mapH" id="mapSec">
+    <h2 id="mapH">Map</h2>
+    <div class="sub" id="homeLine"></div>
+    <div class="maptools">
+      <div class="seg" id="viewSeg">
+        <input type="radio" name="view" id="v-near" value="near" checked><label for="v-near">Near home</label>
+        <input type="radio" name="view" id="v-all" value="all"><label for="v-all">Everything</label>
+      </div>
+      <button type="button" id="setHome">Move home pin</button>
+    </div>
+    <div class="mapbox"><svg id="map" role="img" aria-label="Map of spots around West Town"></svg></div>
+    <div class="keyrow"><span><i style="background:var(--blue-ink)"></i>Café or bakery</span><span><i style="background:var(--ok)"></i>Free</span><span><i style="background:var(--red)"></i>Been there</span><span><i style="background:var(--ink);border-radius:2px"></i>Home</span></div>
+    <div class="selcard" id="selCard" hidden></div>
+  </section>
+
+  <section class="section" aria-labelledby="dirH" id="dirSec">
+    <h2 id="dirH">Directory</h2>
+    <div class="dirtools">
+      <input type="search" id="dirQ" placeholder="Search by name, street, or neighborhood" aria-label="Search spots">
+      <div class="seg" id="catSeg"></div>
+      <div class="dirrow2">
+        <div class="seg">
+          <input type="checkbox" id="fFree"><label for="fFree">Free only</label>
+          <input type="checkbox" id="fOpen"><label for="fOpen">Open now</label>
+          <input type="checkbox" id="fNew"><label for="fNew">Haven't been</label>
+        </div>
+        <select id="sortSel" aria-label="Sort">
+          <option value="near">Nearest first</option>
+          <option value="az">A to Z</option>
+          <option value="hood">By neighborhood</option>
+          <option value="rated">Your sweet spots</option>
+        </select>
+      </div>
+      <div class="count" id="dirCount"></div>
+    </div>
+    <div class="dlist" id="dlist"></div>
+  </section>
+
+  <section class="section" aria-labelledby="weekH">
+    <h2 id="weekH">This week</h2>
+    <div class="week" id="week"></div>
+    <div class="legend">Blue days are targets (Mon, Wed, Fri). Any day out counts as a rep, and a red star marks one.</div>
+  </section>
+
+  <section class="section" aria-labelledby="logH">
+    <h2 id="logH">Log a rep</h2>
+    <form id="form">
+      <div>
+        <span class="lbl" style="margin-bottom:4px">Type</span>
+        <div class="seg" id="types"></div>
+      </div>
+      <div class="row">
+        <div><label class="lbl" for="fSpot" style="margin-bottom:4px">Where</label><select id="fSpot"></select></div>
+        <div><label class="lbl" for="fDate" style="margin-bottom:4px">Date</label><input type="date" id="fDate"></div>
+      </div>
+      <div class="row">
+        <div><label class="lbl" for="fScore" style="margin-bottom:4px">Rep Score · how good</label><select id="fScore"></select></div>
+        <div><label class="lbl" for="fRpe" style="margin-bottom:4px">RPE · how hard</label><select id="fRpe"></select></div>
+      </div>
+      <div class="hint2" style="margin-top:-6px">Score is the spot itself: seats, vibe, would you go back. RPE is the effort to make it happen: travel, cost, hassle. Both optional, 1 to 10.</div>
+      <div><label class="lbl" for="fNote" style="margin-bottom:4px">Note (optional)</label><input type="text" id="fNote" maxlength="140" placeholder="Sat by the window, brought coffee from home"></div>
+      <button class="primary" type="submit">Log rep</button>
+      <div class="toast" id="toast" role="status"></div>
+    </form>
+  </section>
+
+  <section class="section" aria-labelledby="histH">
+    <h2 id="histH">Rep log</h2>
+    <div class="log" id="log"></div>
+  </section>
+
+  <div class="rules">
+    <div><b>The week.</b> Gym Mon, Tue, Thu, Fri. Wednesday is run day and big-city day. Weekends are free.</div>
+    <div><b>The target.</b> Get out Mon, Wed, and Fri. Other days are bonus reps.</div>
+    <div><b>The rule.</b> Missing one target day is fine. Missing two in a row is the only thing to avoid.</div>
+    <div><b>Scores.</b> Rep Score rates the spot. RPE rates the effort to get there, like RPE in the gym. The sweet spots are high score, low RPE: save those for low-energy days.</div>
+    <div><b>Distances.</b> Measured along Chicago's street grid from your home pin (800 address numbers = 1 mile), at 20 min per mile walking and 6 per mile biking. Tap Directions for live times in Apple Maps.</div>
+    <div><b>Data.</b> Locations, license status and inspections from the City of Chicago's open data (Business Licenses and Food Inspections). Hours from © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors (ODbL) and posted Park District and city hours. Geocoding by the US Census Geocoder and OpenStreetMap. Built by the <a href="https://github.com/npsubaric/city-reps" target="_blank" rel="noopener">city-reps</a> pipeline. <span id="dataAsOf"></span></div>
+    <div><b>Your reps.</b> Saved in this browser only. Nothing you log leaves your device.</div>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script>
+// The day this browser started tracking, so a new visitor doesn't start out with missed days
+const START = (()=>{ const today=new Date().toLocaleDateString("en-CA");
+  try{ let s=localStorage.getItem("cr-start"); if(!s){ s=today; localStorage.setItem("cr-start",s); } return s; }catch(_){ return today; } })();
+const PLAN = {
+  0:{short:"Free", long:"Weekend. No target. Anything out is a bonus rep.", out:false},
+  1:{short:"Gym",  long:"Gym day. Target: get out of the house once.", out:true},
+  2:{short:"Gym",  long:"Gym day. No target, so a rep today is a bonus.", out:false},
+  3:{short:"City", long:"Run day and big-city day. Head into the Loop or somewhere new.", out:true},
+  4:{short:"Gym",  long:"Gym day. No target, so a rep today is a bonus.", out:false},
+  5:{short:"Gym",  long:"Gym day. Target: get out of the house once.", out:true},
+  6:{short:"Free", long:"Weekend. No target. Anything out is a bonus rep.", out:false},
+};
+const TYPES = [["cafe","Café"],["library","Library"],["outdoors","Outdoors"],["big","Big-city"],["explore","Explore"],["run","Run"]];
+const TYPE_LABEL = Object.assign(Object.fromEntries(TYPES),{walk:"Walk"});
+
+// hours: index 0 = Sunday, [open, close] in decimal hours (close > 24 runs past midnight), null = closed
+let SPOTS = [];   // filled at startup from Supabase, or the backup JSON
+let SPOT = {};
+// Spots come from the city-reps pipeline: public.spots in Supabase (see loadSpots below).
+// License records lag behind reality, so an expired one means "on file", never "closed".
+const LIC_TEXT = {current:"City license current", on_file:"City license on file", cancelled:"City cancelled this license. Check it's open before you go", not_found:"Not in city license data"};
+// Latest food inspection: an inspection after a license expired suggests the place is still open;
+// an "Out of Business" result is a stronger closure signal than an expired license.
+const monYr = d => { const [y,m] = d.split("-").map(Number); return new Date(y, m-1, 1).toLocaleDateString("en-US", {month:"short", year:"numeric"}); };
+const licLine = s => {
+  if (s.inspClosed) return `<div class="lic cancelled">City inspector marked this out of business (${monYr(s.insp)})</div>`;
+  const t = LIC_TEXT[s.lic]; if (!t) return "";
+  const insp = s.insp && (s.lic === "current" || s.lic === "on_file") ? ` · inspected ${monYr(s.insp)}` : "";
+  return `<div class="lic ${s.lic}">${esc(t)}${insp}</div>`;
+};
+let HOODS = [];   // neighborhoods, nearest to the home pin first
+const KIND_LABEL = {cafe:"Café",bakery:"Bakery",library:"Library",park:"Park",trail:"Trail",museum:"Museum",books:"Bookstore",public:"Public space",walk:"Walk"};
+const CATS = [["all","All"],["coffee","Coffee",["cafe"]],["bakery","Bakeries",["bakery"]],["library","Libraries",["library"]],["outdoors","Outdoors",["park","trail","walk"]],["books","Books",["books"]],["sights","Sights",["museum","public"]]];
+
+const QS = {
+  energy:[["low","Running on empty"],["ok","Normal"],["high","Up for anything"]],
+  feel:[["focus","Get work done"],["recharge","Recharge"],["explore","See something new"],["move","Move"],["people","Be around people"]],
+  time:[["quick","Under an hour"],["couple","1–2 hours"],["half","Half day"]],
+  dist:[["walk","Walk"],["ride","Short ride"],["trip","Worth a trip"]],
+  wx:[["nice","Nice out"],["chilly","Chilly"],["wet","Rain or snow"]],
+  spend:[["free","Free only"],["coffee","Coffee is fine"]],
+};
+
+// ---------- Chicago grid math ----------
+const MADISON_LAT=41.8819, STATE_LNG=-87.6278, MI_LAT=69.05, MI_LNG=51.6;
+const X = lng=>(lng-STATE_LNG)*MI_LNG;          // miles east of State
+const Y = lat=>-(lat-MADISON_LAT)*MI_LAT;        // miles south of Madison (SVG y grows down)
+const LNG = x=>x/MI_LNG+STATE_LNG, LAT = y=>-y/MI_LAT+MADISON_LAT;
+const DEFAULT_HOME = {lat:41.8962,lng:-87.6720,custom:false};
+let home = {...DEFAULT_HOME};
+function miles(s){ return Math.abs(s.lat-home.lat)*MI_LAT + Math.abs(s.lng-home.lng)*MI_LNG; }
+function distCat(s){ const m=miles(s); return m<=1.0?"walk":m<=3.5?"ride":"trip"; }
+function travel(s){ const m=miles(s); const w=Math.max(1,Math.round(m*20)), b=Math.max(1,Math.round(m*6));
+  return m<=1.5 ? `${m.toFixed(1)} mi · ${w} min walk` : `${m.toFixed(1)} mi · ${b} min bike · ${w} min walk`; }
+function mapsUrl(s){ const mode = miles(s)<=1.5 ? "w" : "r";
+  return `https://maps.apple.com/?daddr=${encodeURIComponent(s.addr+", Chicago, IL")}&dirflg=${mode}`; }
+function gridAddr(lat,lng){ const ns=Math.round(-Y(lat)*800/25)*25, ew=Math.round(-X(lng)*800/25)*25;
+  return `${Math.abs(ns)} ${ns>=0?"N":"S"} · ${Math.abs(ew)} ${ew>=0?"W":"E"}`; }
+
+let reps = [], seed = 1, selId = null, settingHome = false, view = "near", viewCenter = null;
+const sel = {energy:"ok",feel:"recharge",time:"quick",dist:"walk",wx:"nice",spend:"free"};
+const dir = {q:"",cat:"all",free:false,open:false,fresh:false,sort:"near",expanded:null};
+
+const $ = id=>document.getElementById(id);
+const pad = n=>String(n).padStart(2,"0");
+const iso = d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const parse = s=>{const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)};
+const addDays = (d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+const fmt = (s,o)=>parse(s).toLocaleDateString("en-US",o);
+const starSvg = cls=>`<svg class="${cls}" aria-hidden="true"><use href="#star"/></svg>`;
+const esc = s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const clock = h=>{h=h%24; const hh=Math.floor(h), mm=Math.round((h-hh)*60); if(hh===0&&mm===0) return "midnight"; const ap=hh>=12?"PM":"AM"; const h12=((hh+11)%12)+1; return mm?`${h12}:${pad(mm)} ${ap}`:`${h12} ${ap}`};
+function spotStats(id){
+  const rs=reps.filter(r=>r.spotId===id), sc=rs.map(r=>r.score).filter(Number.isFinite), rp=rs.map(r=>r.rpe).filter(Number.isFinite);
+  const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
+  return {visits:rs.length,score:avg(sc),rpe:avg(rp)};
+}
+const f1 = n=>Number.isInteger(n)?String(n):n.toFixed(1);
+function ratingText(st){ const p=[]; if(st.score!=null)p.push(`Score ${f1(st.score)}`); if(st.rpe!=null)p.push(`RPE ${f1(st.rpe)}`); return p.join(" · "); }
+function rpeEst(s){ const st=spotStats(s.id); if(st.rpe!=null) return st.rpe; return Math.min(9,2+miles(s)*1.4+(s.out&&sel.wx!=="nice"?1:0)); }
+const visitedSet = ()=>new Set(reps.map(r=>r.spotId).filter(Boolean));
+
+(function initDefaults(){
+  const now=new Date(), h=now.getHours(), m=now.getMonth(), day=now.getDay();
+  sel.wx = (m>=4 && m<=9) ? "nice" : "chilly";
+  if(day===3){ sel.feel="explore"; sel.dist="trip"; sel.time="couple"; }
+  else if(h>=11 && h<14){ sel.feel="recharge"; sel.time="quick"; sel.dist="walk"; }
+  else if(h<11){ sel.feel="focus"; sel.time="couple"; sel.dist="walk"; }
+  else { sel.feel="move"; sel.time="quick"; sel.dist="walk"; }
+  try{ const s=JSON.parse(localStorage.getItem("cr-prefs")||"{}"); if(s.spend) sel.spend=s.spend; if(s.wxDay===iso(now)&&s.wx) sel.wx=s.wx; if(s.home) home=s.home; }catch(_){}
+})();
+function savePrefs(){ try{ localStorage.setItem("cr-prefs",JSON.stringify({spend:sel.spend,wx:sel.wx,wxDay:iso(new Date()),home})); }catch(_){} }
+
+function openState(s, now=new Date()){
+  if(!s.hours) return {known:false};
+  const d=now.getDay(), t=now.getHours()+now.getMinutes()/60;
+  const y=s.hours[(d+6)%7];
+  if(y && y[1]>24 && t+24<y[1]) return {known:true,open:true,left:y[1]-24-t,text:`Open till ${clock(y[1])}`};
+  const e=s.hours[d];
+  if(!e) return {known:true,open:false,text:"Closed today"};
+  if(t<e[0]) return {known:true,open:false,later:true,opensIn:e[0]-t,text:`Opens ${clock(e[0])}`};
+  if(t>=e[1]) return {known:true,open:false,text:"Closed for today"};
+  return {known:true,open:true,left:e[1]-t,text:`Open till ${clock(e[1])}`};
+}
+function rand(id){ let h=seed*2654435761; for(const c of id) h=Math.imul(h^c.charCodeAt(0),16777619); return ((h>>>0)%1000)/1000; }
+
+// ---------- picker ----------
+function recommend(){
+  const visited=visitedSet(), DR={walk:0,ride:1,trip:2}, TR={quick:0,couple:1,half:2}, isWed=new Date().getDay()===3;
+  const out=[];
+  for(const s of SPOTS){
+    const dc=distCat(s);
+    if(sel.spend==="free" && !s.free) continue;
+    if(DR[dc]>DR[sel.dist]) continue;
+    if(TR[s.min]>TR[sel.time]) continue;
+    if(sel.wx==="wet" && s.out) continue;
+    const os=openState(s);
+    if(os.known && !os.open && !(os.later && os.opensIn<=0.5)) continue;
+    let sc=0; const why=[];
+    if(s.moods.includes(sel.feel)) sc+=4; else if(sel.feel==="explore" && !visited.has(s.id)) sc+=1; else sc-=2;
+    sc += DR[dc]===DR[sel.dist] ? 1.5 : 0.5;
+    if(sel.time==="quick") sc -= miles(s)*0.8;
+    if(sel.time==="half"){ if(s.work) sc+=1.5; if(os.known && os.open && os.left<2.5) sc-=2; }
+    if(sel.time==="quick" && os.known && os.open && os.left<0.75) sc-=3;
+    if(s.out) sc += sel.wx==="nice"?1.5:-1.5; else if(sel.wx!=="nice") sc+=0.5;
+    if(sel.feel==="focus" && s.work) sc+=1.5;
+    if(!visited.has(s.id)) sc+=1;
+    if(isWed && dc==="trip") sc+=1;
+    const st=spotStats(s.id), rpe=rpeEst(s);
+    if(sel.energy==="low"){ sc -= rpe*0.6; if(st.score!=null && st.rpe!=null && st.rpe<=4) sc+=1.5; }
+    if(sel.energy==="high"){ if(dc!=="walk") sc+=1; if(!visited.has(s.id)) sc+=1; }
+    if(st.score!=null) sc += (st.score-5)*0.5;
+    if(s.lic==="cancelled" || s.inspClosed) sc -= 4;
+    sc += rand(s.id)*2;
+    if(s.free) why.push(["free","Free"]);
+    if(os.known) why.push(["",os.text]); else why.push(["hint","Check hours"]);
+    why.push(["",s.out?"Outdoors":"Indoors"]);
+    if(s.work && (sel.feel==="focus"||sel.time!=="quick")) why.push(["","Good for working"]);
+    if(!visited.has(s.id)) why.push(["","New to you"]);
+    if(st.score!=null||st.rpe!=null) why.push(["",`Your ${ratingText(st)}`]);
+    else if(sel.energy==="low" && rpe<=3.5) why.push(["","Low effort"]);
+    out.push({s,sc,why});
+  }
+  return out.sort((a,b)=>b.sc-a.sc).slice(0,3);
+}
+function renderPicker(){
+  const now=new Date();
+  $("nowLine").textContent = `Right now: ${now.toLocaleDateString("en-US",{weekday:"long"})}, ${now.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"})}. Picks only show places open now.`;
+  document.querySelectorAll("[data-q]").forEach(box=>{
+    const q=box.dataset.q;
+    box.innerHTML = QS[q].map(([v,l])=>`<input type="radio" name="q-${q}" id="q-${q}-${v}" value="${v}" ${sel[q]===v?"checked":""}><label for="q-${q}-${v}">${l}</label>`).join("");
+  });
+  renderResults();
+}
+function spotActions(s){
+  return `<a class="btn maps" href="${mapsUrl(s)}" target="_blank" rel="noopener">Directions</a>
+    <button type="button" data-use="${s.id}">Log a rep here</button>
+    <button type="button" data-show="${s.id}">Show on map</button>`;
+}
+function renderResults(){
+  const recs=recommend();
+  $("results").innerHTML = recs.length ? recs.map((r,i)=>`
+    <div class="pick ${i===0?"top":""}">
+      <div class="tag">${i===0?"Best match · ":""}${esc(KIND_LABEL[r.s.kind])} · ${esc(r.s.hood)}</div>
+      <div class="name">${esc(r.s.name)}</div>
+      <div class="travel">${travel(r.s)}</div>
+      <div>${esc(r.s.note)}</div>
+      <div class="why">${r.why.map(([c,t])=>`<span class="${c}">${esc(t)}</span>`).join("")}</div>
+      <div class="meta">${esc(r.s.addr)}</div>${licLine(r.s)}
+      <div class="acts">${spotActions(r.s)}</div>
+    </div>`).join("")
+    : `<div class="empty-note">Nothing fits right now. Try "Coffee is fine," a longer trip, or more time.</div>`;
+  $("tip").textContent = sel.spend==="free" ? "Free-only tip: bring coffee from home in a thermos. You're out of the house and it costs nothing." : "";
+}
+
+// ---------- map ----------
+const NS_STREETS=[["State",0],["Halsted",800],["Racine",1200],["Ashland",1600],["Damen",2000],["Western",2400],["California",2800],["Kedzie",3200],["Central Park",3600],["Pulaski",4000]];
+const EW_STREETS=[["Fullerton",2400],["Armitage",2000],["North",1600],["Division",1200],["Chicago",800],["Grand",520],["Lake",200],["Madison",0],["Roosevelt",-1200],["Cermak",-2200]];
+const MILWAUKEE=[[41.8855,-87.6399],[41.89491,-87.65388],[41.90529,-87.66997],[41.90841,-87.6746],[41.91088,-87.67778],[41.91711,-87.68762],[41.92225,-87.69588],[41.92457,-87.69979],[41.9317,-87.71146],[41.9390,-87.7235]];
+function viewBox(){
+  const A=5/4;
+  if(view==="near" || viewCenter){
+    const c = viewCenter || {x:X(home.lng),y:Y(home.lat)}; const w = viewCenter?2.6:3.0, h=w/A;
+    return [c.x-w/2,c.y-h/2,w,h];
+  }
+  const xs=SPOTS.map(s=>X(s.lng)).concat(X(home.lng)), ys=SPOTS.map(s=>Y(s.lat)).concat(Y(home.lat));
+  let x0=Math.min(...xs)-0.3,x1=Math.max(...xs)+0.3,y0=Math.min(...ys)-0.3,y1=Math.max(...ys)+0.3;
+  let w=x1-x0,h=y1-y0; if(w/h<A){const nw=h*A;x0-=(nw-w)/2;w=nw}else{const nh=w/A;y0-=(nh-h)/2;h=nh}
+  return [x0,y0,w,h];
+}
+function renderMap(){
+  const [vx,vy,vw,vh]=viewBox(), fs=vw*0.024, r=vw*0.011, visited=visitedSet();
+  const parts=[];
+  for(const [n,a] of NS_STREETS){ const x=-a/800; if(x<vx||x>vx+vw) continue;
+    parts.push(`<line class="st" x1="${x}" y1="${vy}" x2="${x}" y2="${vy+vh}" stroke-width="${a%800===0?2:1}"/>`);
+    parts.push(`<text class="sl" x="${x+fs*0.25}" y="${vy+fs*1.1}" font-size="${fs*0.8}">${n}</text>`); }
+  for(const [n,a] of EW_STREETS){ const y=-a/800; if(y<vy||y>vy+vh) continue;
+    parts.push(`<line class="st" x1="${vx}" y1="${y}" x2="${vx+vw}" y2="${y}" stroke-width="${a%800===0?2:1}"/>`);
+    parts.push(`<text class="sl" x="${vx+fs*0.3}" y="${y-fs*0.3}" font-size="${fs*0.8}">${n}</text>`); }
+  parts.push(`<polyline class="mil" stroke-width="2" points="${MILWAUKEE.map(([la,ln])=>`${X(ln)},${Y(la)}`).join(" ")}"/>`);
+  const ml=MILWAUKEE[2]; parts.push(`<text class="sl" font-size="${fs*0.8}" transform="translate(${X(ml[1])+fs*0.4},${Y(ml[0])-fs*0.2}) rotate(-36)">Milwaukee</text>`);
+  // spots
+  const showLabels = vw<4;
+  for(const s of SPOTS){
+    const x=X(s.lng), y=Y(s.lat); if(x<vx-r||x>vx+vw+r||y<vy-r||y>vy+vh+r) continue;
+    const v=visited.has(s.id);
+    parts.push(`<g data-id="${s.id}" style="cursor:pointer"><circle cx="${x}" cy="${y}" r="${r*2.2}" fill="transparent"/>`+
+      (v ? `<use href="#star" x="${x-r*1.6}" y="${y-r*1.6}" width="${r*3.2}" height="${r*3.2}" class="vstar" style="color:var(--red)"/>`
+         : `<circle class="dot ${s.free?"free":"paid"}" cx="${x}" cy="${y}" r="${r}" stroke-width="1.5"/>`)+
+      (s.id===selId?`<circle class="ring" cx="${x}" cy="${y}" r="${r*2}"/>`:"")+`</g>`);
+  }
+  if(selId && showLabels){ const s=SPOT[selId]; parts.push(`<text class="lab" x="${X(s.lng)+r*2.4}" y="${Y(s.lat)+fs*0.35}" font-size="${fs}">${esc(s.name)}</text>`); }
+  const hx=X(home.lng), hy=Y(home.lat), hs=r*1.8;
+  parts.push(`<rect class="home" x="${hx-hs/2}" y="${hy-hs/2}" width="${hs}" height="${hs}" rx="${hs*0.15}"/><text class="homel" x="${hx+hs*0.8}" y="${hy-hs*0.6}" font-size="${fs}">Home</text>`);
+  const svg=$("map"); svg.setAttribute("viewBox",`${vx} ${vy} ${vw} ${vh}`); svg.innerHTML=parts.join("");
+  svg.classList.toggle("setting",settingHome);
+  $("setHome").classList.toggle("on",settingHome);
+  $("setHome").textContent = settingHome ? "Tap the map to place home · Cancel" : "Move home pin";
+  $("homeLine").textContent = settingHome ? "Tap where you live. Distances everywhere update right away."
+    : home.custom ? `Distances are measured from your home pin, near ${gridAddr(home.lat,home.lng)} on the grid.`
+    : "Distances are measured from a default pin at Chicago & Wood. Tap \"Move home pin\" to put it where you live.";
+  renderSelCard();
+}
+function renderSelCard(){
+  const c=$("selCard"); if(!selId){c.hidden=true;return;}
+  const s=SPOT[selId], os=openState(s), v=visitedSet().has(s.id);
+  c.hidden=false;
+  c.innerHTML=`<div class="tag">${esc(KIND_LABEL[s.kind])} · ${esc(s.hood)}${s.free?" · Free":""}${v?" · Been there":""}</div>
+    <div class="name">${esc(s.name)}</div><div class="travel">${travel(s)}</div>${(()=>{const st=spotStats(s.id),t=ratingText(st);return t?`<div class="travel">Your ratings: ${t} (${st.visits} visit${st.visits===1?"":"s"})</div>`:""})()}
+    <div>${esc(s.note)}</div><div class="meta">${esc(s.addr)} · ${esc(os.known?os.text:"Check hours")}</div>${licLine(s)}
+    <div class="acts">${spotActions(s).replace(/<button type="button" data-show[^]*?<\/button>/,"")}</div>`;
+}
+$("map").addEventListener("click",e=>{
+  const svg=$("map");
+  if(settingHome){
+    const pt=svg.createSVGPoint(); pt.x=e.clientX; pt.y=e.clientY;
+    const p=pt.matrixTransform(svg.getScreenCTM().inverse());
+    setHome({lat:+LAT(p.y).toFixed(5),lng:+LNG(p.x).toFixed(5),custom:true});
+    settingHome=false; viewCenter=null; renderAll(); return;
+  }
+  const g=e.target.closest("[data-id]"); if(g){ selId=g.dataset.id; renderMap(); }
+});
+async function setHome(h){
+  home=h; savePrefs(); sortHoods();
+}
+
+// ---------- directory ----------
+function renderDirectory(){
+  $("catSeg").innerHTML = CATS.map(([v,l])=>`<input type="radio" name="cat" id="cat-${v}" value="${v}" ${dir.cat===v?"checked":""}><label for="cat-${v}">${l}</label>`).join("");
+  renderList();
+}
+function renderList(){
+  const visited=visitedSet(), q=dir.q.trim().toLowerCase(), kinds=(CATS.find(c=>c[0]===dir.cat)||[])[2];
+  let list=SPOTS.filter(s=>{
+    if(kinds && !kinds.includes(s.kind)) return false;
+    if(dir.free && !s.free) return false;
+    if(dir.fresh && visited.has(s.id)) return false;
+    if(dir.open){ const os=openState(s); if(!os.known || !os.open) return false; }
+    if(q && !(`${s.name} ${s.addr} ${s.hood} ${KIND_LABEL[s.kind]}`.toLowerCase().includes(q))) return false;
+    return true;
+  });
+  if(dir.sort==="near") list.sort((a,b)=>miles(a)-miles(b));
+  else if(dir.sort==="az") list.sort((a,b)=>a.name.localeCompare(b.name));
+  else if(dir.sort==="rated"){ const k=s=>{const st=spotStats(s.id);return st.score==null&&st.rpe==null?-99:(st.score??5)-(st.rpe??5)}; list=list.filter(s=>k(s)>-99).sort((a,b)=>k(b)-k(a)); }
+  else list.sort((a,b)=>HOODS.indexOf(a.hood)-HOODS.indexOf(b.hood)||miles(a)-miles(b));
+  $("dirCount").textContent = `Showing ${list.length} of ${SPOTS.length} spots · ${visited.size} visited`;
+  let lastHood=null;
+  $("dlist").innerHTML = list.length ? list.map(s=>{
+    const os=openState(s), v=visited.has(s.id), ex=dir.expanded===s.id;
+    const hdr = dir.sort==="hood" && s.hood!==lastHood ? `<div class="tag" style="padding:12px 2px 4px">${esc(lastHood=s.hood)}</div>` : "";
+    return `${hdr}<div class="ditem"><button type="button" class="dhead" data-exp="${s.id}" aria-expanded="${ex}">
+      ${starSvg("mk"+(v?"":" empty"))}
+      <div class="txt"><div class="n">${esc(s.name)}</div><div class="m">${esc(s.hood)} · ${esc(KIND_LABEL[s.kind])}${s.free?" · Free":""}${(()=>{const t=ratingText(spotStats(s.id));return t?` <span class="rpill">${t}</span>`:""})()}</div></div>
+      <div class="r"><b>${miles(s).toFixed(1)} mi</b><span class="${os.open?"open":""}">${esc(os.known?os.text:"Check hours")}</span></div>
+    </button>${ex?`<div class="dbody"><div class="travel">${travel(s)}</div><div>${esc(s.note)}</div><div class="meta">${esc(s.addr)}</div>${licLine(s)}<div class="acts">${spotActions(s)}</div></div>`:""}</div>`;
+  }).join("") : `<div class="empty-note">${dir.sort==="rated"?"No rated spots yet. Add a Rep Score and RPE when you log a rep, and your sweet spots show up here, ranked by score minus RPE.":"No spots match. Clear a filter or the search."}</div>`;
+}
+$("dirQ").addEventListener("input",e=>{ dir.q=e.target.value; renderList(); });
+
+// ---------- tracker ----------
+function repDates(){return new Set(reps.map(r=>r.date))}
+function missState(){
+  const dates=repDates(); let miss=0; const today=new Date(); today.setHours(0,0,0,0);
+  for(let d=parse(START); d<today; d=addDays(d,1)){ if(dates.has(iso(d))) miss=0; else if(PLAN[d.getDay()].out) miss++; }
+  if(dates.has(iso(today))) miss=0; return miss;
+}
+function nextTarget(){ let d=new Date(); d.setHours(0,0,0,0);
+  for(let i=0;i<8;i++){ if(PLAN[d.getDay()].out && !repDates().has(iso(d))) return d; d=addDays(d,1); } return null; }
+function weekStart(){const d=new Date();d.setHours(0,0,0,0);const off=(d.getDay()+6)%7;return addDays(d,-off)}
+function renderTracker(){
+  const now=new Date(), tk=iso(now), p=PLAN[now.getDay()], dates=repDates();
+  $("todayDate").textContent = now.toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});
+  $("todayH").textContent = now.toLocaleDateString("en-US",{weekday:"long"});
+  $("todayPlan").textContent = dates.has(tk) ? `${p.long} Rep logged today.` : p.long;
+  const miss=missState(), st=$("status"), n=nextTarget(), nd=n?n.toLocaleDateString("en-US",{weekday:"short"}):"";
+  if(miss===0){st.className="chip ok";st.textContent= n && iso(n)!==tk ? `On track · next target ${nd}` : "On track";}
+  else if(miss===1){st.className="chip warn";st.textContent= n ? `Missed one · get out ${iso(n)===tk?"today":nd}` : "Missed one";}
+  else {st.className="chip bad";st.textContent="Missed twice · get out today";}
+  const ws=weekStart(); let hit=0;
+  for(let i=0;i<7;i++){const d=addDays(ws,i); if(PLAN[d.getDay()].out && dates.has(iso(d))) hit++;}
+  $("sWeek").textContent=`${hit}/3`; $("sTotal").textContent=reps.length; $("sSpots").textContent=visitedSet().size;
+  const today0=new Date();today0.setHours(0,0,0,0);
+  $("week").innerHTML=[...Array(7)].map((_,i)=>{
+    const d=addDays(ws,i), k=iso(d), pl=PLAN[d.getDay()], has=dates.has(k), past=d<today0&&d>=parse(START);
+    const mark = has ? starSvg("mark") : (pl.out && past ? `<div class="mark miss" aria-label="missed">–</div>` : `<div class="mark"></div>`);
+    return `<div class="dcell ${pl.out?"out":""} ${k===tk?"is-today":""}"><div class="d">${d.toLocaleDateString("en-US",{weekday:"narrow"})} ${d.getDate()}</div><div class="p">${pl.short}</div>${mark}</div>`;
+  }).join("");
+  renderLog();
+}
+function renderLog(){
+  const sorted=[...reps].sort((a,b)=>b.date.localeCompare(a.date)||(b.created||0)-(a.created||0));
+  if(!sorted.length){$("log").innerHTML=`<div class="empty-note">No reps yet. Log your first one above.</div>`;return;}
+  $("log").innerHTML=sorted.map(r=>`
+    <div class="entry"><div class="dt">${fmt(r.date,{weekday:"short",month:"short",day:"numeric"})}</div>
+      <div class="what"><div class="ty">${esc(TYPE_LABEL[r.type]||r.type)}${Number.isFinite(r.score)?` <span class="rpill">${r.score}/10</span>`:""}${Number.isFinite(r.rpe)?` <span class="rpill">RPE ${r.rpe}</span>`:""}</div>
+        <div>${esc(r.spotId&&SPOT[r.spotId]?SPOT[r.spotId].name:(r.spotName||"Out of the house"))}${r.note?` <span class="mut">· ${esc(r.note)}</span>`:""}</div></div>
+      <button type="button" data-del="${esc(r.id)}" aria-label="Delete rep">Delete</button></div>`).join("");
+}
+function buildForm(){
+  $("types").innerHTML=TYPES.map(([v,l],i)=>`<input type="radio" name="type" id="t${i}" value="${v}" ${i===0?"checked":""}><label for="t${i}">${l}</label>`).join("");
+  $("fSpot").innerHTML=`<option value="">Somewhere else</option>`+HOODS.map(h=>`<optgroup label="${esc(h)}">${SPOTS.filter(s=>s.hood===h).sort((a,b)=>a.name.localeCompare(b.name)).map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join("")}</optgroup>`).join("");
+  $("fDate").value=iso(new Date());
+  const opts=(labels)=>`<option value="">Skip</option>`+[...Array(10)].map((_,i)=>`<option value="${i+1}">${i+1}${labels[i+1]?` · ${labels[i+1]}`:""}</option>`).join("");
+  $("fScore").innerHTML=opts({1:"Never again",5:"Fine",8:"Great",10:"Perfect"});
+  $("fRpe").innerHTML=opts({1:"Barely left home",3:"Easy",5:"Some effort",8:"A real trek",10:"Max effort"});
+}
+function typeFor(s){ const dc=distCat(s); if(s.kind==="cafe"||s.kind==="bakery") return "cafe"; if(dc==="trip") return "big"; if(s.kind==="library") return "library"; if(s.out) return "outdoors"; return "explore"; }
+// Reps are saved in this browser only (localStorage). Nothing personal is sent anywhere.
+const repStore = {
+  load(){ try{ return JSON.parse(localStorage.getItem("cr-reps")||"[]"); }catch(_){ return null; } },
+  save(list){ try{ localStorage.setItem("cr-reps",JSON.stringify(list)); return true; }catch(_){ return false; } },
+};
+async function save(rep){
+  reps.push(rep); if(!repStore.save(reps)) $("notice").hidden=false; renderAll(); return true;
+}
+
+function renderAll(){ renderTracker(); renderResults(); renderMap(); renderList(); }
+
+document.addEventListener("submit",async e=>{
+  e.preventDefault();
+  const type=document.querySelector('input[name=type]:checked')?.value||"cafe", spotId=$("fSpot").value||null, date=$("fDate").value||iso(new Date());
+  const rep={id:`${date}-${Math.random().toString(36).slice(2,8)}`,date,type,spotId,spotName:spotId?SPOT[spotId].name:"",note:$("fNote").value.trim(),created:Date.now(),score:$("fScore").value?+$("fScore").value:null,rpe:$("fRpe").value?+$("fRpe").value:null};
+  if(await save(rep)){ $("fNote").value=""; $("fScore").value=""; $("fRpe").value=""; $("toast").textContent=`Rep logged for ${fmt(date,{weekday:"long"})}.`; setTimeout(()=>$("toast").textContent="",3000); }
+});
+const smooth = ()=>matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth";
+document.addEventListener("click",async e=>{
+  const t=e.target;
+  if(t.id==="shuffle"){ seed++; renderResults(); return; }
+  if(t.id==="setHome"){ settingHome=!settingHome; if(settingHome){ viewCenter=null; } renderMap(); return; }
+  const exp=t.closest?.("[data-exp]"); if(exp){ dir.expanded = dir.expanded===exp.dataset.exp?null:exp.dataset.exp; renderList(); return; }
+  const show=t.closest?.("[data-show]"); if(show){ const s=SPOT[show.dataset.show]; selId=s.id; viewCenter={x:X(s.lng),y:Y(s.lat)}; renderMap(); $("mapSec").scrollIntoView({behavior:smooth()}); return; }
+  const use=t.closest?.("[data-use]");
+  if(use){ const s=SPOT[use.dataset.use]; $("fSpot").value=s.id; const r=document.querySelector(`input[name=type][value=${typeFor(s)}]`); if(r) r.checked=true;
+    $("fDate").value=iso(new Date()); $("form").scrollIntoView({behavior:smooth()}); return; }
+  const del=t.closest?.("[data-del]");
+  if(del){ const id=del.dataset.del;
+    if(del.dataset.confirm!=="1"){ del.dataset.confirm="1"; del.textContent="Confirm"; setTimeout(()=>{if(del.isConnected){del.dataset.confirm="";del.textContent="Delete";}},3000); return; }
+    reps=reps.filter(r=>r.id!==id); repStore.save(reps); renderAll(); }
+});
+document.addEventListener("change",e=>{
+  const n=e.target.name||"", id=e.target.id;
+  if(n.startsWith("q-")){ sel[n.slice(2)]=e.target.value; seed=1; savePrefs(); renderResults(); }
+  if(n==="view"){ view=e.target.value; viewCenter=null; renderMap(); }
+  if(n==="cat"){ dir.cat=e.target.value; renderList(); }
+  if(id==="fFree"){ dir.free=e.target.checked; renderList(); }
+  if(id==="fOpen"){ dir.open=e.target.checked; renderList(); }
+  if(id==="fNew"){ dir.fresh=e.target.checked; renderList(); }
+  if(id==="sortSel"){ dir.sort=e.target.value; renderList(); }
+});
+
+// ---------- data ----------
+// Live: Supabase's Data API serves public.spots (built by dbt, read-only for
+// this key). Backup: the daily export the site ships with, used if Supabase
+// is paused or unreachable.
+function toSpot(r){
+  return {id:r.spot_id, name:r.name, hood:r.neighborhood, addr:r.address, kind:r.kind,
+    lat:r.lat, lng:r.lon, coordSrc:r.coord_source, lic:r.license_state,
+    insp:r.last_inspection_date||undefined, inspClosed:r.inspector_marked_closed||undefined,
+    moods:r.moods||[], free:!!r.is_free, out:!!r.is_outdoors, work:!!r.good_for_work,
+    min:r.time_needed||"quick", hours:r.hours_week||null, hoursSrc:r.hours_source||null, note:r.note||""};
+}
+async function loadSpots(){
+  const cfg = window.CITY_REPS_CONFIG || {};
+  if(cfg.supabaseUrl && cfg.supabaseKey){
+    try{
+      const headers = {apikey:cfg.supabaseKey};
+      if(cfg.supabaseKey.startsWith("eyJ")) headers.Authorization = `Bearer ${cfg.supabaseKey}`; // legacy anon key
+      const res = await fetch(`${cfg.supabaseUrl}/rest/v1/spots?select=*`, {headers, signal:AbortSignal.timeout(8000)});
+      if(res.ok){ const rows = await res.json(); if(rows.length) return {rows, live:true, asOf:rows[0].refreshed_at}; }
+    }catch(_){}
+  }
+  const res = await fetch("dim_spots.json", {cache:"no-cache"});
+  if(!res.ok) throw new Error(`backup ${res.status}`);
+  return {rows:(await res.json()).spots, live:false};
+}
+function sortHoods(){
+  const near = {};
+  for(const s of SPOTS) near[s.hood] = Math.min(near[s.hood] ?? Infinity, miles(s));
+  HOODS = Object.keys(near).sort((a,b)=>near[a]-near[b]);
+}
+function showSource(data){
+  const when = data.asOf ? new Date(data.asOf).toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"}) : "";
+  $("dataAsOf").textContent = data.live
+    ? `Live from Supabase, refreshed ${when}.`
+    : "Showing the backup copy (Supabase didn't answer).";
+}
+
+(async()=>{
+  let data;
+  try{ data = await loadSpots(); }
+  catch(_){ $("loadError").hidden=false; return; }
+  SPOTS = data.rows.map(toSpot);
+  SPOT = Object.fromEntries(SPOTS.map(s=>[s.id,s]));
+  sortHoods(); showSource(data);
+  const saved = repStore.load(); if(saved===null) $("notice").hidden=false; else reps = saved;
+  buildForm(); renderPicker(); renderDirectory(); renderAll();
+  let lastTick=-1;
+  setInterval(()=>{ const m=Math.floor(new Date().getMinutes()/10); if(m!==lastTick){ lastTick=m; renderPicker(); renderAll(); } },60000);
+})();
+</script>
+
+</body></html>

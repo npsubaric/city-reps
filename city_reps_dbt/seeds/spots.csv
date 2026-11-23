@@ -1,75 +1,75 @@
-spot_id,name,neighborhood,address,kind,is_free,good_for_work
-wt-library,West Town Library,West Town,1625 W Chicago Ave,library,true,true
-eckhart,Eckhart Park,West Town,1330 W Chicago Ave,park,true,false
-standing-passengers,Standing Passengers,West Town,1458 W Chicago Ave,cafe,false,true
-prequel,Prequel Cafe,West Town,1957 W Chicago Ave,cafe,false,true
-altar,Altar Home & Cafe,West Town,1858 W Chicago Ave,cafe,false,false
-west-town-bakery,West Town Bakery,West Town,1916 W Chicago Ave,bakery,false,false
-guillotine,Guillotine Bakery,West Town,1711 W Chicago Ave,bakery,false,false
-mano,Mano Modern Cafe,West Town,851 N Ashland Ave,cafe,false,false
-engine,Engine Coffee,West Town,1109 N Ashland Ave,cafe,false,false
-center-order,Center of Order & Experimentation,West Town,1727 W Grand Ave,cafe,false,false
-pqb,Publican Quality Bread,West Town,1759 W Grand Ave,bakery,false,false
-dm-soft-parade,Dark Matter Soft Parade,West Town,2015 W Grand Ave,cafe,false,false
-move-along,Move Along Coffee,River West,1223 W Grand Ave,cafe,false,false
-gallery-cafe,Gallery Café,River West,734 N Milwaukee Ave,cafe,false,false
-smith-park,Smith Park,Ukrainian Village,2526 W Grand Ave,park,true,false
-dm-star,Dark Matter Star Lounge,Ukrainian Village,2521 W Chicago Ave,cafe,false,true
-dm-mothership,Dark Matter Mothership,Ukrainian Village,738 N Western Ave,cafe,false,false
-shokolad,Shokolad Pastry & Cafe,Ukrainian Village,2524 W Chicago Ave,bakery,false,false
-uima,Ukrainian Institute of Modern Art,Ukrainian Village,2320 W Chicago Ave,museum,false,false
-wicker-park-park,Wicker Park (the park),Wicker Park,1425 N Damen Ave,park,true,false
-quimbys,Quimby's Bookstore,Wicker Park,1854 W North Ave,books,true,false
-myopic,Myopic Books,Wicker Park,1564 N Milwaukee Ave,books,true,false
-bn-wicker,Barnes & Noble Wicker Park,Wicker Park,1601 N Milwaukee Ave,books,true,false
-candor,Candor,Wicker Park,1745 W Division St,cafe,false,false
-tous-les-jours,Tous les Jours,Wicker Park,1726 W Division St,bakery,false,false
-wake-n-bakery,Wake N Bakery,Wicker Park,1659 W Division St,bakery,false,false
-heyday,Heyday Eatery,Wicker Park,1609 W Division St,cafe,false,false
-prequel-wp,Prequel Cafe Wicker Park,Wicker Park,2034 W Division St,cafe,false,false
-colectivo-wp,Colectivo Wicker Park,Wicker Park,1211 N Damen Ave,cafe,false,true
-oud,Oud Coffee & Cafe,Wicker Park,2127 W Division St,cafe,false,true
-letizias,Letizia's Natural Bakery,Wicker Park,2144 W Division St,bakery,false,false
-wormhole,The Wormhole,Wicker Park,1462 N Milwaukee Ave,cafe,false,false
-bru,Brü,Wicker Park,1562 N Milwaukee Ave,cafe,false,false
-606-east,The 606 (east end),Wicker Park,Ashland & Bloomingdale,trail,true,false
-bwp-library,Bucktown-Wicker Park Library,Bucktown,1701 N Milwaukee Ave,library,true,true
-soloway,Soloway Coffee,Bucktown,1708 N Damen Ave,cafe,false,false
-goddess-bucktown,Goddess and Grocer Bucktown,Bucktown,1649 N Damen Ave,cafe,false,false
-ipsento,Ipsento 606,Bucktown,1813 N Milwaukee Ave,cafe,false,true
-truce,Truce,Bucktown,1935 N Damen Ave,cafe,false,false
-arwa,Arwa Yemeni Coffee,Bucktown,1953 N Milwaukee Ave,cafe,false,false
-cafe-gimme,Cafe Gimme,Bucktown,2115 N Damen Ave,cafe,false,false
-humboldt-park,Humboldt Park,Humboldt Park,1400 N Humboldt Dr,park,true,false
-hp-library,Humboldt Park Library,Humboldt Park,1605 N Troy St,library,true,true
-la-boulangerie,La Boulangerie & Co,Humboldt Park,936 N California Ave,bakery,false,false
-colao,Café Colao,Humboldt Park,2638 W Division St,bakery,false,false
-plena,Plena Mercancia,Humboldt Park,2628 W Division St,cafe,false,false
-chucherias,Chucherías Tropical Creations,Humboldt Park,2627 W Division St,cafe,false,false
-happy-thoughts,Drink Happy Thoughts,Humboldt Park,2415 W North Ave,cafe,false,false
-calida,Café Calidá,Humboldt Park,3455 W North Ave,cafe,false,true
-tasa,Tasa Coffee Roasters,Humboldt Park,4136 W North Ave,cafe,false,false
-ls-library,Logan Square Library,Logan Square,3030 W Fullerton Ave,library,true,true
-city-lit,City Lit Books,Logan Square,2523 N Kedzie Blvd,books,true,false
-umbria,Caffè Umbria,Logan Square,2545 W Armitage Ave,cafe,false,true
-logan-collective,Logan Collective,Logan Square,3026 W Armitage Ave,cafe,false,false
-colectivo,Colectivo Logan Square,Logan Square,2261 N Milwaukee Ave,cafe,false,true
-cafe-mustache,Cafe Mustache,Logan Square,2313 N Milwaukee Ave,cafe,false,false
-gaslight,Gaslight Coffee Roasters,Logan Square,2385 N Milwaukee Ave,cafe,false,true
-chique,Chique°Latte,Logan Square,2643 N Milwaukee Ave,cafe,false,true
-mate,Mate & Company,Logan Square,2779 N Milwaukee Ave,cafe,false,false
-fulton-walk,Fulton Market walk,West Loop,Fulton Market & Randolph St,walk,true,false
-la-colombe,La Colombe Coffee Workshop,West Loop,955 W Randolph St,cafe,false,true
-goddess-fulton,Goddess and Grocer Fulton Market,West Loop,911 W Randolph St,cafe,false,false
-sawada,Sawada Coffee,West Loop,112 N Green St,cafe,false,true
-discourse,Discourse Coffee,West Loop,952 W Fulton St,cafe,false,false
-loop-coffee,Loop Coffee,West Loop,810 W Washington Blvd,cafe,false,false
-drip,Drip Collective,West Loop,172 N Racine Ave,cafe,false,false
-hwlc,Harold Washington Library,The Loop,400 S State St,library,true,true
-cultural-center,Chicago Cultural Center,The Loop,78 E Washington St,public,true,true
-riverwalk,Chicago Riverwalk,The Loop,Riverwalk at State St,walk,true,false
-millennium,Millennium Park & Lurie Garden,The Loop,201 E Randolph St,park,true,false
-after-words,after-words Bookstore,River North,23 E Illinois St,books,true,false
-garfield-cons,Garfield Park Conservatory,Garfield Park,300 N Central Park Ave,museum,true,false
-lp-cons,Lincoln Park Conservatory,Lincoln Park,2391 N Stockton Dr,museum,true,false
-nmma,National Museum of Mexican Art,Pilsen,1852 W 19th St,museum,true,false
+spot_id,name,neighborhood,address,kind,is_free,good_for_work,is_outdoors,moods,time_needed,note
+wt-library,West Town Library,West Town,1625 W Chicago Ave,library,true,true,false,focus recharge,quick,Chicago Public Library branch on Chicago Ave. Free wifi and tables.
+eckhart,Eckhart Park,West Town,1330 W Chicago Ave,park,true,false,true,recharge move,quick,"Park District park with a big lawn, shade trees, and benches."
+standing-passengers,Standing Passengers,West Town,1458 W Chicago Ave,cafe,false,true,false,people explore,quick,Coffee shop on Chicago Ave with records and arcade games.
+prequel,Prequel Cafe,West Town,1957 W Chicago Ave,cafe,false,true,false,focus recharge,quick,Coffee shop on Chicago Ave that also shows local art.
+altar,Altar Home & Cafe,West Town,1858 W Chicago Ave,cafe,false,false,false,recharge focus,quick,Coffee bar inside a home goods shop on Chicago Ave.
+west-town-bakery,West Town Bakery,West Town,1916 W Chicago Ave,bakery,false,false,false,people,quick,Bakery café on Chicago Ave with breakfast and pastries.
+guillotine,Guillotine Bakery,West Town,1711 W Chicago Ave,bakery,false,false,false,explore,quick,Small bakery on Chicago Ave.
+mano,Mano Modern Cafe,West Town,851 N Ashland Ave,cafe,false,false,false,focus people,quick,Filipino-inspired café on Ashland.
+engine,Engine Coffee,West Town,1109 N Ashland Ave,cafe,false,false,false,recharge,quick,"Small coffee shop on Ashland, just south of Division."
+center-order,Center of Order & Experimentation,West Town,1727 W Grand Ave,cafe,false,false,false,explore recharge,quick,"Coffee shop and gift shop in one, on Grand."
+pqb,Publican Quality Bread,West Town,1759 W Grand Ave,bakery,false,false,false,explore people,quick,"Bakery café from the Publican team. Bread, pastries, and coffee."
+dm-soft-parade,Dark Matter Soft Parade,West Town,2015 W Grand Ave,cafe,false,false,false,move,quick,Small Dark Matter coffee bar on Grand.
+move-along,Move Along Coffee,River West,1223 W Grand Ave,cafe,false,false,false,move,quick,Walk-up coffee window on Grand. No seating.
+gallery-cafe,Gallery Café,River West,734 N Milwaukee Ave,cafe,false,false,false,focus,quick,Coffee shop on Milwaukee in River West.
+smith-park,Smith Park,Ukrainian Village,2526 W Grand Ave,park,true,false,true,move recharge,quick,Park District park with a walking path around it.
+dm-star,Dark Matter Star Lounge,Ukrainian Village,2521 W Chicago Ave,cafe,false,true,false,people focus,quick,"Dark Matter café on Chicago Ave, with murals and a patio."
+dm-mothership,Dark Matter Mothership,Ukrainian Village,738 N Western Ave,cafe,false,false,false,people,quick,"The original Dark Matter café, on Western."
+shokolad,Shokolad Pastry & Cafe,Ukrainian Village,2524 W Chicago Ave,bakery,false,false,false,explore recharge,quick,Ukrainian pastry café on Chicago Ave.
+uima,Ukrainian Institute of Modern Art,Ukrainian Village,2320 W Chicago Ave,museum,false,false,false,explore,quick,Ukrainian Institute of Modern Art. A small museum with rotating shows.
+wicker-park-park,Wicker Park (the park),Wicker Park,1425 N Damen Ave,park,true,false,true,recharge people,quick,"Neighborhood park with a fountain, gardens, and benches."
+quimbys,Quimby's Bookstore,Wicker Park,1854 W North Ave,books,true,false,false,explore recharge,quick,"Bookstore for zines, comics, and small-press books."
+myopic,Myopic Books,Wicker Park,1564 N Milwaukee Ave,books,true,false,false,explore recharge,quick,Used bookstore on three floors.
+bn-wicker,Barnes & Noble Wicker Park,Wicker Park,1601 N Milwaukee Ave,books,true,false,false,recharge explore,quick,"Barnes & Noble in the old bank building at Milwaukee, North, and Damen."
+candor,Candor,Wicker Park,1745 W Division St,cafe,false,false,false,recharge,quick,Café on Division with a back patio.
+tous-les-jours,Tous les Jours,Wicker Park,1726 W Division St,bakery,false,false,false,people,quick,Korean-French bakery café on Division.
+wake-n-bakery,Wake N Bakery,Wicker Park,1659 W Division St,bakery,false,false,false,people,quick,Bakery café on Division.
+heyday,Heyday Eatery,Wicker Park,1609 W Division St,cafe,false,false,false,people,quick,Coffee and brunch on Division.
+prequel-wp,Prequel Cafe Wicker Park,Wicker Park,2034 W Division St,cafe,false,false,false,focus recharge,quick,"The second Prequel, on Division."
+colectivo-wp,Colectivo Wicker Park,Wicker Park,1211 N Damen Ave,cafe,false,true,false,focus people,quick,"Colectivo on Damen, just south of Division."
+oud,Oud Coffee & Cafe,Wicker Park,2127 W Division St,cafe,false,true,false,focus people,quick,Palestinian café on Division with a large seating area.
+letizias,Letizia's Natural Bakery,Wicker Park,2144 W Division St,bakery,false,false,false,recharge,quick,Long-running bakery café at Division and Leavitt.
+wormhole,The Wormhole,Wicker Park,1462 N Milwaukee Ave,cafe,false,false,false,people explore,quick,Coffee shop on Milwaukee with an '80s sci-fi theme.
+bru,Brü,Wicker Park,1562 N Milwaukee Ave,cafe,false,false,false,people focus,quick,"Coffee, breakfast, and desserts on Milwaukee."
+606-east,The 606 (east end),Wicker Park,Ashland & Bloomingdale,trail,true,false,true,move recharge people,quick,Elevated trail on an old rail line. Walk out and back from the Ashland trailhead.
+bwp-library,Bucktown-Wicker Park Library,Bucktown,1701 N Milwaukee Ave,library,true,true,false,focus recharge,quick,Bucktown-Wicker Park branch of the Chicago Public Library.
+soloway,Soloway Coffee,Bucktown,1708 N Damen Ave,cafe,false,false,false,move people,quick,"Coffee shop and running store on Damen, near the 606."
+goddess-bucktown,Goddess and Grocer Bucktown,Bucktown,1649 N Damen Ave,cafe,false,false,false,focus,quick,Café and market on Damen.
+ipsento,Ipsento 606,Bucktown,1813 N Milwaukee Ave,cafe,false,true,false,focus people,quick,"Coffee shop on Milwaukee, steps from the 606."
+truce,Truce,Bucktown,1935 N Damen Ave,cafe,false,false,false,people explore,quick,Café on Damen that also runs as a cocktail bar.
+arwa,Arwa Yemeni Coffee,Bucktown,1953 N Milwaukee Ave,cafe,false,false,false,explore people,quick,Yemeni coffee house on Milwaukee.
+cafe-gimme,Cafe Gimme,Bucktown,2115 N Damen Ave,cafe,false,false,false,recharge,quick,Small café on Damen near Armitage.
+humboldt-park,Humboldt Park,Humboldt Park,1400 N Humboldt Dr,park,true,false,true,move recharge explore,couple,"Large park with a lagoon, boathouse, and prairie paths."
+hp-library,Humboldt Park Library,Humboldt Park,1605 N Troy St,library,true,true,false,focus,quick,Humboldt Park branch of the Chicago Public Library.
+la-boulangerie,La Boulangerie & Co,Humboldt Park,936 N California Ave,bakery,false,false,false,recharge,quick,French bakery café on California.
+colao,Café Colao,Humboldt Park,2638 W Division St,bakery,false,false,false,explore people,quick,Puerto Rican bakery café on Paseo Boricua.
+plena,Plena Mercancia,Humboldt Park,2628 W Division St,cafe,false,false,false,explore,quick,Small coffee shop on Paseo Boricua.
+chucherias,Chucherías Tropical Creations,Humboldt Park,2627 W Division St,cafe,false,false,false,explore,quick,Café on Division with tropical drinks and brunch.
+happy-thoughts,Drink Happy Thoughts,Humboldt Park,2415 W North Ave,cafe,false,false,false,people,quick,Small café on North Ave with a back patio.
+calida,Café Calidá,Humboldt Park,3455 W North Ave,cafe,false,true,false,focus recharge,quick,Café on North Ave with breakfast tacos.
+tasa,Tasa Coffee Roasters,Humboldt Park,4136 W North Ave,cafe,false,false,false,focus,quick,Café on North Ave with a full food menu. Farther west.
+ls-library,Logan Square Library,Logan Square,3030 W Fullerton Ave,library,true,true,false,focus,quick,Logan Square branch of the Chicago Public Library.
+city-lit,City Lit Books,Logan Square,2523 N Kedzie Blvd,books,true,false,false,explore recharge,quick,Independent bookstore on Kedzie Boulevard.
+umbria,Caffè Umbria,Logan Square,2545 W Armitage Ave,cafe,false,true,false,focus recharge,quick,"Caffè Umbria on Armitage, with several seating areas."
+logan-collective,Logan Collective,Logan Square,3026 W Armitage Ave,cafe,false,false,false,recharge,quick,Café on Armitage that roasts its own coffee.
+colectivo,Colectivo Logan Square,Logan Square,2261 N Milwaukee Ave,cafe,false,true,false,focus people,quick,Colectivo on Milwaukee in Logan Square.
+cafe-mustache,Cafe Mustache,Logan Square,2313 N Milwaukee Ave,cafe,false,false,false,people,quick,"Café by day and bar at night, on Milwaukee."
+gaslight,Gaslight Coffee Roasters,Logan Square,2385 N Milwaukee Ave,cafe,false,true,false,focus,quick,Coffee roastery on Milwaukee.
+chique,Chique°Latte,Logan Square,2643 N Milwaukee Ave,cafe,false,true,false,focus people,quick,Small café on Milwaukee in Logan Square.
+mate,Mate & Company,Logan Square,2779 N Milwaukee Ave,cafe,false,false,false,explore recharge,quick,Yerba mate café on Milwaukee.
+fulton-walk,Fulton Market walk,West Loop,Fulton Market & Randolph St,walk,true,false,true,explore people move,quick,"Walk Randolph and Fulton from Halsted to Ogden. Restaurants, murals, people-watching."
+la-colombe,La Colombe Coffee Workshop,West Loop,955 W Randolph St,cafe,false,true,false,people focus,quick,Large La Colombe café on Randolph.
+goddess-fulton,Goddess and Grocer Fulton Market,West Loop,911 W Randolph St,cafe,false,false,false,people,quick,Café and market on Randolph.
+sawada,Sawada Coffee,West Loop,112 N Green St,cafe,false,true,false,people explore,quick,Coffee shop in a large industrial space in Fulton Market.
+discourse,Discourse Coffee,West Loop,952 W Fulton St,cafe,false,false,false,explore,quick,Specialty coffee shop on Fulton with unusual lattes.
+loop-coffee,Loop Coffee,West Loop,810 W Washington Blvd,cafe,false,false,false,explore,quick,Coffee shop on Washington with house-made syrups.
+drip,Drip Collective,West Loop,172 N Racine Ave,cafe,false,false,false,people,quick,Coffee shop on Racine with inventive lattes.
+hwlc,Harold Washington Library,The Loop,400 S State St,library,true,true,false,focus explore,couple,"Harold Washington Library, the main branch. The Winter Garden is on the 9th floor."
+cultural-center,Chicago Cultural Center,The Loop,78 E Washington St,public,true,true,false,explore focus people,couple,"Free landmark building with a Tiffany dome, exhibits, and public seating."
+riverwalk,Chicago Riverwalk,The Loop,Riverwalk at State St,walk,true,false,true,move people explore,couple,Walk the river east toward the lake.
+millennium,Millennium Park & Lurie Garden,The Loop,201 E Randolph St,park,true,false,true,explore people recharge,couple,"The Bean, Lurie Garden, then Maggie Daley Park next door."
+after-words,after-words Bookstore,River North,23 E Illinois St,books,true,false,false,explore recharge,couple,New and used bookstore with a big basement.
+garfield-cons,Garfield Park Conservatory,Garfield Park,300 N Central Park Ave,museum,true,false,false,recharge explore,couple,"Large glass conservatory, warm inside year-round. Check its site for timed entry."
+lp-cons,Lincoln Park Conservatory,Lincoln Park,2391 N Stockton Dr,museum,true,false,false,recharge explore,couple,Victorian glass conservatory next to Lincoln Park Zoo.
+nmma,National Museum of Mexican Art,Pilsen,1852 W 19th St,museum,true,false,false,explore,couple,"National Museum of Mexican Art, free. 18th Street's murals are nearby."

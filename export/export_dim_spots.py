@@ -1,7 +1,9 @@
-"""Export analytics.dim_spots to export/dim_spots.json for the City Reps app.
+"""Export analytics.dim_spots to export/dim_spots.json.
 
-The app can't query Supabase directly, so the daily pipeline writes this file
-and commits it to the repo whenever the data changes.
+The website reads live from Supabase (public.spots). This file is its
+backup copy: the site falls back to it if Supabase can't be reached, and it
+keeps a readable history of the data in git. The daily pipeline writes it
+and commits it whenever the data changes.
 
 The output is deterministic (sorted by spot_id, no timestamps), so the file
 only changes, and only gets a new commit, when the underlying data does. The
@@ -25,16 +27,19 @@ OUT_FILE = Path(__file__).resolve().parent / "dim_spots.json"
 
 COLUMNS = [
     "spot_id", "name", "neighborhood", "address", "kind", "is_free", "good_for_work",
+    "is_outdoors", "moods", "time_needed", "note",
     "lat", "lon", "coord_source",
     "license_no", "license_business_name", "match_method",
     "license_expiration_date", "license_state",
     "last_inspection_date", "last_inspection_result", "inspector_marked_closed",
+    "hours_week", "hours_source", "osm_key",
 ]
 
 ATTRIBUTION = [
     "City of Chicago open data: Business Licenses (r5kz-chrr), Food Inspections (4ijn-s7e5)",
     "US Census Geocoder (public domain)",
-    "© OpenStreetMap contributors, ODbL (spots with coord_source = openstreetmap)",
+    "© OpenStreetMap contributors, ODbL (spots with coord_source or hours_source = openstreetmap)",
+    "Posted park hours: Chicago Park District and City of Chicago",
 ]
 
 

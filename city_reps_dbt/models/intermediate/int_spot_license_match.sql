@@ -43,19 +43,9 @@ licenses as (
     select * from {{ ref('int_license_locations') }}
 ),
 
--- Distinctive words in each spot's name, for the name check.
--- Generic words (CAFE, COFFEE, neighborhood names) don't count.
+-- Distinctive words in each spot's name, for the name check (macros/spot_name_words.sql)
 spot_words as (
-    select spots.spot_id, word
-    from spots
-    cross join lateral regexp_split_to_table(upper(spots.name), '[^A-Z0-9]+') as word
-    where length(word) >= 4
-      and word not in (
-          'CAFE', 'CAFFE', 'COFFEE', 'BAKERY', 'BOOKS', 'BOOKSTORE', 'ROASTERS',
-          'COMPANY', 'EATERY', 'PASTRY', 'BREAD', 'HOME', 'NATURAL', 'MODERN',
-          'WICKER', 'PARK', 'LOGAN', 'SQUARE', 'BUCKTOWN', 'TOWN', 'WEST',
-          'LOOP', 'FULTON', 'MARKET'
-      )
+    {{ spot_name_words('spots') }}
 ),
 
 candidates as (
