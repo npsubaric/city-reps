@@ -4,7 +4,7 @@
 
 City Reps is a small app that helps me get out of my apartment: it picks a café, library, park or bookstore near me based on my mood, the time and the weather, and tracks a "never miss twice" streak. This repo is the data engineering behind it. Every day it loads the City of Chicago's open data and OpenStreetMap, matches them to the app's 74 hand-picked spots, and builds tested tables in Supabase. The website reads them live.
 
-**Live app:** [npsubaric.github.io/city-reps](https://npsubaric.github.io/city-reps/)
+**Live app:** [npsubaric.github.io/city-reps](https://npsubaric.github.io/city-reps/) · **dbt docs:** [npsubaric.github.io/city-reps/docs](https://npsubaric.github.io/city-reps/docs/) (models, tests, lineage graph)
 
 Built by [Nikolas Subaric](https://github.com/npsubaric), a data engineer in Chicago.
 
@@ -109,7 +109,7 @@ Seeds: `spots` (the app's spots and notes), `spot_coordinates` (open-data geocod
 | Workflow | When | What it does |
 | --- | --- | --- |
 | [Daily pipeline](.github/workflows/daily_pipeline.yml) | Every day, 11:17 UTC (+ manual button) | Runs the loaders, then `dbt build`, then commits the JSON export if the data changed |
-| [Deploy website](.github/workflows/pages.yml) | After each pipeline run, and on changes to the app | Publishes `app/` and the backup JSON to GitHub Pages |
+| [Deploy website](.github/workflows/pages.yml) | After each pipeline run, and on changes to the app or models | Publishes `app/`, the backup JSON and the dbt docs site to GitHub Pages |
 | [CI](.github/workflows/ci.yml) | Every pull request | Runs the Python tests, then builds and tests every model in separate `ci` and `ci_public` schemas, so checks never touch production tables |
 
 Every change goes through a pull request and must pass CI before merging.
