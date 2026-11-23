@@ -1,6 +1,6 @@
 {
   "attribution": [
-    "City of Chicago open data: Business Licenses (r5kz-chrr)",
+    "City of Chicago open data: Business Licenses (r5kz-chrr), Food Inspections (4ijn-s7e5)",
     "US Census Geocoder (public domain)",
     "© OpenStreetMap contributors, ODbL (spots with coord_source = openstreetmap)"
   ],
@@ -21,7 +21,10 @@
       "license_business_name": null,
       "match_method": null,
       "license_expiration_date": null,
-      "license_state": "not_applicable"
+      "license_state": "not_applicable",
+      "last_inspection_date": null,
+      "last_inspection_result": null,
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "after-words",
@@ -38,7 +41,10 @@
       "license_business_name": "AFTERWORDS INC BOOK SALES",
       "match_method": "address_only",
       "license_expiration_date": "2027-03-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": null,
+      "last_inspection_result": null,
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "altar",
@@ -55,7 +61,10 @@
       "license_business_name": "ALTAR HOME",
       "match_method": "address_and_name",
       "license_expiration_date": "2028-07-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2025-12-16",
+      "last_inspection_result": "PASS W/ CONDITIONS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "arwa",
@@ -72,7 +81,10 @@
       "license_business_name": "ARWA YEMENI COFFEE BUCKTOWN",
       "match_method": "address_and_name",
       "license_expiration_date": "2028-06-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2026-10-20",
+      "last_inspection_result": "PASS W/ CONDITIONS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "bn-wicker",
@@ -89,7 +101,10 @@
       "license_business_name": "BARNES & NOBLE BOOKSELLERS INC",
       "match_method": "address_and_name",
       "license_expiration_date": "2028-02-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": null,
+      "last_inspection_result": null,
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "bru",
@@ -106,7 +121,10 @@
       "license_business_name": "AMP CAFE",
       "match_method": "address_only",
       "license_expiration_date": "2028-04-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2025-08-26",
+      "last_inspection_result": "PASS W/ CONDITIONS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "bwp-library",
@@ -123,7 +141,10 @@
       "license_business_name": null,
       "match_method": null,
       "license_expiration_date": null,
-      "license_state": "not_applicable"
+      "license_state": "not_applicable",
+      "last_inspection_date": null,
+      "last_inspection_result": null,
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "cafe-gimme",
@@ -140,7 +161,10 @@
       "license_business_name": "CAFE GIMME",
       "match_method": "address_and_name",
       "license_expiration_date": "2028-08-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2026-07-13",
+      "last_inspection_result": "PASS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "cafe-mustache",
@@ -157,7 +181,10 @@
       "license_business_name": "CAFE MUSTACHE",
       "match_method": "address_and_name",
       "license_expiration_date": "2028-07-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2026-10-15",
+      "last_inspection_result": "PASS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "calida",
@@ -174,7 +201,10 @@
       "license_business_name": "CAFE CALIDA",
       "match_method": "address_only",
       "license_expiration_date": "2028-02-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2025-12-23",
+      "last_inspection_result": "PASS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "candor",
@@ -191,7 +221,10 @@
       "license_business_name": "CANDOR",
       "match_method": "address_and_name",
       "license_expiration_date": "2027-08-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2025-07-21",
+      "last_inspection_result": "PASS W/ CONDITIONS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "center-order",
@@ -208,7 +241,10 @@
       "license_business_name": null,
       "match_method": null,
       "license_expiration_date": null,
-      "license_state": "not_found"
+      "license_state": "not_found",
+      "last_inspection_date": null,
+      "last_inspection_result": null,
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "chique",
@@ -225,7 +261,10 @@
       "license_business_name": "CHIQUEOLATTE",
       "match_method": "address_only",
       "license_expiration_date": "2028-03-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": null,
+      "last_inspection_result": null,
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "chucherias",
@@ -242,7 +281,10 @@
       "license_business_name": "CHUCHERIAS TROPICAL CREATIONS",
       "match_method": "address_and_name",
       "license_expiration_date": "2028-10-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2025-08-28",
+      "last_inspection_result": "PASS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "city-lit",
@@ -259,7 +301,10 @@
       "license_business_name": "CITY LIT BOOKS LLC",
       "match_method": "address_and_name",
       "license_expiration_date": "2028-09-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": null,
+      "last_inspection_result": null,
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "colao",
@@ -276,7 +321,10 @@
       "license_business_name": "CAFE COLAO",
       "match_method": "address_and_name",
       "license_expiration_date": "2028-10-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2026-11-03",
+      "last_inspection_result": "PASS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "colectivo",
@@ -293,7 +341,10 @@
       "license_business_name": "COLECTIVO COFFEE",
       "match_method": "address_and_name",
       "license_expiration_date": "2027-05-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2026-10-14",
+      "last_inspection_result": "PASS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "colectivo-wp",
@@ -310,7 +361,10 @@
       "license_business_name": "COLECTIVO COFFEE",
       "match_method": "address_and_name",
       "license_expiration_date": "2027-05-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2025-09-24",
+      "last_inspection_result": "PASS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "cultural-center",
@@ -327,7 +381,10 @@
       "license_business_name": null,
       "match_method": null,
       "license_expiration_date": null,
-      "license_state": "not_applicable"
+      "license_state": "not_applicable",
+      "last_inspection_date": null,
+      "last_inspection_result": null,
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "discourse",
@@ -344,7 +401,10 @@
       "license_business_name": null,
       "match_method": null,
       "license_expiration_date": null,
-      "license_state": "not_found"
+      "license_state": "not_found",
+      "last_inspection_date": null,
+      "last_inspection_result": null,
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "dm-mothership",
@@ -361,7 +421,10 @@
       "license_business_name": "DARK MATTER COFFEE",
       "match_method": "address_and_name",
       "license_expiration_date": "2028-07-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2025-09-05",
+      "last_inspection_result": "PASS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "dm-soft-parade",
@@ -378,7 +441,10 @@
       "license_business_name": "CHOCOLATE CITY",
       "match_method": "address_only",
       "license_expiration_date": "2027-05-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2025-11-10",
+      "last_inspection_result": "PASS W/ CONDITIONS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "dm-star",
@@ -395,7 +461,10 @@
       "license_business_name": "STAR LOUNGE COFFEE BAR",
       "match_method": "address_and_name",
       "license_expiration_date": "2028-07-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2025-12-17",
+      "last_inspection_result": "PASS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "drip",
@@ -412,7 +481,10 @@
       "license_business_name": "DRIP COLLECTIVE LLC",
       "match_method": "address_and_name",
       "license_expiration_date": "2025-12-15",
-      "license_state": "on_file"
+      "license_state": "on_file",
+      "last_inspection_date": null,
+      "last_inspection_result": null,
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "eckhart",
@@ -429,7 +501,10 @@
       "license_business_name": null,
       "match_method": null,
       "license_expiration_date": null,
-      "license_state": "not_applicable"
+      "license_state": "not_applicable",
+      "last_inspection_date": null,
+      "last_inspection_result": null,
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "engine",
@@ -446,7 +521,10 @@
       "license_business_name": "ENGINE COFFEE",
       "match_method": "address_and_name",
       "license_expiration_date": "2026-05-15",
-      "license_state": "on_file"
+      "license_state": "on_file",
+      "last_inspection_date": "2025-05-21",
+      "last_inspection_result": "PASS W/ CONDITIONS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "fulton-walk",
@@ -463,7 +541,10 @@
       "license_business_name": null,
       "match_method": null,
       "license_expiration_date": null,
-      "license_state": "not_applicable"
+      "license_state": "not_applicable",
+      "last_inspection_date": null,
+      "last_inspection_result": null,
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "gallery-cafe",
@@ -480,7 +561,10 @@
       "license_business_name": "GALLERY CAFE",
       "match_method": "address_and_name",
       "license_expiration_date": "2028-05-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2025-12-16",
+      "last_inspection_result": "PASS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "garfield-cons",
@@ -497,7 +581,10 @@
       "license_business_name": null,
       "match_method": null,
       "license_expiration_date": null,
-      "license_state": "not_applicable"
+      "license_state": "not_applicable",
+      "last_inspection_date": null,
+      "last_inspection_result": null,
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "gaslight",
@@ -514,7 +601,10 @@
       "license_business_name": "GASLIGHT COFFEE ROASTERS",
       "match_method": "address_and_name",
       "license_expiration_date": "2026-10-15",
-      "license_state": "on_file"
+      "license_state": "on_file",
+      "last_inspection_date": "2026-07-27",
+      "last_inspection_result": "PASS W/ CONDITIONS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "goddess-bucktown",
@@ -531,7 +621,10 @@
       "license_business_name": "THE GODDESS AND  GROCER",
       "match_method": "address_and_name",
       "license_expiration_date": "2027-11-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2026-01-21",
+      "last_inspection_result": "PASS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "goddess-fulton",
@@ -548,7 +641,10 @@
       "license_business_name": "THE GODDESS WEST LOOP",
       "match_method": "address_and_name",
       "license_expiration_date": "2028-02-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2026-06-22",
+      "last_inspection_result": "PASS W/ CONDITIONS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "guillotine",
@@ -565,7 +661,10 @@
       "license_business_name": "GUILLOTINE BAKERY",
       "match_method": "address_and_name",
       "license_expiration_date": "2028-06-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2026-05-28",
+      "last_inspection_result": "PASS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "happy-thoughts",
@@ -582,7 +681,10 @@
       "license_business_name": "DRINK HAPPY THOUGHTS",
       "match_method": "address_and_name",
       "license_expiration_date": "2026-06-15",
-      "license_state": "on_file"
+      "license_state": "on_file",
+      "last_inspection_date": "2025-12-17",
+      "last_inspection_result": "PASS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "heyday",
@@ -599,7 +701,10 @@
       "license_business_name": "HEYDAY",
       "match_method": "address_and_name",
       "license_expiration_date": "2027-08-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2025-07-24",
+      "last_inspection_result": "PASS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "hp-library",
@@ -616,7 +721,10 @@
       "license_business_name": null,
       "match_method": null,
       "license_expiration_date": null,
-      "license_state": "not_applicable"
+      "license_state": "not_applicable",
+      "last_inspection_date": null,
+      "last_inspection_result": null,
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "humboldt-park",
@@ -633,7 +741,10 @@
       "license_business_name": null,
       "match_method": null,
       "license_expiration_date": null,
-      "license_state": "not_applicable"
+      "license_state": "not_applicable",
+      "last_inspection_date": null,
+      "last_inspection_result": null,
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "hwlc",
@@ -650,7 +761,10 @@
       "license_business_name": null,
       "match_method": null,
       "license_expiration_date": null,
-      "license_state": "not_applicable"
+      "license_state": "not_applicable",
+      "last_inspection_date": null,
+      "last_inspection_result": null,
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "ipsento",
@@ -667,7 +781,10 @@
       "license_business_name": "IPSENTO COFFEE",
       "match_method": "address_and_name",
       "license_expiration_date": "2028-06-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2024-12-27",
+      "last_inspection_result": "PASS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "la-boulangerie",
@@ -684,7 +801,10 @@
       "license_business_name": "LA BOULANGERIE & CO",
       "match_method": "address_and_name",
       "license_expiration_date": "2028-08-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2026-10-05",
+      "last_inspection_result": "PASS W/ CONDITIONS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "la-colombe",
@@ -701,7 +821,10 @@
       "license_business_name": "LA COLUMBE",
       "match_method": "address_only",
       "license_expiration_date": "2027-07-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2025-07-02",
+      "last_inspection_result": "PASS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "letizias",
@@ -718,7 +841,10 @@
       "license_business_name": "LETIZA'S NATURAL BAKERY / ENOTECA ROMA",
       "match_method": "address_only",
       "license_expiration_date": "2028-11-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2026-10-26",
+      "last_inspection_result": "PASS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "logan-collective",
@@ -735,7 +861,10 @@
       "license_business_name": "LOGAN COLLECTIVE",
       "match_method": "address_and_name",
       "license_expiration_date": "2028-06-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2025-12-16",
+      "last_inspection_result": "PASS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "loop-coffee",
@@ -752,7 +881,10 @@
       "license_business_name": "LOOP COFFEE CHICAGO",
       "match_method": "address_only",
       "license_expiration_date": "2028-06-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2026-05-13",
+      "last_inspection_result": "PASS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "lp-cons",
@@ -769,7 +901,10 @@
       "license_business_name": null,
       "match_method": null,
       "license_expiration_date": null,
-      "license_state": "not_applicable"
+      "license_state": "not_applicable",
+      "last_inspection_date": null,
+      "last_inspection_result": null,
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "ls-library",
@@ -786,7 +921,10 @@
       "license_business_name": null,
       "match_method": null,
       "license_expiration_date": null,
-      "license_state": "not_applicable"
+      "license_state": "not_applicable",
+      "last_inspection_date": null,
+      "last_inspection_result": null,
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "mano",
@@ -803,7 +941,10 @@
       "license_business_name": "MANO MODERN CAFE",
       "match_method": "address_and_name",
       "license_expiration_date": "2027-11-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2026-10-15",
+      "last_inspection_result": "PASS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "mate",
@@ -820,7 +961,10 @@
       "license_business_name": "MATE & COMPANY",
       "match_method": "address_and_name",
       "license_expiration_date": "2028-09-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2026-08-13",
+      "last_inspection_result": "PASS W/ CONDITIONS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "millennium",
@@ -837,7 +981,10 @@
       "license_business_name": null,
       "match_method": null,
       "license_expiration_date": null,
-      "license_state": "not_applicable"
+      "license_state": "not_applicable",
+      "last_inspection_date": null,
+      "last_inspection_result": null,
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "move-along",
@@ -854,7 +1001,10 @@
       "license_business_name": "MOVE ALONG COFFEE LLC",
       "match_method": "address_and_name",
       "license_expiration_date": "2028-09-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2025-04-28",
+      "last_inspection_result": "NO ENTRY",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "myopic",
@@ -871,7 +1021,10 @@
       "license_business_name": "MYOPIC BOOKS",
       "match_method": "address_and_name",
       "license_expiration_date": "2024-05-15",
-      "license_state": "on_file"
+      "license_state": "on_file",
+      "last_inspection_date": null,
+      "last_inspection_result": null,
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "nmma",
@@ -888,7 +1041,10 @@
       "license_business_name": null,
       "match_method": null,
       "license_expiration_date": null,
-      "license_state": "not_applicable"
+      "license_state": "not_applicable",
+      "last_inspection_date": null,
+      "last_inspection_result": null,
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "oud",
@@ -905,7 +1061,10 @@
       "license_business_name": "OUD COFFEE AND CAFE",
       "match_method": "address_only",
       "license_expiration_date": "2027-06-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2025-07-17",
+      "last_inspection_result": "PASS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "plena",
@@ -922,7 +1081,10 @@
       "license_business_name": "PLENA MERCANCIA LLC",
       "match_method": "address_and_name",
       "license_expiration_date": "2028-07-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2025-02-05",
+      "last_inspection_result": "PASS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "pqb",
@@ -939,7 +1101,10 @@
       "license_business_name": "PUBLICAN QUALITY BREAD",
       "match_method": "address_and_name",
       "license_expiration_date": "2028-03-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2026-04-20",
+      "last_inspection_result": "PASS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "prequel",
@@ -956,7 +1121,10 @@
       "license_business_name": "PREQUEL CAFE",
       "match_method": "address_and_name",
       "license_expiration_date": "2026-08-15",
-      "license_state": "on_file"
+      "license_state": "on_file",
+      "last_inspection_date": "2025-05-21",
+      "last_inspection_result": "PASS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "prequel-wp",
@@ -973,7 +1141,10 @@
       "license_business_name": "PREQUEL CAFE",
       "match_method": "address_and_name",
       "license_expiration_date": "2026-08-15",
-      "license_state": "on_file"
+      "license_state": "on_file",
+      "last_inspection_date": "2026-10-28",
+      "last_inspection_result": "PASS W/ CONDITIONS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "quimbys",
@@ -990,7 +1161,10 @@
       "license_business_name": "QUIMBY'S BOOKSTORE",
       "match_method": "address_and_name",
       "license_expiration_date": "2027-04-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": null,
+      "last_inspection_result": null,
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "riverwalk",
@@ -1007,7 +1181,10 @@
       "license_business_name": null,
       "match_method": null,
       "license_expiration_date": null,
-      "license_state": "not_applicable"
+      "license_state": "not_applicable",
+      "last_inspection_date": null,
+      "last_inspection_result": null,
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "sawada",
@@ -1024,7 +1201,10 @@
       "license_business_name": "GREEN STREET SMOKED MEATS/HIGH FIVE RAMEN/SAWADA COFFEE",
       "match_method": "address_and_name",
       "license_expiration_date": "2027-11-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2026-08-25",
+      "last_inspection_result": "PASS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "shokolad",
@@ -1041,7 +1221,10 @@
       "license_business_name": "SHOKOLAD PASTRY & CAFE, INC",
       "match_method": "address_and_name",
       "license_expiration_date": "2028-11-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2026-08-05",
+      "last_inspection_result": "PASS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "smith-park",
@@ -1058,7 +1241,10 @@
       "license_business_name": null,
       "match_method": null,
       "license_expiration_date": null,
-      "license_state": "not_applicable"
+      "license_state": "not_applicable",
+      "last_inspection_date": null,
+      "last_inspection_result": null,
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "soloway",
@@ -1075,7 +1261,10 @@
       "license_business_name": "SOLOWAY COFFEE",
       "match_method": "address_and_name",
       "license_expiration_date": "2028-02-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2026-02-02",
+      "last_inspection_result": "PASS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "standing-passengers",
@@ -1092,7 +1281,10 @@
       "license_business_name": "STANDING PASSENGERS INC.",
       "match_method": "address_and_name",
       "license_expiration_date": "2028-05-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2025-12-03",
+      "last_inspection_result": "PASS W/ CONDITIONS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "tasa",
@@ -1109,7 +1301,10 @@
       "license_business_name": "TASA COFFEE ROASTERS",
       "match_method": "address_and_name",
       "license_expiration_date": "2028-08-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": null,
+      "last_inspection_result": null,
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "tous-les-jours",
@@ -1126,7 +1321,10 @@
       "license_business_name": "TOUS LES JOURS",
       "match_method": "address_and_name",
       "license_expiration_date": "2027-06-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2025-09-02",
+      "last_inspection_result": "PASS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "truce",
@@ -1143,7 +1341,10 @@
       "license_business_name": "TRUCE",
       "match_method": "address_and_name",
       "license_expiration_date": "2027-11-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": null,
+      "last_inspection_result": null,
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "uima",
@@ -1160,7 +1361,10 @@
       "license_business_name": null,
       "match_method": null,
       "license_expiration_date": null,
-      "license_state": "not_applicable"
+      "license_state": "not_applicable",
+      "last_inspection_date": null,
+      "last_inspection_result": null,
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "umbria",
@@ -1177,7 +1381,10 @@
       "license_business_name": "CAFE UMBRIA, INC.",
       "match_method": "address_and_name",
       "license_expiration_date": "2027-11-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2024-12-17",
+      "last_inspection_result": "PASS W/ CONDITIONS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "wake-n-bakery",
@@ -1194,7 +1401,10 @@
       "license_business_name": "WAKE-N-BAKERY",
       "match_method": "address_and_name",
       "license_expiration_date": "2028-03-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2024-12-09",
+      "last_inspection_result": "PASS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "west-town-bakery",
@@ -1211,7 +1421,10 @@
       "license_business_name": "WEST TOWN BAKERY & DINER",
       "match_method": "address_only",
       "license_expiration_date": "2027-09-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2026-08-14",
+      "last_inspection_result": "PASS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "wicker-park-park",
@@ -1228,7 +1441,10 @@
       "license_business_name": null,
       "match_method": null,
       "license_expiration_date": null,
-      "license_state": "not_applicable"
+      "license_state": "not_applicable",
+      "last_inspection_date": null,
+      "last_inspection_result": null,
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "wormhole",
@@ -1245,7 +1461,10 @@
       "license_business_name": "THE WORMHOLE",
       "match_method": "address_and_name",
       "license_expiration_date": "2028-11-15",
-      "license_state": "current"
+      "license_state": "current",
+      "last_inspection_date": "2025-08-07",
+      "last_inspection_result": "PASS",
+      "inspector_marked_closed": false
     },
     {
       "spot_id": "wt-library",
@@ -1262,7 +1481,10 @@
       "license_business_name": null,
       "match_method": null,
       "license_expiration_date": null,
-      "license_state": "not_applicable"
+      "license_state": "not_applicable",
+      "last_inspection_date": null,
+      "last_inspection_result": null,
+      "inspector_marked_closed": false
     }
   ]
 }
