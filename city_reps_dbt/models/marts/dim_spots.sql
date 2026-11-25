@@ -31,7 +31,7 @@ matches as (
 
 inspections as (
     select license_no, last_inspection_date, last_inspection_type, last_result,
-           last_violation_count, inspection_count, failed_inspection_count
+           last_violation_count, last_violations, inspection_count, failed_inspection_count
     from {{ ref('dim_facilities') }}
 ),
 
@@ -85,6 +85,7 @@ select
     inspections.last_result                                     as last_inspection_result,
     inspections.last_inspection_type,
     inspections.last_violation_count,
+    inspections.last_violations,
     inspections.inspection_count,
     inspections.failed_inspection_count,
     coalesce(inspections.last_result = 'OUT OF BUSINESS', false) as inspector_marked_closed,

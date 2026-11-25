@@ -40,6 +40,7 @@ select
     last_inspection_type,
     last_inspection_result,
     last_violation_count,
+    last_violations,
     inspection_count,
     failed_inspection_count,
     inspector_marked_closed,

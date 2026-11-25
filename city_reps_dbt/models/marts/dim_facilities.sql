@@ -27,6 +27,7 @@ select
     -- Violations arrive as one text field, separated by " | "
     coalesce(array_length(string_to_array(nullif(trim(violations), ''), ' | '), 1), 0)
                                   as last_violation_count,
+    nullif(trim(violations), '')  as last_violations,
     inspection_count,
     failed_inspection_count,
     result = 'OUT OF BUSINESS'    as is_closed

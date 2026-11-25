@@ -46,6 +46,12 @@ h2{font-size:22px;font-weight:800;font-stretch:80%;text-transform:uppercase;lett
 .licpanel{margin:6px 0 2px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:13px;line-height:1.5}
 .ld-h{font-weight:600;margin-top:8px} .ld-h:first-child{margin-top:0}
 .ld-ok{color:var(--ok)} .ld-warn{color:var(--warn)} .ld-bad{color:var(--red)}
+.viol{margin:4px 0 2px} .viol>summary{cursor:pointer;list-style:none;display:inline;color:var(--blue-ink)}
+.viol>summary::-webkit-details-marker{display:none}
+.viol>summary:hover,.viol>summary:focus-visible,.viol[open]>summary{text-decoration:underline;text-underline-offset:2px}
+.viol ol{margin:6px 0 0;padding-left:20px} .viol li{margin:0 0 8px}
+.vt{font-weight:600} .vsev{font-size:11px;font-weight:600;margin-left:6px;white-space:nowrap}
+.vnote{color:var(--muted);font-size:12px;margin-top:2px}
 .ld-src{font-size:12px;color:var(--muted);margin-top:6px} .ld-src a{color:var(--blue-ink)}
 .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
 .section{display:flex;flex-direction:column;gap:12px}
@@ -332,12 +338,36 @@ const titleCase = t => t ? t.toLowerCase().replace(/\b\w/g, c => c.toUpperCase()
 const RESULT_TEXT = {"PASS":["Passed","ok"], "PASS W/ CONDITIONS":["Passed with conditions","warn"], "FAIL":["Failed","bad"],
   "OUT OF BUSINESS":["Out of business","bad"], "NO ENTRY":["No entry (inspector couldn't get in)","warn"],
   "NOT READY":["Not ready for inspection","warn"], "BUSINESS NOT LOCATED":["Business not located","bad"]};
+// The city publishes violations as one text field: "<n>. <RULE> - Comments: <notes> | <n>. ..."
+const sentenceCase = t => t.toLowerCase().replace(/(^|[.!?]\s+)([a-z])/g, (m, a, b) => a + b.toUpperCase());
+function parseViolations(text){
+  if (!text) return [];
+  return String(text).split(" | ").map(v => {
+    const m = v.match(/^\s*(\d+)\.\s*([\s\S]*?)(?:\s+-\s+Comments:\s*([\s\S]*))?$/i);
+    const rule = m ? m[2] : v, note = m && m[3] ? m[3].trim() : "";
+    const up = note.toUpperCase();
+    const sev = /PRIORITY FOUNDATION/.test(up) ? ["Priority foundation", "warn"]
+      : /PRIORITY/.test(up) ? ["Priority", "bad"] : /CORE/.test(up) ? ["Core", ""] : null;
+    return {num: m ? m[1] : "", rule: rule.trim(), note, sev, cited: /CITATION ISSUED/.test(up) && !/NO CITATION ISSUED/.test(up)};
+  });
+}
+function violationList(s){
+  const vs = parseViolations(s.inspViolText);
+  if (!vs.length) return "";
+  const items = vs.map(v => `<li><span class="vt">${esc(titleCase(v.rule))}</span>`
+    + (v.sev ? `<span class="vsev ld-${v.sev[1]}">${esc(v.sev[0])}</span>` : "")
+    + (v.cited ? `<span class="vsev ld-bad">Citation issued</span>` : "")
+    + (v.note ? `<div class="vnote">Inspector: ${esc(sentenceCase(v.note))}</div>` : "") + `</li>`).join("");
+  return `<details class="viol"><summary>See what the inspector found (${vs.length})</summary><ol>${items}</ol></details>`;
+}
 function licDetail(s){
   const out = [`<div class="ld-h">Health inspection</div>`];
   if (s.insp) {
     const [label, tone] = RESULT_TEXT[s.inspResult] || [titleCase(s.inspResult || "Unknown"), ""];
     out.push(`<div>Last inspected <b>${esc(fmtDay(s.insp))}</b>${s.inspType ? ` · ${esc(titleCase(s.inspType))}` : ""}</div>`);
     out.push(`<div>Result: <b class="ld-${tone}">${esc(label)}</b>${s.inspViol ? ` · ${s.inspViol} violation${s.inspViol === 1 ? "" : "s"} noted` : ""}</div>`);
+    if (s.inspResult === "PASS W/ CONDITIONS") out.push(`<div class="vnote">Passed with conditions means the inspector found serious problems, and they were corrected during the inspection.</div>`);
+    out.push(violationList(s));
     if (s.inspCount) out.push(`<div>${s.inspCount} inspection${s.inspCount === 1 ? "" : "s"} since 2024, ${s.inspFails ? `${s.inspFails} failed` : "none failed"}</div>`);
   } else {
     out.push(`<div>No food inspections on record since 2024.</div>`);
@@ -357,7 +387,7 @@ function licDetail(s){
     const n = encodeURIComponent(s.licNo);
     out.push(`<div class="ld-src">City of Chicago open data, license #${esc(String(s.licNo))}: `
       + `<a href="https://data.cityofchicago.org/resource/4ijn-s7e5.json?license_=${n}&$order=inspection_date%20DESC" target="_blank" rel="noopener">inspections</a> · `
-      + `<a href="https://data.cityofchicago.org/resource/r5kz-chrr.json?license_number=${n}&$order=expiration_date%20DESC" target="_blank" rel="noopener">license</a></div>`);
+      + `<a href="https://data.cityofchicago.org/resource/r5kz-chrr.json?license_number=${n}&$order=license_start_date%20DESC,expiration_date%20DESC&$limit=1" target="_blank" rel="noopener">license</a></div>`);
   }
   return `<div class="licpanel">${out.join("")}</div>`;
 }
@@ -728,7 +758,7 @@ function toSpot(r){
     lat:r.lat, lng:r.lon, coordSrc:r.coord_source, lic:r.license_state,
     insp:r.last_inspection_date||undefined, inspClosed:r.inspector_marked_closed||undefined,
     inspType:r.last_inspection_type||null, inspResult:r.last_inspection_result||null,
-    inspViol:r.last_violation_count||0, inspCount:r.inspection_count||0, inspFails:r.failed_inspection_count||0,
+    inspViol:r.last_violation_count||0, inspViolText:r.last_violations||"", inspCount:r.inspection_count||0, inspFails:r.failed_inspection_count||0,
     licNo:r.license_no||null, licName:r.license_business_name||null, licType:r.license_type||null,
     licStart:r.license_start_date||null, licExp:r.license_expiration_date||null,
     moods:r.moods||[], free:!!r.is_free, out:!!r.is_outdoors, work:!!r.good_for_work,
