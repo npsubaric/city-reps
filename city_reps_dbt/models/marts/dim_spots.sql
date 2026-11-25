@@ -30,7 +30,8 @@ matches as (
 ),
 
 inspections as (
-    select license_no, last_inspection_date, last_result
+    select license_no, last_inspection_date, last_inspection_type, last_result,
+           last_violation_count, inspection_count, failed_inspection_count
     from {{ ref('dim_facilities') }}
 ),
 
@@ -67,7 +68,9 @@ select
 
     matches.license_no,
     matches.license_business_name,
+    matches.license_type,
     matches.match_method,
+    matches.license_start_date,
     matches.license_expiration_date,
     case
         when matches.license_no is null
@@ -80,6 +83,10 @@ select
 
     inspections.last_inspection_date,
     inspections.last_result                                     as last_inspection_result,
+    inspections.last_inspection_type,
+    inspections.last_violation_count,
+    inspections.inspection_count,
+    inspections.failed_inspection_count,
     coalesce(inspections.last_result = 'OUT OF BUSINESS', false) as inspector_marked_closed,
 
     coalesce(hours_rules.hours_week, osm.osm_hours_week) as hours_week,

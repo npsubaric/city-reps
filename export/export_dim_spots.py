@@ -29,9 +29,11 @@ COLUMNS = [
     "spot_id", "name", "neighborhood", "address", "kind", "is_free", "good_for_work",
     "is_outdoors", "moods", "time_needed", "note",
     "lat", "lon", "coord_source",
-    "license_no", "license_business_name", "match_method",
-    "license_expiration_date", "license_state",
-    "last_inspection_date", "last_inspection_result", "inspector_marked_closed",
+    "license_no", "license_business_name", "license_type", "match_method",
+    "license_start_date", "license_expiration_date", "license_state",
+    "last_inspection_date", "last_inspection_type", "last_inspection_result",
+    "last_violation_count", "inspection_count", "failed_inspection_count",
+    "inspector_marked_closed",
     "hours_week", "hours_source", "osm_key",
 ]
 
