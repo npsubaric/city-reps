@@ -1,3 +1,8 @@
+-- Stored as a table, not a view: the name matching is the slowest step in the
+-- project, and dim_spots and dim_new_places both read it. As a view it ran
+-- twice in parallel and pushed dim_new_places past Supabase's statement timeout.
+{{ config(materialized='table') }}
+
 -- Finds the business license, if any, behind each City Reps spot.
 --
 -- Rules:
