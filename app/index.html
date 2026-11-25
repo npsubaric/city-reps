@@ -109,7 +109,7 @@ select,input[type=date],input[type=text],input[type=search]{font:inherit;color:v
 #map .mil{stroke:var(--street);fill:none;vector-effect:non-scaling-stroke}
 #map .sl{fill:var(--muted);font-family:var(--mono)}
 #map .dot{stroke:var(--surface);vector-effect:non-scaling-stroke}
-#map .dot.food{fill:var(--blue-ink)} #map .dot.free{fill:var(--ok)} #map .dot.paid{fill:var(--muted)}
+#map .dot.paid{fill:var(--blue-ink)} #map .dot.free{fill:var(--ok)}
 #map .vstar{fill:var(--red)}
 #map .ring{fill:none;stroke:var(--ink);vector-effect:non-scaling-stroke;stroke-width:2}
 #map .home{color:var(--red);stroke:var(--ink);stroke-width:1.6;stroke-linejoin:round} #map .homel{fill:var(--ink);font-family:var(--body);font-weight:700}
@@ -229,7 +229,7 @@ form{display:flex;flex-direction:column;gap:12px}
       <button type="button" id="setHome">Move home pin</button>
     </div>
     <div class="mapbox"><svg id="map" role="img" aria-label="Map of spots around West Town"></svg></div>
-    <div class="keyrow"><span><i style="background:var(--blue-ink)"></i>Café or bakery</span><span><i style="background:var(--ok)"></i>Free</span><span><i style="background:var(--muted)"></i>Paid entry</span><span><i style="background:var(--red)"></i>Been there</span><span><svg class="homekey" aria-hidden="true"><use href="#star"/></svg>Home</span></div>
+    <div class="keyrow"><span><i style="background:var(--blue-ink)"></i>Café or bakery</span><span><i style="background:var(--ok)"></i>Free</span><span><i style="background:var(--red)"></i>Been there</span><span><svg class="homekey" aria-hidden="true"><use href="#star"/></svg>Home</span></div>
     <div class="selcard" id="selCard" hidden></div>
   </section>
 
@@ -531,8 +531,6 @@ function viewBox(){
   let w=x1-x0,h=y1-y0; if(w/h<A){const nw=h*A;x0-=(nw-w)/2;w=nw}else{const nh=w/A;y0-=(nh-h)/2;h=nh}
   return [x0,y0,w,h];
 }
-// Dot colors: blue = café or bakery, green = free (parks, libraries...), gray = paid entry
-const dotClass = s => (s.kind === "cafe" || s.kind === "bakery") ? "food" : s.free ? "free" : "paid";
 function renderMap(){
   const [vx,vy,vw,vh]=viewBox(), fs=vw*0.024, r=vw*0.011, visited=visitedSet();
   const parts=[];
@@ -551,7 +549,7 @@ function renderMap(){
     const v=visited.has(s.id);
     parts.push(`<g data-id="${s.id}" style="cursor:pointer"><circle cx="${x}" cy="${y}" r="${r*2.2}" fill="transparent"/>`+
       (v ? `<use href="#star" x="${x-r*1.6}" y="${y-r*1.6}" width="${r*3.2}" height="${r*3.2}" class="vstar" style="color:var(--red)"/>`
-         : `<circle class="dot ${dotClass(s)}" cx="${x}" cy="${y}" r="${r}" stroke-width="1.5"/>`)+
+         : `<circle class="dot ${s.free?"free":"paid"}" cx="${x}" cy="${y}" r="${r}" stroke-width="1.5"/>`)+
       (s.id===selId?`<circle class="ring" cx="${x}" cy="${y}" r="${r*2}"/>`:"")+`</g>`);
   }
   if(selId && showLabels){ const s=SPOT[selId]; parts.push(`<text class="lab" x="${X(s.lng)+r*2.4}" y="${Y(s.lat)+fs*0.35}" font-size="${fs}">${esc(s.name)}</text>`); }
