@@ -327,7 +327,7 @@ const LIC_TEXT = {current:"City license current", on_file:"City license on file"
 // an "Out of Business" result is a stronger closure signal than an expired license.
 const monYr = d => { const [y,m] = d.split("-").map(Number); return new Date(y, m-1, 1).toLocaleDateString("en-US", {month:"short", year:"numeric"}); };
 // Tapping the license line opens the latest inspection and license details.
-const fmtDay = d => { const [y,m,dd] = d.split("-").map(Number); return new Date(y, m-1, dd).toLocaleDateString("en-US", {month:"short", day:"numeric", year:"numeric"}); };
+const fmtDay = d => { if (!d) return ""; const [y,m,dd] = String(d).slice(0,10).split("-").map(Number); return new Date(y, m-1, dd).toLocaleDateString("en-US", {month:"short", day:"numeric", year:"numeric"}); };
 const titleCase = t => t ? t.toLowerCase().replace(/\b\w/g, c => c.toUpperCase()) : "";
 const RESULT_TEXT = {"PASS":["Passed","ok"], "PASS W/ CONDITIONS":["Passed with conditions","warn"], "FAIL":["Failed","bad"],
   "OUT OF BUSINESS":["Out of business","bad"], "NO ENTRY":["No entry (inspector couldn't get in)","warn"],
@@ -346,7 +346,7 @@ function licDetail(s){
   if (s.lic === "not_found") {
     out.push(`<div>No matching license in the city's data. Some cafés run under another business's license, or the record is missing.</div>`);
   } else {
-    const [status, tone] = s.lic === "current" ? [`Current through ${fmtDay(s.licExp)}`, "ok"]
+    const [status, tone] = s.lic === "current" ? [s.licExp ? `Current through ${fmtDay(s.licExp)}` : "Current", "ok"]
       : s.lic === "cancelled" ? ["Cancelled by the city", "bad"]
       : [`Expired ${s.licExp ? fmtDay(s.licExp) : ""}, no renewal on file yet`, "warn"];
     out.push(`<div>Status: <b class="ld-${tone}">${esc(status)}</b></div>`);
@@ -566,13 +566,15 @@ function renderMap(){
     : "Distances are measured from a default pin at Chicago & Wood. Tap \"Move home pin\" to put it where you live.";
   renderSelCard();
 }
+// A missing field in the license details must never blank the card or stop the map
+function safeLicLine(s){ try { return licLine(s); } catch(e){ console.warn("license line", s.id, e); return ""; } }
 function renderSelCard(){
   const c=$("selCard"); if(!selId){c.hidden=true;return;}
   const s=SPOT[selId], os=openState(s), v=visitedSet().has(s.id);
   c.hidden=false;
   c.innerHTML=`<div class="tag">${esc(KIND_LABEL[s.kind])} · ${esc(s.hood)}${s.free?" · Free":""}${v?" · Been there":""}</div>
     <div class="name">${esc(s.name)}</div><div class="travel">${travel(s)}</div>${(()=>{const st=spotStats(s.id),t=ratingText(st);return t?`<div class="travel">Your ratings: ${t} (${st.visits} visit${st.visits===1?"":"s"})</div>`:""})()}
-    <div>${esc(s.note)}</div><div class="meta">${esc(s.addr)} · ${esc(os.known?os.text:"Check hours")}</div>${licLine(s)}
+    <div>${esc(s.note)}</div><div class="meta">${esc(s.addr)} · ${esc(os.known?os.text:"Check hours")}</div>${safeLicLine(s)}
     <div class="acts">${spotActions(s).replace(/<button type="button" data-show[^]*?<\/button>/,"")}</div>`;
 }
 $("map").addEventListener("click",e=>{
@@ -623,7 +625,7 @@ function renderList(){
       ${starSvg("mk"+(v?"":" empty"))}
       <div class="txt"><div class="n">${esc(s.name)}</div><div class="m">${esc(s.hood)} · ${esc(KIND_LABEL[s.kind])}${s.free?" · Free":""}${(()=>{const t=ratingText(spotStats(s.id));return t?` <span class="rpill">${t}</span>`:""})()}</div></div>
       <div class="r"><b>${miles(s).toFixed(1)} mi</b><span class="${os.open?"open":""}">${esc(os.known?os.text:"Check hours")}</span></div>
-    </button>${ex?`<div class="dbody"><div class="travel">${travel(s)}</div><div>${esc(s.note)}</div><div class="meta">${esc(s.addr)}</div>${licLine(s)}<div class="acts">${spotActions(s)}</div></div>`:""}</div>`;
+    </button>${ex?`<div class="dbody"><div class="travel">${travel(s)}</div><div>${esc(s.note)}</div><div class="meta">${esc(s.addr)}</div>${safeLicLine(s)}<div class="acts">${spotActions(s)}</div></div>`:""}</div>`;
   }).join("") : `<div class="empty-note">${dir.sort==="rated"?"No rated spots yet. Add a Rep Score and RPE when you log a rep, and your sweet spots show up here, ranked by score minus RPE.":"No spots match. Clear a filter or the search."}</div>`;
 }
 $("dirQ").addEventListener("input",e=>{ dir.q=e.target.value; renderList(); });
