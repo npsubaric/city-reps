@@ -41,9 +41,8 @@ h2{font-size:22px;font-weight:800;font-stretch:80%;text-transform:uppercase;lett
 .lic.current{color:var(--ok)}
 .lic.cancelled{color:var(--red);font-weight:600}
 /* License line opens a detail panel (native <details>, no JS) */
-.licd summary{cursor:pointer;list-style:none} .licd summary::-webkit-details-marker{display:none}
-.lic-more{font-size:11px;text-decoration:underline;margin-left:4px;opacity:.85}
-.licd[open] .lic-more{display:none}
+.licd summary{cursor:pointer;list-style:none;display:inline} .licd summary::-webkit-details-marker{display:none}
+.licd summary:hover,.licd summary:focus-visible,.licd[open] summary{text-decoration:underline;text-underline-offset:2px}
 .licpanel{margin:6px 0 2px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:13px;line-height:1.5}
 .ld-h{font-weight:600;margin-top:8px} .ld-h:first-child{margin-top:0}
 .ld-ok{color:var(--ok)} .ld-warn{color:var(--warn)} .ld-bad{color:var(--red)}
@@ -328,7 +327,7 @@ const LIC_TEXT = {current:"City license current", on_file:"City license on file"
 // an "Out of Business" result is a stronger closure signal than an expired license.
 const monYr = d => { const [y,m] = d.split("-").map(Number); return new Date(y, m-1, 1).toLocaleDateString("en-US", {month:"short", year:"numeric"}); };
 // Tapping the license line opens the latest inspection and license details.
-const fmtDay = d => { const [y,m,dd] = d.split("-").map(Number); return new Date(y, m-1, dd).toLocaleDateString("en-US", {month:"short", day:"numeric", year:"numeric"}); };
+const fmtDay = d => { if (!d) return ""; const [y,m,dd] = String(d).slice(0,10).split("-").map(Number); return new Date(y, m-1, dd).toLocaleDateString("en-US", {month:"short", day:"numeric", year:"numeric"}); };
 const titleCase = t => t ? t.toLowerCase().replace(/\b\w/g, c => c.toUpperCase()) : "";
 const RESULT_TEXT = {"PASS":["Passed","ok"], "PASS W/ CONDITIONS":["Passed with conditions","warn"], "FAIL":["Failed","bad"],
   "OUT OF BUSINESS":["Out of business","bad"], "NO ENTRY":["No entry (inspector couldn't get in)","warn"],
@@ -347,7 +346,7 @@ function licDetail(s){
   if (s.lic === "not_found") {
     out.push(`<div>No matching license in the city's data. Some cafés run under another business's license, or the record is missing.</div>`);
   } else {
-    const [status, tone] = s.lic === "current" ? [`Current through ${fmtDay(s.licExp)}`, "ok"]
+    const [status, tone] = s.lic === "current" ? [s.licExp ? `Current through ${fmtDay(s.licExp)}` : "Current", "ok"]
       : s.lic === "cancelled" ? ["Cancelled by the city", "bad"]
       : [`Expired ${s.licExp ? fmtDay(s.licExp) : ""}, no renewal on file yet`, "warn"];
     out.push(`<div>Status: <b class="ld-${tone}">${esc(status)}</b></div>`);
@@ -370,7 +369,7 @@ const licLine = s => {
     cls = s.lic;
     text = t + (s.insp && (s.lic === "current" || s.lic === "on_file") ? ` · inspected ${monYr(s.insp)}` : "");
   }
-  return `<details class="licd"><summary class="lic ${cls}">${esc(text)}<span class="lic-more">Details</span></summary>${licDetail(s)}</details>`;
+  return `<details class="licd"><summary class="lic ${cls}" title="Show inspection and license details">${esc(text)}</summary>${licDetail(s)}</details>`;
 };
 let HOODS = [];   // neighborhoods, nearest to the home pin first
 const KIND_LABEL = {cafe:"Café",bakery:"Bakery",library:"Library",park:"Park",trail:"Trail",museum:"Museum",books:"Bookstore",public:"Public space",walk:"Walk"};
@@ -565,13 +564,15 @@ function renderMap(){
     : "Distances are measured from a default pin at Chicago & Wood. Tap \"Move home pin\" to put it where you live.";
   renderSelCard();
 }
+// A missing field in the license details must never blank the card or stop the map
+function safeLicLine(s){ try { return licLine(s); } catch(e){ console.warn("license line", s.id, e); return ""; } }
 function renderSelCard(){
   const c=$("selCard"); if(!selId){c.hidden=true;return;}
   const s=SPOT[selId], os=openState(s), v=visitedSet().has(s.id);
   c.hidden=false;
   c.innerHTML=`<div class="tag">${esc(KIND_LABEL[s.kind])} · ${esc(s.hood)}${s.free?" · Free":""}${v?" · Been there":""}</div>
     <div class="name">${esc(s.name)}</div><div class="travel">${travel(s)}</div>${(()=>{const st=spotStats(s.id),t=ratingText(st);return t?`<div class="travel">Your ratings: ${t} (${st.visits} visit${st.visits===1?"":"s"})</div>`:""})()}
-    <div>${esc(s.note)}</div><div class="meta">${esc(s.addr)} · ${esc(os.known?os.text:"Check hours")}</div>${licLine(s)}
+    <div>${esc(s.note)}</div><div class="meta">${esc(s.addr)} · ${esc(os.known?os.text:"Check hours")}</div>${safeLicLine(s)}
     <div class="acts">${spotActions(s).replace(/<button type="button" data-show[^]*?<\/button>/,"")}</div>`;
 }
 $("map").addEventListener("click",e=>{
@@ -582,7 +583,13 @@ $("map").addEventListener("click",e=>{
     setHome({lat:+LAT(p.y).toFixed(5),lng:+LNG(p.x).toFixed(5),custom:true});
     settingHome=false; viewCenter=null; renderAll(); return;
   }
-  const g=e.target.closest("[data-id]"); if(g){ selId=g.dataset.id; renderMap(); }
+  // Tap areas overlap where spots are close together, so pick the dot nearest the tap
+  const pt=svg.createSVGPoint(); pt.x=e.clientX; pt.y=e.clientY;
+  const p=pt.matrixTransform(svg.getScreenCTM().inverse());
+  const reach=viewBox()[2]*0.011*3;
+  let best=null, bestD=Infinity;
+  for(const s of SPOTS){ const d=Math.hypot(X(s.lng)-p.x, Y(s.lat)-p.y); if(d<bestD){ bestD=d; best=s; } }
+  if(best && bestD<=reach && best.id!==selId){ selId=best.id; renderMap(); }
 });
 async function setHome(h){
   home=h; savePrefs(); sortHoods();
@@ -616,7 +623,7 @@ function renderList(){
       ${starSvg("mk"+(v?"":" empty"))}
       <div class="txt"><div class="n">${esc(s.name)}</div><div class="m">${esc(s.hood)} · ${esc(KIND_LABEL[s.kind])}${s.free?" · Free":""}${(()=>{const t=ratingText(spotStats(s.id));return t?` <span class="rpill">${t}</span>`:""})()}</div></div>
       <div class="r"><b>${miles(s).toFixed(1)} mi</b><span class="${os.open?"open":""}">${esc(os.known?os.text:"Check hours")}</span></div>
-    </button>${ex?`<div class="dbody"><div class="travel">${travel(s)}</div><div>${esc(s.note)}</div><div class="meta">${esc(s.addr)}</div>${licLine(s)}<div class="acts">${spotActions(s)}</div></div>`:""}</div>`;
+    </button>${ex?`<div class="dbody"><div class="travel">${travel(s)}</div><div>${esc(s.note)}</div><div class="meta">${esc(s.addr)}</div>${safeLicLine(s)}<div class="acts">${spotActions(s)}</div></div>`:""}</div>`;
   }).join("") : `<div class="empty-note">${dir.sort==="rated"?"No rated spots yet. Add a Rep Score and RPE when you log a rep, and your sweet spots show up here, ranked by score minus RPE.":"No spots match. Clear a filter or the search."}</div>`;
 }
 $("dirQ").addEventListener("input",e=>{ dir.q=e.target.value; renderList(); });
