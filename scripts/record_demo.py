@@ -95,13 +95,14 @@ async def record():
         # 1. Today: the plan and the streak
         await r.shot(2200)
 
-        # 2. The picker: answer a few questions
-        await r.scroll_to("#goH")
+        # 2. The picker: open the "Where should I go?" sheet and answer a few questions
+        await r.click("#filterBtn", wait=300)
         await r.shot(900)
         # (the defaults are focus, normal energy, 1-2 hours, walk, free only)
         for label in ["q-feel-recharge", "q-time-quick", "q-spend-coffee"]:
             await r.click(f"label[for={label}]")
             await r.shot(700)
+        await r.click("#sheetGo", wait=400)
 
         # 3. The picks, with hours, license and inspection lines
         await r.scroll_to("#results", offset=-8)
@@ -114,10 +115,11 @@ async def record():
             await r.scroll_to("#newSec")
             await r.shot(2400)
 
-        # 5. A pick on the map
+        # 5. A pick on the full-screen map, then back to Explore
         await r.scroll_to("#results", offset=-8)
         await r.click("#results [data-show]", wait=500)
         await r.shot(2400)
+        await r.click("#mapClose", wait=300)
 
         # 6. The directory: open now, then one spot opened up
         await r.scroll_to("#dirH")

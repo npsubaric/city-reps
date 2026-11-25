@@ -4,47 +4,116 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>City Reps</title>
+<meta name="theme-color" content="#0b0f13">
 <meta name="description" content="Pick a spot to get out of the house in Chicago. Live data from the city-reps pipeline.">
-<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
+<style>:root{color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#0b0f13;color:#eef3f6}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
-/* Layout: one narrow column, like a transit card. Chicago-flag blue bands frame it; the red six-point star marks every rep. */
+/* Layout: an app-style phone column on a dark Chicago-night ground. Chicago-flag light blue is the accent; the red six-point star marks every rep. */
 :root{
-  --bg:#f4f8fb; --surface:#ffffff; --ink:#14212b; --muted:#5c6f7d; --line:#d6e2ea; --street:#e6eef3;
-  --blue:#7cc4e8; --blue-ink:#2b7fae; --blue-soft:#e3f2fa; --red:#d7262e; --red-soft:#fde8e9;
-  --ok:#1f7a4d; --ok-soft:#e2f4ea; --warn:#a15c00; --warn-soft:#fdf0dc;
+  --bg:#0b0f13; --surface:#171e25; --raised:#1d252d; --ink:#eef3f6; --muted:#9aa8b3; --line:#26303a; --street:#1f3242; --street2:#16232d; --mapbg:#10181f;
+  --blue:#7cc4e8; --blue-ink:#7cc4e8; --blue-soft:#15303f; --red:#e8343c; --red-soft:#3a1a1d;
+  --ok:#57c48c; --ok-soft:#10261b; --warn:#f0a945; --warn-soft:#3a2a12;
   --display:"Archivo","Arial Narrow",sans-serif; --body:"Public Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --navh:72px; color-scheme:dark;
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#0e161c; --surface:#16222b; --ink:#e7f0f5; --muted:#93a7b4; --line:#26353f; --street:#1f2d37;
-  --blue:#5aa9d1; --blue-ink:#7cc4e8; --blue-soft:#15303f; --red:#f0484f; --red-soft:#3a1a1d;
-  --ok:#57c48c; --ok-soft:#14301f; --warn:#f0a945; --warn-soft:#3a2a12; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#0e161c; --surface:#16222b; --ink:#e7f0f5; --muted:#93a7b4; --line:#26353f; --street:#1f2d37;
-  --blue:#5aa9d1; --blue-ink:#7cc4e8; --blue-soft:#15303f; --red:#f0484f; --red-soft:#3a1a1d;
-  --ok:#57c48c; --ok-soft:#14301f; --warn:#f0a945; --warn-soft:#3a2a12; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
-.wrap{max-width:640px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:32px}
+a{color:var(--blue-ink)}
+.wrap{max-width:640px;margin:0 auto;padding-top:20px;padding-bottom:calc(var(--navh) + 120px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:22px}
+.pad{padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.view{display:flex;flex-direction:column;gap:22px}
 h1,h2{font-family:var(--display);margin:0;text-wrap:balance}
-h1{font-size:44px;font-weight:900;font-stretch:72%;letter-spacing:-.01em;line-height:.95;text-transform:uppercase}
-h2{font-size:22px;font-weight:800;font-stretch:80%;text-transform:uppercase;letter-spacing:.01em}
-.flag{display:flex;flex-direction:column;gap:6px}
-.band{height:8px;background:var(--blue);border-radius:2px}
-.stars{display:flex;gap:6px;color:var(--red)}
-.stars svg{width:16px;height:16px}
-.mast{display:flex;flex-direction:column;gap:10px}
+h1{font-size:28px;font-weight:900;font-stretch:72%;line-height:1;text-transform:uppercase;letter-spacing:.01em}
+h2{font-size:26px;font-weight:800;font-stretch:85%;line-height:1.1;scroll-margin-top:16px}
+.stars{display:flex;gap:4px;color:var(--red)} .stars svg{width:11px;height:11px}
+.mast{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.mast .brand{display:flex;flex-direction:column;gap:4px}
 .tag{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .mut{color:var(--muted)}
-.lic{font-size:12px;color:var(--muted)}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.sub{font-size:14px;color:var(--muted)}
+.shead{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.linkbtn{all:unset;cursor:pointer;color:var(--blue-ink);font-weight:700;font-size:16px;white-space:nowrap}
+.linkbtn:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:4px}
+.hscroll{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x mandatory;scroll-padding-left:20px}
+.hscroll::-webkit-scrollbar{display:none}
+.hscroll>*{scroll-snap-align:start;flex:none}
+
+/* status chip */
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;padding:7px 12px;border-radius:999px;white-space:nowrap}
+.chip::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.chip.ok{background:var(--ok-soft);color:var(--ok)} .chip.warn{background:var(--warn-soft);color:var(--warn)} .chip.bad{background:var(--red-soft);color:var(--red)}
+
+/* search + filter */
+.searchrow{display:flex;gap:10px}
+.search{flex:1;display:flex;align-items:center;gap:12px;background:var(--surface);border-radius:16px;padding:0 16px;height:52px;min-width:0}
+.search svg{flex:none}
+.search input{all:unset;flex:1;min-width:0;font-size:17px;color:var(--ink)}
+.search input::placeholder{color:var(--muted)}
+.search:focus-within{outline:2px solid var(--blue);outline-offset:2px}
+.iconbtn{width:52px;height:52px;flex:none;border-radius:16px;justify-content:center;padding:0;background:var(--surface);border:0;position:relative}
+.iconbtn .dotb{position:absolute;top:12px;right:12px;width:8px;height:8px;border-radius:50%;background:var(--blue)}
+
+/* category tiles */
+.tiles{gap:14px}
+.tile{all:unset;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:7px;width:66px}
+.tile .ic{width:62px;height:62px;border-radius:18px;background:var(--surface);display:flex;align-items:center;justify-content:center;color:var(--ink)}
+.tile .ic svg{width:26px;height:26px}
+.tile span:last-child{font-size:13px;color:#cfd8de}
+.tile[aria-pressed=true] .ic{background:var(--blue);color:var(--bg)}
+.tile[aria-pressed=true] span:last-child{color:var(--ink);font-weight:700}
+.tile:focus-visible .ic{outline:2px solid var(--blue);outline-offset:2px}
+
+/* pills */
+.pill{all:unset;cursor:pointer;padding:10px 16px;border-radius:999px;background:var(--surface);font-size:15px;font-weight:600;white-space:nowrap}
+.pill[aria-pressed=true]{background:var(--blue);color:var(--bg);font-weight:700}
+.pill:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+/* week strip */
+.strip{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.sday{display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 0 8px;border-radius:14px;background:var(--surface);min-width:0}
+.sday .d{font-size:12px;color:var(--muted)}
+.sday .n{font-family:var(--display);font-weight:800;font-size:20px;line-height:1}
+.sday .m{height:10px;display:flex;align-items:center}
+.sday .m svg{width:10px;height:10px;color:var(--red)}
+.sday .m i{width:6px;height:6px;border-radius:50%;background:var(--blue)}
+.sday .m b{font-family:var(--mono);font-size:11px;color:var(--muted);font-weight:500}
+.sday.is-today{background:var(--ink);color:var(--bg)} .sday.is-today .d{color:var(--bg);font-weight:700} .sday.is-today .m i{background:#2b7fae}
+
+/* pick cards */
+.cards{gap:14px}
+.card{width:min(300px,78vw);display:flex;flex-direction:column;gap:8px}
+.ctile{height:150px;border-radius:20px;position:relative;overflow:hidden;cursor:pointer;border:0;padding:0;width:100%;display:block;
+  background-color:#12202b;background-image:linear-gradient(var(--street) 2px,transparent 2px),linear-gradient(90deg,var(--street) 2px,transparent 2px),linear-gradient(var(--street2) 1px,transparent 1px),linear-gradient(90deg,var(--street2) 1px,transparent 1px);background-size:96px 96px,96px 96px,24px 24px,24px 24px}
+.ctile .pin{position:absolute;width:16px;height:16px;border-radius:50%;background:var(--blue);border:3px solid var(--bg)}
+.ctile .pin.free{background:var(--ok)}
+.ctile .pin.been{background:var(--red)}
+.ctile .lbl2{position:absolute;left:12px;top:12px;font-size:12px;font-weight:700;padding:5px 10px;border-radius:999px;background:rgba(11,15,19,.82);color:var(--ink)}
+.ctile .best{position:absolute;right:12px;top:12px;font-size:12px;font-weight:700;padding:5px 10px;border-radius:999px;background:var(--red);color:#fff}
+.openline{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue-ink)}
+.openline::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.openline.shut{color:var(--muted)} .openline.unk{color:var(--warn)}
+.card .name,.selcard .name{font-family:var(--display);font-weight:800;font-stretch:85%;font-size:24px;line-height:1.1}
+.travel{font-size:15px;color:var(--muted)}
+.why{display:flex;flex-wrap:wrap;gap:4px}
+.why span{font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--surface);color:var(--ink)}
+.why span.free{background:var(--ok-soft);color:var(--ok)}
+.why span.hint{background:var(--warn-soft);color:var(--warn)}
+.note{font-size:14px;color:#cfd8de}
+.meta{font-size:13px;color:var(--muted)}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;align-items:center}
+.tip{font-size:13px;color:var(--muted)}
+
+/* license / inspection line and panel */
+.lic{font-size:13px;color:var(--muted)}
 .lic.current{color:var(--ok)}
 .lic.cancelled{color:var(--red);font-weight:600}
-/* License line opens a detail panel (native <details>, no JS) */
 .licd summary{cursor:pointer;list-style:none;display:inline} .licd summary::-webkit-details-marker{display:none}
 .licd summary:hover,.licd summary:focus-visible,.licd[open] summary{text-decoration:underline;text-underline-offset:2px}
-.licpanel{margin:6px 0 2px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:13px;line-height:1.5}
-.ld-h{font-weight:600;margin-top:8px} .ld-h:first-child{margin-top:0}
+.licpanel{margin:6px 0 2px;padding:10px 12px;background:var(--raised);border-radius:12px;font-size:13px;line-height:1.5}
+.ld-h{font-weight:700;margin-top:8px} .ld-h:first-child{margin-top:0}
 .ld-ok{color:var(--ok)} .ld-warn{color:var(--warn)} .ld-bad{color:var(--red)}
 .viol{margin:4px 0 2px} .viol>summary{cursor:pointer;list-style:none;display:inline;color:var(--blue-ink)}
 .viol>summary::-webkit-details-marker{display:none}
@@ -52,120 +121,120 @@ h2{font-size:22px;font-weight:800;font-stretch:80%;text-transform:uppercase;lett
 .viol ol{margin:6px 0 0;padding-left:20px} .viol li{margin:0 0 8px}
 .vt{font-weight:600} .vsev{font-size:11px;font-weight:600;margin-left:6px;white-space:nowrap}
 .vnote{color:var(--muted);font-size:12px;margin-top:2px}
-.ld-src{font-size:12px;color:var(--muted);margin-top:6px} .ld-src a{color:var(--blue-ink)}
-.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
-.section{display:flex;flex-direction:column;gap:12px}
-.sub{font-size:14px;color:var(--muted);margin-top:-4px}
+.ld-src{font-size:12px;color:var(--muted);margin-top:6px}
 
-.today{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:14px}
-.today-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
-.dayname{font-family:var(--display);font-weight:900;font-stretch:75%;font-size:30px;text-transform:uppercase;line-height:1}
-.plan{font-size:15px;margin-top:4px}
-.chip{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:4px 10px;border-radius:999px;white-space:nowrap}
-.chip.ok{background:var(--ok-soft);color:var(--ok)} .chip.warn{background:var(--warn-soft);color:var(--warn)} .chip.bad{background:var(--red-soft);color:var(--red)}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;border-top:1px solid var(--line);padding-top:12px}
-.stat b{display:block;font-family:var(--display);font-weight:800;font-stretch:80%;font-size:28px;line-height:1}
-.stat span{font-size:12px;color:var(--muted)}
-
-.week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
-.dcell{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 2px;border-radius:8px;background:var(--surface);border:1px solid var(--line);min-width:0}
-.dcell.out{border-color:var(--blue);background:var(--blue-soft)}
-.dcell.is-today{outline:2px solid var(--ink);outline-offset:-2px}
-.dcell .d{font-family:var(--mono);font-size:11px;color:var(--muted)}
-.dcell .p{font-size:11px;font-weight:600;text-align:center;line-height:1.2}
-.dcell .mark{height:18px;width:18px;color:var(--red)}
-.dcell .mark.miss{color:var(--muted);font-family:var(--mono);font-size:13px;text-align:center}
-.legend{font-size:12px;color:var(--muted)}
-
-.q{display:flex;flex-direction:column;gap:6px}
-.qs{display:flex;flex-direction:column;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px}
-.now{font-size:13px;color:var(--muted)}
+/* buttons and inputs */
+button,.btn{font:inherit;cursor:pointer;border-radius:12px;border:0;background:var(--surface);color:var(--ink);padding:10px 14px;font-weight:600;font-size:14px;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.btn.maps{background:var(--ink);color:var(--bg)}
+button.go{background:var(--red);color:#fff}
+button.on{background:var(--warn-soft);color:var(--warn)}
+button.primary{background:var(--red);color:#fff;font-family:var(--display);font-stretch:85%;font-weight:800;text-transform:uppercase;letter-spacing:.03em;font-size:17px;padding:14px 16px;justify-content:center;border-radius:14px}
+button:focus-visible,.btn:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+select,input[type=date],input[type=text]{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:11px 12px;width:100%}
 .seg{display:flex;flex-wrap:wrap;gap:6px}
 .seg input{position:absolute;opacity:0;pointer-events:none}
-.seg label{padding:6px 12px;border:1px solid var(--line);border-radius:999px;font-size:14px;cursor:pointer;background:var(--surface)}
-.seg input:checked+label{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.seg label{padding:8px 14px;border-radius:999px;font-size:14px;font-weight:600;cursor:pointer;background:var(--surface)}
+.seg input:checked+label{background:var(--blue);color:var(--bg);font-weight:700}
 .seg input:focus-visible+label{outline:2px solid var(--blue);outline-offset:2px}
-.lbl{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block}
-
-.results{display:flex;flex-direction:column;gap:10px}
-.pick{background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--blue);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
-.pick.top{border-left-color:var(--red)}
-.pick .name{font-family:var(--display);font-weight:800;font-stretch:85%;font-size:22px;line-height:1.1}
-.meta{font-size:13px;color:var(--muted)}
-.travel{font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums}
-.why{display:flex;flex-wrap:wrap;gap:4px}
-.why span{font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--blue-soft);color:var(--ink)}
-.why span.free{background:var(--ok-soft);color:var(--ok)}
-.why span.hint{background:var(--warn-soft);color:var(--warn)}
-.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;align-items:center}
-.tip{font-size:13px;color:var(--muted)}
-
-button,.btn{font:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:8px 13px;font-weight:600;font-size:14px;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
-.btn.maps{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-button.on{background:var(--warn-soft);border-color:var(--warn);color:var(--warn)}
-button.primary{background:var(--red);border-color:var(--red);color:#fff;font-family:var(--display);font-stretch:85%;font-weight:800;text-transform:uppercase;letter-spacing:.03em;font-size:16px;padding:11px 16px;justify-content:center}
-button:focus-visible,.btn:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-select,input[type=date],input[type=text],input[type=search]{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 10px;width:100%}
-
-/* map */
-.mapbox{position:relative}
-#map{width:100%;max-width:100%;aspect-ratio:5/4;display:block;background:var(--surface);border:1px solid var(--line);border-radius:10px;touch-action:manipulation;cursor:pointer}
-#map.setting{cursor:crosshair;border-color:var(--warn)}
-#map .st{stroke:var(--street);fill:none;vector-effect:non-scaling-stroke}
-#map .mil{stroke:var(--street);fill:none;vector-effect:non-scaling-stroke}
-#map .sl{fill:var(--muted);font-family:var(--mono)}
-#map .dot{stroke:var(--surface);vector-effect:non-scaling-stroke}
-#map .dot.paid{fill:var(--blue-ink)} #map .dot.free{fill:var(--ok)}
-#map .vstar{fill:var(--red)}
-#map .ring{fill:none;stroke:var(--ink);vector-effect:non-scaling-stroke;stroke-width:2}
-#map .home{color:var(--red);stroke:var(--ink);stroke-width:1.6;stroke-linejoin:round} #map .homel{fill:var(--ink);font-family:var(--body);font-weight:700}
-#map .lab{fill:var(--ink);font-family:var(--body);font-weight:600;paint-order:stroke;stroke:var(--surface);stroke-width:3px;vector-effect:non-scaling-stroke}
-.maptools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.keyrow{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
-.keyrow .homekey{width:13px;height:13px;margin-right:4px;vertical-align:-2px;color:var(--red);stroke:var(--ink);stroke-width:2;stroke-linejoin:round}
-.keyrow i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
-.selcard{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:4px}
-.selcard[hidden]{display:none}
-.selcard .name{font-family:var(--display);font-weight:800;font-stretch:85%;font-size:20px;line-height:1.1}
+.lbl{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block}
 
 /* directory */
-.dirtools{display:flex;flex-direction:column;gap:10px}
-.dirrow2{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.dirrow2 select{width:auto;flex:0 0 auto}
+.dirtools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.dirtools select{width:auto}
 .count{font-size:13px;color:var(--muted)}
-.dlist{display:flex;flex-direction:column;border-top:1px solid var(--line)}
-.ditem{border-bottom:1px solid var(--line)}
-.dhead{all:unset;box-sizing:border-box;display:flex;gap:10px;align-items:center;width:100%;padding:10px 2px;cursor:pointer}
+.dlist{display:flex;flex-direction:column;gap:8px}
+.ditem{background:var(--surface);border-radius:16px}
+.dhead{all:unset;box-sizing:border-box;display:flex;gap:12px;align-items:center;width:100%;padding:12px 14px;cursor:pointer;border-radius:16px}
 .dhead:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-.dhead .mk{width:14px;height:14px;flex:none;color:var(--red)}
+.dhead .mk{width:16px;height:16px;flex:none;color:var(--red)}
 .dhead .mk.empty{color:var(--line)}
 .dhead .txt{flex:1;min-width:0}
-.dhead .n{font-weight:600;line-height:1.3}
+.dhead .n{font-weight:700;line-height:1.3}
 .dhead .m{font-size:12px;color:var(--muted)}
 .dhead .r{text-align:right;flex:none}
 .dhead .r b{display:block;font-family:var(--mono);font-size:13px;font-weight:500}
 .dhead .r span{font-size:11px;color:var(--muted)}
 .dhead .r span.open{color:var(--ok)}
-.dbody{padding:0 2px 12px 24px;display:flex;flex-direction:column;gap:4px}
+.dbody{padding:0 14px 14px 42px;display:flex;flex-direction:column;gap:4px}
+.hoodh{padding:8px 2px 0}
+.rpill{display:inline-block;font-family:var(--mono);font-size:11px;padding:1px 7px;border-radius:999px;background:var(--blue-soft);color:var(--ink);margin-left:4px;white-space:nowrap}
 
-form{display:flex;flex-direction:column;gap:12px}
+/* new near you */
+.newcard{width:min(240px,64vw);background:var(--surface);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:4px}
+.newcard .n{font-weight:700;font-size:16px;line-height:1.25}
+.newcard .m{font-size:13px;color:var(--muted)}
+.newcard .r{display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-size:13px}
+.newcard .r a{font-weight:700}
+
+/* week view */
+.today{background:var(--surface);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.today-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.dayname{font-family:var(--display);font-weight:900;font-stretch:75%;font-size:32px;text-transform:uppercase;line-height:1}
+.plan{font-size:15px;margin-top:4px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;border-top:1px solid var(--line);padding-top:12px}
+.stat b{display:block;font-family:var(--display);font-weight:800;font-stretch:80%;font-size:28px;line-height:1}
+.stat span{font-size:12px;color:var(--muted)}
+.legend{font-size:13px;color:var(--muted)}
+.rules{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:6px}
+.rules b{color:var(--ink)}
+
+/* log + history */
+form{display:flex;flex-direction:column;gap:14px}
 .row{display:flex;gap:8px;flex-wrap:wrap}
 .row>*{flex:1 1 160px;min-width:0}
-.rpill{display:inline-block;font-family:var(--mono);font-size:11px;padding:1px 7px;border-radius:999px;background:var(--blue-soft);color:var(--ink);margin-left:4px;white-space:nowrap}
-.hint2{font-size:12px;color:var(--muted);margin-top:4px}
+.hint2{font-size:12px;color:var(--muted)}
 .toast{font-size:14px;color:var(--ok);min-height:1.2em}
-.log{display:flex;flex-direction:column}
-.entry{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
-.newp .nm{flex:1;min-width:0} .newp .n{font-weight:600;font-size:15px} .newp .m{font-size:13px;color:var(--muted);margin-top:2px}
-.newp .r{display:flex;flex-direction:column;align-items:flex-end;gap:2px;font-size:13px;white-space:nowrap} .newp .r a{color:var(--blue-ink);font-weight:600}
+.log{display:flex;flex-direction:column;gap:8px}
+.entry{display:flex;gap:12px;align-items:center;padding:12px 14px;background:var(--surface);border-radius:16px}
 .entry .dt{font-family:var(--mono);font-size:12px;color:var(--muted);width:74px;flex:none}
 .entry .what{flex:1;min-width:0}
-.entry .ty{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
-.entry button{padding:4px 8px;font-size:12px;font-weight:500;color:var(--muted)}
+.entry .ty{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.entry button{padding:6px 10px;font-size:12px;font-weight:600;color:var(--muted);background:var(--raised)}
 .empty-note{color:var(--muted);font-size:14px;padding:8px 0}
-.notice{font-size:13px;background:var(--warn-soft);color:var(--warn);padding:8px 12px;border-radius:8px}
-.rules{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:4px;border-top:1px solid var(--line);padding-top:16px}
-.rules b{color:var(--ink)}
+.notice{font-size:13px;background:var(--warn-soft);color:var(--warn);padding:10px 12px;border-radius:12px}
+.foot{font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--line);padding-top:16px}
+
+/* floating map button + bottom nav */
+.mapfab{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--navh) + 32px + env(safe-area-inset-bottom,0px));z-index:20;background:var(--ink);color:var(--bg);font-size:18px;font-weight:700;padding:14px 26px;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,.55);gap:10px}
+.nav{position:fixed;left:50%;transform:translateX(-50%);width:min(612px,calc(100% - 28px));bottom:calc(14px + env(safe-area-inset-bottom,0px));height:var(--navh);z-index:20;border-radius:36px;background:#161c22;border:1px solid var(--line);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));align-items:center;box-shadow:0 8px 24px rgba(0,0,0,.45)}
+.nav button{all:unset;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px;font-weight:600;color:var(--ink);padding:6px 0;border-radius:24px}
+.nav button svg{width:24px;height:24px}
+.nav button[aria-current=page]{color:var(--blue-ink);font-weight:700}
+.nav button:focus-visible{outline:2px solid var(--blue);outline-offset:-4px}
+
+/* bottom sheet (filters) */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:40}
+.sheet{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(640px,100%);max-height:86vh;overflow-y:auto;z-index:41;background:#161c22;border-radius:28px 28px 0 0;border-top:1px solid var(--line);padding:10px 20px calc(24px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:16px}
+.grab{align-self:center;width:40px;height:5px;border-radius:3px;background:#3a4650;flex:none}
+.q{display:flex;flex-direction:column;gap:8px}
+.sheet .seg label{background:#252f39}
+.now{font-size:13px;color:var(--muted)}
+
+/* map view: full screen */
+.mapview{position:fixed;inset:0;z-index:30;background:var(--mapbg)}
+#map{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:manipulation;cursor:pointer}
+#map.setting{cursor:crosshair}
+#map .st{stroke:var(--street);fill:none;vector-effect:non-scaling-stroke}
+#map .mil{stroke:#2a4356;fill:none;vector-effect:non-scaling-stroke}
+#map .sl{fill:#6f8594;font-family:var(--body)}
+#map .dot{stroke:var(--mapbg);vector-effect:non-scaling-stroke}
+#map .dot.paid{fill:var(--blue)} #map .dot.free{fill:var(--ok)}
+#map .vstar{fill:var(--red)}
+#map .ring{fill:none;stroke:var(--ink);vector-effect:non-scaling-stroke;stroke-width:2}
+#map .home{color:var(--red);stroke:var(--ink);stroke-width:1.4;stroke-linejoin:round} #map .homel{fill:var(--ink);font-family:var(--body);font-weight:700}
+#map .lab{fill:var(--ink);font-family:var(--body);font-weight:700;paint-order:stroke;stroke:var(--mapbg);stroke-width:4px;vector-effect:non-scaling-stroke}
+.maptop{position:absolute;left:0;right:0;top:0;padding:calc(14px + env(safe-area-inset-top,0px)) 16px 0;display:flex;flex-direction:column;gap:10px;pointer-events:none;max-width:640px;margin:0 auto}
+.maptop>*{pointer-events:auto}
+.maptop .bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.maptop .bar button{box-shadow:0 6px 18px rgba(0,0,0,.45)}
+.maptop .homeline{font-size:12px;color:var(--muted);background:rgba(16,24,31,.85);padding:6px 10px;border-radius:10px;align-self:flex-start}
+.keyrow{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted);background:rgba(16,24,31,.85);padding:6px 10px;border-radius:10px;align-self:flex-start}
+.keyrow i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.keyrow .homekey{width:13px;height:13px;margin-right:4px;vertical-align:-2px;color:var(--red)}
+.selcard{position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:min(640px,100%);max-height:62vh;overflow-y:auto;background:#161c22;border-radius:28px 28px 0 0;border-top:1px solid var(--line);padding:10px 20px calc(22px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:8px}
+.selcard[hidden]{display:none}
+.selcard .btn,.selcard button{height:50px;justify-content:center;font-size:16px;font-weight:700}
+.selcard .acts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 </style>
 </head>
 <body>
@@ -175,79 +244,51 @@ form{display:flex;flex-direction:column;gap:12px}
 </svg>
 
 <div class="wrap">
-  <header class="mast">
-    <div class="flag"><div class="band"></div>
-      <div class="stars"><svg><use href="#star"/></svg><svg><use href="#star"/></svg><svg><use href="#star"/></svg><svg><use href="#star"/></svg></div>
-      <div class="band"></div></div>
-    <h1>City Reps</h1>
-    <div class="tag">Never miss twice · West Town, Chicago</div>
+  <header class="mast pad">
+    <div class="brand">
+      <div class="stars" aria-hidden="true"><svg><use href="#star"/></svg><svg><use href="#star"/></svg><svg><use href="#star"/></svg><svg><use href="#star"/></svg></div>
+      <h1>City Reps</h1>
+    </div>
+    <span class="chip ok" id="hdrStatus"></span>
   </header>
 
-  <div id="loadError" class="notice" hidden>Couldn't load the spots right now. Try again in a minute.</div>
-  <div id="notice" class="notice" hidden>Saving isn't available in this browser (private mode?), so reps you log here won't be kept.</div>
+  <div id="loadError" class="notice pad" hidden>Couldn't load the spots right now. Try again in a minute.</div>
+  <div id="notice" class="notice pad" hidden>Saving isn't available in this browser (private mode?), so reps you log here won't be kept.</div>
 
-  <section class="today" aria-labelledby="todayH">
-    <div class="today-top">
-      <div>
-        <div class="tag" id="todayDate"></div>
-        <div class="dayname" id="todayH"></div>
-        <div class="plan" id="todayPlan"></div>
-      </div>
-      <span class="chip ok" id="status"></span>
+  <!-- ===== Explore ===== -->
+  <main class="view" id="view-explore">
+    <div class="searchrow pad">
+      <label class="search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9aa8b3" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+        <input type="search" id="dirQ" placeholder="Cafés, parks, neighborhoods" aria-label="Search spots" autocomplete="off">
+      </label>
+      <button type="button" class="iconbtn" id="filterBtn" aria-label="Where should I go? Set mood, time and distance">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg>
+      </button>
     </div>
-    <div class="stats">
-      <div class="stat"><b id="sWeek" class="mono">0/3</b><span>target days hit</span></div>
-      <div class="stat"><b id="sTotal" class="mono">0</b><span>reps logged</span></div>
-      <div class="stat"><b id="sSpots" class="mono">0</b><span>spots explored</span></div>
-    </div>
-  </section>
 
-  <section class="section" aria-labelledby="goH">
-    <h2 id="goH">Where should I go?</h2>
-    <div class="qs">
-      <div class="now" id="nowLine"></div>
-      <div class="q"><span class="lbl">How are you feeling?</span><div class="seg" data-q="feel"></div></div>
-      <div class="q"><span class="lbl">Energy</span><div class="seg" data-q="energy"></div></div>
-      <div class="q"><span class="lbl">How much time?</span><div class="seg" data-q="time"></div></div>
-      <div class="q"><span class="lbl">How far?</span><div class="seg" data-q="dist"></div></div>
-      <div class="q"><span class="lbl">Weather</span><div class="seg" data-q="wx"></div></div>
-      <div class="q"><span class="lbl">Spend</span><div class="seg" data-q="spend"></div></div>
-    </div>
-    <div class="results" id="results"></div>
-    <div class="acts"><button type="button" id="shuffle">Show different options</button></div>
-    <div class="tip" id="tip"></div>
-  </section>
+    <div class="hscroll tiles pad" id="catSeg" role="group" aria-label="Category"></div>
+    <div class="hscroll pad" id="hoodRow" role="group" aria-label="Neighborhood"></div>
+    <div class="strip pad" id="strip" aria-label="This week"></div>
 
-  <section class="section" aria-labelledby="newH" id="newSec" hidden>
-    <h2 id="newH">New near you</h2>
-    <div class="sub">Cafés and bakeries within 2 miles that passed their city license inspection in the last 90 days, from Chicago's food inspection data. Newly licensed can also mean a new owner.</div>
-    <div id="newList"></div>
-  </section>
+    <section class="view" aria-labelledby="goH">
+      <div class="shead pad"><h2 id="goH">Best match now</h2><button type="button" class="linkbtn" id="shuffle">Shuffle ›</button></div>
+      <div class="hscroll cards pad" id="results"></div>
+      <div class="tip pad" id="tip"></div>
+    </section>
 
-  <section class="section" aria-labelledby="mapH" id="mapSec">
-    <h2 id="mapH">Map</h2>
-    <div class="sub" id="homeLine"></div>
-    <div class="maptools">
-      <div class="seg" id="viewSeg">
-        <input type="radio" name="view" id="v-near" value="near" checked><label for="v-near">Near home</label>
-        <input type="radio" name="view" id="v-all" value="all"><label for="v-all">Everything</label>
-      </div>
-      <button type="button" id="setHome">Move home pin</button>
-    </div>
-    <div class="mapbox"><svg id="map" role="img" aria-label="Map of spots around West Town"></svg></div>
-    <div class="keyrow"><span><i style="background:var(--blue-ink)"></i>Café or bakery</span><span><i style="background:var(--ok)"></i>Free</span><span><i style="background:var(--red)"></i>Been there</span><span><svg class="homekey" aria-hidden="true"><use href="#star"/></svg>Home</span></div>
-    <div class="selcard" id="selCard" hidden></div>
-  </section>
+    <section class="view" aria-labelledby="newH" id="newSec" hidden>
+      <div class="pad"><h2 id="newH">New near you</h2>
+        <div class="sub">Cafés and bakeries within 2 miles that passed their city license inspection in the last 90 days. Newly licensed can also mean a new owner.</div></div>
+      <div class="hscroll pad" id="newList"></div>
+    </section>
 
-  <section class="section" aria-labelledby="dirH" id="dirSec">
-    <h2 id="dirH">Directory</h2>
-    <div class="dirtools">
-      <input type="search" id="dirQ" placeholder="Search by name, street, or neighborhood" aria-label="Search spots">
-      <div class="seg" id="catSeg"></div>
-      <div class="dirrow2">
+    <section class="view pad" aria-labelledby="dirH" id="dirSec">
+      <div class="shead"><h2 id="dirH">All spots</h2><span class="count" id="dirCount"></span></div>
+      <div class="dirtools">
         <div class="seg">
-          <input type="checkbox" id="fFree"><label for="fFree">Free only</label>
           <input type="checkbox" id="fOpen"><label for="fOpen">Open now</label>
+          <input type="checkbox" id="fFree"><label for="fFree">Free</label>
           <input type="checkbox" id="fNew"><label for="fNew">Haven't been</label>
         </div>
         <select id="sortSel" aria-label="Sort">
@@ -257,54 +298,116 @@ form{display:flex;flex-direction:column;gap:12px}
           <option value="rated">Your sweet spots</option>
         </select>
       </div>
-      <div class="count" id="dirCount"></div>
+      <div class="dlist" id="dlist"></div>
+    </section>
+
+    <div class="foot pad">
+      <div><b>Distances.</b> Measured along Chicago's street grid from your home pin (800 address numbers = 1 mile), at 20 min per mile walking and 6 per mile biking. Tap Directions for live times in Apple Maps.</div>
+      <div><b>Data.</b> Locations, license status and inspections from the City of Chicago's open data (Business Licenses and Food Inspections). Hours from © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors (ODbL) and posted Park District and city hours. Geocoding by the US Census Geocoder and OpenStreetMap. Built by the <a href="https://github.com/npsubaric/city-reps" target="_blank" rel="noopener">city-reps</a> pipeline (<a href="docs/" target="_blank" rel="noopener">data model docs</a>). <span id="dataAsOf"></span></div>
+      <div><b>Your reps.</b> Saved in this browser only. Nothing you log leaves your device.</div>
     </div>
-    <div class="dlist" id="dlist"></div>
-  </section>
+  </main>
 
-  <section class="section" aria-labelledby="weekH">
+  <!-- ===== Week ===== -->
+  <section class="view pad" id="view-week" hidden aria-labelledby="weekH">
     <h2 id="weekH">This week</h2>
-    <div class="week" id="week"></div>
-    <div class="legend">Blue days are targets (Mon, Wed, Fri). Any day out counts as a rep, and a red star marks one.</div>
+    <div class="today">
+      <div class="today-top">
+        <div>
+          <div class="tag" id="todayDate"></div>
+          <div class="dayname" id="todayH"></div>
+          <div class="plan" id="todayPlan"></div>
+        </div>
+        <span class="chip ok" id="status"></span>
+      </div>
+      <div class="stats">
+        <div class="stat"><b id="sWeek" class="mono">0/3</b><span>target days hit</span></div>
+        <div class="stat"><b id="sTotal" class="mono">0</b><span>reps logged</span></div>
+        <div class="stat"><b id="sSpots" class="mono">0</b><span>spots explored</span></div>
+      </div>
+    </div>
+    <div class="strip" id="week"></div>
+    <div class="legend">Blue dots are target days (Mon, Wed, Fri). Any day out counts as a rep, and a red star marks one.</div>
+    <div class="rules">
+      <div><b>The week.</b> Gym Mon, Tue, Thu, Fri. Wednesday is run day and big-city day. Weekends are free.</div>
+      <div><b>The target.</b> Get out Mon, Wed, and Fri. Other days are bonus reps.</div>
+      <div><b>The rule.</b> Missing one target day is fine. Missing two in a row is the only thing to avoid.</div>
+      <div><b>Scores.</b> Rep Score rates the spot. RPE rates the effort to get there, like RPE in the gym. The sweet spots are high score, low RPE: save those for low-energy days.</div>
+    </div>
   </section>
 
-  <section class="section" aria-labelledby="logH">
+  <!-- ===== Log a rep ===== -->
+  <section class="view pad" id="view-log" hidden aria-labelledby="logH">
     <h2 id="logH">Log a rep</h2>
     <form id="form">
       <div>
-        <span class="lbl" style="margin-bottom:4px">Type</span>
+        <span class="lbl" style="margin-bottom:6px">Type</span>
         <div class="seg" id="types"></div>
       </div>
       <div class="row">
-        <div><label class="lbl" for="fSpot" style="margin-bottom:4px">Where</label><select id="fSpot"></select></div>
-        <div><label class="lbl" for="fDate" style="margin-bottom:4px">Date</label><input type="date" id="fDate"></div>
+        <div><label class="lbl" for="fSpot" style="margin-bottom:6px">Where</label><select id="fSpot"></select></div>
+        <div><label class="lbl" for="fDate" style="margin-bottom:6px">Date</label><input type="date" id="fDate"></div>
       </div>
       <div class="row">
-        <div><label class="lbl" for="fScore" style="margin-bottom:4px">Rep Score · how good</label><select id="fScore"></select></div>
-        <div><label class="lbl" for="fRpe" style="margin-bottom:4px">RPE · how hard</label><select id="fRpe"></select></div>
+        <div><label class="lbl" for="fScore" style="margin-bottom:6px">Rep Score · how good</label><select id="fScore"></select></div>
+        <div><label class="lbl" for="fRpe" style="margin-bottom:6px">RPE · how hard</label><select id="fRpe"></select></div>
       </div>
-      <div class="hint2" style="margin-top:-6px">Score is the spot itself: seats, vibe, would you go back. RPE is the effort to make it happen: travel, cost, hassle. Both optional, 1 to 10.</div>
-      <div><label class="lbl" for="fNote" style="margin-bottom:4px">Note (optional)</label><input type="text" id="fNote" maxlength="140" placeholder="Sat by the window, brought coffee from home"></div>
+      <div class="hint2">Score is the spot itself: seats, vibe, would you go back. RPE is the effort to make it happen: travel, cost, hassle. Both optional, 1 to 10.</div>
+      <div><label class="lbl" for="fNote" style="margin-bottom:6px">Note (optional)</label><input type="text" id="fNote" maxlength="140" placeholder="Sat by the window, brought coffee from home"></div>
       <button class="primary" type="submit">Log rep</button>
       <div class="toast" id="toast" role="status"></div>
     </form>
   </section>
 
-  <section class="section" aria-labelledby="histH">
-    <h2 id="histH">Rep log</h2>
+  <!-- ===== My reps ===== -->
+  <section class="view pad" id="view-reps" hidden aria-labelledby="histH">
+    <h2 id="histH">My reps</h2>
     <div class="log" id="log"></div>
   </section>
-
-  <div class="rules">
-    <div><b>The week.</b> Gym Mon, Tue, Thu, Fri. Wednesday is run day and big-city day. Weekends are free.</div>
-    <div><b>The target.</b> Get out Mon, Wed, and Fri. Other days are bonus reps.</div>
-    <div><b>The rule.</b> Missing one target day is fine. Missing two in a row is the only thing to avoid.</div>
-    <div><b>Scores.</b> Rep Score rates the spot. RPE rates the effort to get there, like RPE in the gym. The sweet spots are high score, low RPE: save those for low-energy days.</div>
-    <div><b>Distances.</b> Measured along Chicago's street grid from your home pin (800 address numbers = 1 mile), at 20 min per mile walking and 6 per mile biking. Tap Directions for live times in Apple Maps.</div>
-    <div><b>Data.</b> Locations, license status and inspections from the City of Chicago's open data (Business Licenses and Food Inspections). Hours from © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors (ODbL) and posted Park District and city hours. Geocoding by the US Census Geocoder and OpenStreetMap. Built by the <a href="https://github.com/npsubaric/city-reps" target="_blank" rel="noopener">city-reps</a> pipeline (<a href="docs/" target="_blank" rel="noopener">data model docs</a>). <span id="dataAsOf"></span></div>
-    <div><b>Your reps.</b> Saved in this browser only. Nothing you log leaves your device.</div>
-  </div>
 </div>
+
+<!-- ===== Map (full screen) ===== -->
+<section class="mapview" id="mapSec" hidden aria-labelledby="mapH">
+  <h2 id="mapH" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Map</h2>
+  <svg id="map" role="img" aria-label="Map of spots around West Town"></svg>
+  <div class="maptop">
+    <div class="bar">
+      <button type="button" id="mapClose" aria-label="Back to Explore"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Explore</button>
+      <div class="seg" id="viewSeg">
+        <input type="radio" name="view" id="v-near" value="near" checked><label for="v-near">Near home</label>
+        <input type="radio" name="view" id="v-all" value="all"><label for="v-all">Everything</label>
+      </div>
+      <button type="button" id="setHome">Move home pin</button>
+    </div>
+    <div class="homeline" id="homeLine"></div>
+    <div class="keyrow"><span><i style="background:var(--blue)"></i>Café or bakery</span><span><i style="background:var(--ok)"></i>Free</span><span><i style="background:var(--red)"></i>Been there</span><span><svg class="homekey" aria-hidden="true"><use href="#star"/></svg>Home</span></div>
+  </div>
+  <div class="selcard" id="selCard" hidden></div>
+</section>
+
+<!-- ===== Where should I go? (filter sheet) ===== -->
+<div class="scrim" id="scrim" hidden></div>
+<section class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheetH">
+  <span class="grab" aria-hidden="true"></span>
+  <div class="shead"><h2 id="sheetH">Where should I go?</h2><button type="button" class="linkbtn" id="sheetDone">Done</button></div>
+  <div class="now" id="nowLine"></div>
+  <div class="q"><span class="lbl">How are you feeling?</span><div class="seg" data-q="feel"></div></div>
+  <div class="q"><span class="lbl">Energy</span><div class="seg" data-q="energy"></div></div>
+  <div class="q"><span class="lbl">How much time?</span><div class="seg" data-q="time"></div></div>
+  <div class="q"><span class="lbl">How far?</span><div class="seg" data-q="dist"></div></div>
+  <div class="q"><span class="lbl">Weather</span><div class="seg" data-q="wx"></div></div>
+  <div class="q"><span class="lbl">Spend</span><div class="seg" data-q="spend"></div></div>
+  <button type="button" class="primary" id="sheetGo">Show my picks</button>
+</section>
+
+<button type="button" class="mapfab" id="mapFab"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15M15 6v15"/></svg>Map</button>
+
+<nav class="nav" aria-label="Sections">
+  <button type="button" data-tab="explore" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg>Explore</button>
+  <button type="button" data-tab="week"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Week</button>
+  <button type="button" data-tab="log"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>Log rep</button>
+  <button type="button" data-tab="reps"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><path d="M4 6h.01M4 12h.01M4 18h.01"/></svg>My reps</button>
+</nav>
 
 <script src="config.js"></script>
 <script>
@@ -404,6 +507,15 @@ const licLine = s => {
 let HOODS = [];   // neighborhoods, nearest to the home pin first
 const KIND_LABEL = {cafe:"Café",bakery:"Bakery",library:"Library",park:"Park",trail:"Trail",museum:"Museum",books:"Bookstore",public:"Public space",walk:"Walk"};
 const CATS = [["all","All"],["coffee","Coffee",["cafe"]],["bakery","Bakeries",["bakery"]],["library","Libraries",["library"]],["outdoors","Outdoors",["park","trail","walk"]],["books","Books",["books"]],["sights","Sights",["museum","public"]]];
+// Stroke icons for the category tiles (24×24 paths)
+const CAT_ICON = {
+  coffee:'<path d="M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V9z"/><path d="M17 11h1.5a2.5 2.5 0 0 1 0 5H17"/><path d="M8 3v3M12 3v3"/>',
+  bakery:'<path d="M3 15c0-5 4-9 9-9s9 4 9 9"/><path d="M3 15h18l-2 4H5z"/><path d="M9 7l1 8M15 7l-1 8"/>',
+  library:'<path d="M3 10l9-6 9 6"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8"/><path d="M3 20h18"/>',
+  outdoors:'<path d="M12 3l6 9h-3l4 6H5l4-6H6z"/><path d="M12 18v3"/>',
+  books:'<path d="M4 5a2 2 0 0 1 2-2h5v17H6a2 2 0 0 0-2 2z"/><path d="M20 5a2 2 0 0 0-2-2h-5v17h5a2 2 0 0 1 2 2z"/>',
+  sights:'<path d="M4 21V10l8-6 8 6v11"/><path d="M9 21v-6h6v6"/><path d="M4 21h16"/>',
+};
 
 const QS = {
   energy:[["low","Running on empty"],["ok","Normal"],["high","Up for anything"]],
@@ -430,9 +542,10 @@ function mapsUrl(s){ const mode = miles(s)<=1.5 ? "w" : "r";
 function gridAddr(lat,lng){ const ns=Math.round(-Y(lat)*800/25)*25, ew=Math.round(-X(lng)*800/25)*25;
   return `${Math.abs(ns)} ${ns>=0?"N":"S"} · ${Math.abs(ew)} ${ew>=0?"W":"E"}`; }
 
-let reps = [], seed = 1, selId = null, settingHome = false, view = "near", viewCenter = null;
+let dotR = 0.03, reps = [], seed = 1, selId = null, settingHome = false, view = "near", viewCenter = null;
 const sel = {energy:"ok",feel:"recharge",time:"quick",dist:"walk",wx:"nice",spend:"free"};
-const dir = {q:"",cat:"all",free:false,open:false,fresh:false,sort:"near",expanded:null};
+const dir = {q:"",cat:"all",hood:null,free:false,open:false,fresh:false,sort:"near",expanded:null};
+let tab = "explore", mapOpen = false;
 
 const $ = id=>document.getElementById(id);
 const pad = n=>String(n).padStart(2,"0");
@@ -527,22 +640,36 @@ function renderPicker(){
 }
 function spotActions(s){
   return `<a class="btn maps" href="${mapsUrl(s)}" target="_blank" rel="noopener">Directions</a>
-    <button type="button" data-use="${s.id}">Log a rep here</button>
+    <button type="button" class="go" data-use="${s.id}">Log a rep here</button>
     <button type="button" data-show="${s.id}">Show on map</button>`;
+}
+// "Open now · until 6 PM" line above a spot's name
+function openLine(os){
+  if(!os.known) return `<div class="openline unk">Check hours</div>`;
+  if(os.open) return `<div class="openline">Open now · ${esc(os.text.replace(/^Open /,""))}</div>`;
+  return `<div class="openline shut">${esc(os.text)}</div>`;
+}
+// The card's picture: a little street-grid tile with the spot's pin, placed by its own coordinates
+function gridTile(s, label, best){
+  const v=visitedSet().has(s.id), fx=((X(s.lng)*4)%1+1)%1, fy=((Y(s.lat)*4)%1+1)%1;
+  return `<button type="button" class="ctile" data-show="${s.id}" aria-label="Show ${esc(s.name)} on the map">
+    <span class="pin ${v?"been":s.free?"free":""}" style="left:calc(${(20+fx*60).toFixed(1)}% - 8px);top:calc(${(30+fy*45).toFixed(1)}% - 8px)"></span>
+    <span class="lbl2">${esc(label)}</span>${best?`<span class="best">Best match</span>`:""}</button>`;
 }
 function renderResults(){
   const recs=recommend();
   $("results").innerHTML = recs.length ? recs.map((r,i)=>`
-    <div class="pick ${i===0?"top":""}">
-      <div class="tag">${i===0?"Best match · ":""}${esc(KIND_LABEL[r.s.kind])} · ${esc(r.s.hood)}</div>
+    <article class="card">
+      ${gridTile(r.s, `${KIND_LABEL[r.s.kind]} · ${r.s.hood}`, i===0)}
+      ${openLine(openState(r.s))}
       <div class="name">${esc(r.s.name)}</div>
       <div class="travel">${travel(r.s)}</div>
-      <div>${esc(r.s.note)}</div>
-      <div class="why">${r.why.map(([c,t])=>`<span class="${c}">${esc(t)}</span>`).join("")}</div>
-      <div class="meta">${esc(r.s.addr)}</div>${licLine(r.s)}
-      <div class="acts">${spotActions(r.s)}</div>
-    </div>`).join("")
-    : `<div class="empty-note">Nothing fits right now. Try "Coffee is fine," a longer trip, or more time.</div>`;
+      <div class="why">${r.why.filter(([c,t])=>!/^(Open|Opens|Check hours)/.test(t)).map(([c,t])=>`<span class="${c}">${esc(t)}</span>`).join("")}</div>
+      ${r.s.note?`<div class="note">${esc(r.s.note)}</div>`:""}
+      <div class="meta">${esc(r.s.addr)}</div>${safeLicLine(r.s)}
+      <div class="acts">${spotActions(r.s).replace(/<button type="button" data-show[^]*?<\/button>/,"")}</div>
+    </article>`).join("")
+    : `<div class="empty-note">Nothing fits right now. Tap the filter button and try "Coffee is fine," a longer trip, or more time.</div>`;
   $("tip").textContent = sel.spend==="free" ? "Free-only tip: bring coffee from home in a thermos. You're out of the house and it costs nothing." : "";
 }
 
@@ -551,10 +678,12 @@ const NS_STREETS=[["State",0],["Halsted",800],["Racine",1200],["Ashland",1600],[
 const EW_STREETS=[["Fullerton",2400],["Armitage",2000],["North",1600],["Division",1200],["Chicago",800],["Grand",520],["Lake",200],["Madison",0],["Roosevelt",-1200],["Cermak",-2200]];
 const MILWAUKEE=[[41.8855,-87.6399],[41.89491,-87.65388],[41.90529,-87.66997],[41.90841,-87.6746],[41.91088,-87.67778],[41.91711,-87.68762],[41.92225,-87.69588],[41.92457,-87.69979],[41.9317,-87.71146],[41.9390,-87.7235]];
 function viewBox(){
-  const A=5/4;
+  // The map fills the screen, so its shape follows the window
+  const svg=$("map"), A=(svg.clientWidth&&svg.clientHeight) ? svg.clientWidth/svg.clientHeight : 5/4;
   if(view==="near" || viewCenter){
-    const c = viewCenter || {x:X(home.lng),y:Y(home.lat)}; const w = viewCenter?2.6:3.0, h=w/A;
-    return [c.x-w/2,c.y-h/2,w,h];
+    const c = viewCenter || {x:X(home.lng),y:Y(home.lat)}; const w = (viewCenter?2.6:3.0)*Math.min(1,Math.max(.55,A)), h=w/A;
+    // Nudge the spot above the card that slides up from the bottom
+    return [c.x-w/2,c.y-h/2+(viewCenter&&selId?h*0.18:0),w,h];
   }
   const xs=SPOTS.map(s=>X(s.lng)).concat(X(home.lng)), ys=SPOTS.map(s=>Y(s.lat)).concat(Y(home.lat));
   let x0=Math.min(...xs)-0.3,x1=Math.max(...xs)+0.3,y0=Math.min(...ys)-0.3,y1=Math.max(...ys)+0.3;
@@ -562,7 +691,8 @@ function viewBox(){
   return [x0,y0,w,h];
 }
 function renderMap(){
-  const [vx,vy,vw,vh]=viewBox(), fs=vw*0.024, r=vw*0.011, visited=visitedSet();
+  const [vx,vy,vw,vh]=viewBox(), ppx=vw/($("map").clientWidth||500), fs=13*ppx, r=6*ppx, visited=visitedSet();
+  dotR=r;
   const parts=[];
   for(const [n,a] of NS_STREETS){ const x=-a/800; if(x<vx||x>vx+vw) continue;
     parts.push(`<line class="st" x1="${x}" y1="${vy}" x2="${x}" y2="${vy+vh}" stroke-width="${a%800===0?2:1}"/>`);
@@ -600,9 +730,12 @@ function renderSelCard(){
   const c=$("selCard"); if(!selId){c.hidden=true;return;}
   const s=SPOT[selId], os=openState(s), v=visitedSet().has(s.id);
   c.hidden=false;
-  c.innerHTML=`<div class="tag">${esc(KIND_LABEL[s.kind])} · ${esc(s.hood)}${s.free?" · Free":""}${v?" · Been there":""}</div>
-    <div class="name">${esc(s.name)}</div><div class="travel">${travel(s)}</div>${(()=>{const st=spotStats(s.id),t=ratingText(st);return t?`<div class="travel">Your ratings: ${t} (${st.visits} visit${st.visits===1?"":"s"})</div>`:""})()}
-    <div>${esc(s.note)}</div><div class="meta">${esc(s.addr)} · ${esc(os.known?os.text:"Check hours")}</div>${safeLicLine(s)}
+  const st=spotStats(s.id), rt=ratingText(st);
+  c.innerHTML=`<span class="grab" aria-hidden="true"></span>${openLine(os)}
+    <div class="name">${esc(s.name)}</div>
+    <div class="travel">${esc(KIND_LABEL[s.kind])} · ${esc(s.hood)}${s.free?" · Free":""}${v?" · Been there":""}</div>
+    <div class="travel">${travel(s)}</div>${rt?`<div class="travel">Your ratings: ${rt} (${st.visits} visit${st.visits===1?"":"s"})</div>`:""}
+    ${s.note?`<div class="note">${esc(s.note)}</div>`:""}<div class="meta">${esc(s.addr)}</div>${safeLicLine(s)}
     <div class="acts">${spotActions(s).replace(/<button type="button" data-show[^]*?<\/button>/,"")}</div>`;
 }
 $("map").addEventListener("click",e=>{
@@ -616,10 +749,11 @@ $("map").addEventListener("click",e=>{
   // Tap areas overlap where spots are close together, so pick the dot nearest the tap
   const pt=svg.createSVGPoint(); pt.x=e.clientX; pt.y=e.clientY;
   const p=pt.matrixTransform(svg.getScreenCTM().inverse());
-  const reach=viewBox()[2]*0.011*3;
+  const reach=dotR*3.5;
   let best=null, bestD=Infinity;
   for(const s of SPOTS){ const d=Math.hypot(X(s.lng)-p.x, Y(s.lat)-p.y); if(d<bestD){ bestD=d; best=s; } }
-  if(best && bestD<=reach && best.id!==selId){ selId=best.id; renderMap(); }
+  if(best && bestD<=reach){ if(best.id!==selId){ selId=best.id; renderMap(); } }
+  else if(selId){ selId=null; viewCenter=null; renderMap(); }  // tap open map to close the card
 });
 async function setHome(h){
   home=h; savePrefs(); sortHoods();
@@ -627,13 +761,17 @@ async function setHome(h){
 
 // ---------- directory ----------
 function renderDirectory(){
-  $("catSeg").innerHTML = CATS.map(([v,l])=>`<input type="radio" name="cat" id="cat-${v}" value="${v}" ${dir.cat===v?"checked":""}><label for="cat-${v}">${l}</label>`).join("");
+  $("catSeg").innerHTML = CATS.filter(c=>c[0]!=="all").map(([v,l])=>`<button type="button" class="tile" data-cat="${v}" aria-pressed="${dir.cat===v}">
+    <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${CAT_ICON[v]}</svg></span><span>${l}</span></button>`).join("");
+  $("hoodRow").innerHTML = [[null,"Near home"],...HOODS.map(h=>[h,h])].map(([v,l])=>
+    `<button type="button" class="pill" data-hood="${esc(v??"")}" aria-pressed="${dir.hood===v}">${esc(l)}</button>`).join("");
   renderList();
 }
 function renderList(){
   const visited=visitedSet(), q=dir.q.trim().toLowerCase(), kinds=(CATS.find(c=>c[0]===dir.cat)||[])[2];
   let list=SPOTS.filter(s=>{
     if(kinds && !kinds.includes(s.kind)) return false;
+    if(dir.hood && s.hood!==dir.hood) return false;
     if(dir.free && !s.free) return false;
     if(dir.fresh && visited.has(s.id)) return false;
     if(dir.open){ const os=openState(s); if(!os.known || !os.open) return false; }
@@ -644,16 +782,18 @@ function renderList(){
   else if(dir.sort==="az") list.sort((a,b)=>a.name.localeCompare(b.name));
   else if(dir.sort==="rated"){ const k=s=>{const st=spotStats(s.id);return st.score==null&&st.rpe==null?-99:(st.score??5)-(st.rpe??5)}; list=list.filter(s=>k(s)>-99).sort((a,b)=>k(b)-k(a)); }
   else list.sort((a,b)=>HOODS.indexOf(a.hood)-HOODS.indexOf(b.hood)||miles(a)-miles(b));
+  const catL=(CATS.find(c=>c[0]===dir.cat)||[])[1];
+  $("dirH").textContent = [dir.cat!=="all"?catL:"All spots", dir.hood].filter(Boolean).join(" · ");
   $("dirCount").textContent = `Showing ${list.length} of ${SPOTS.length} spots · ${visited.size} visited`;
   let lastHood=null;
   $("dlist").innerHTML = list.length ? list.map(s=>{
     const os=openState(s), v=visited.has(s.id), ex=dir.expanded===s.id;
-    const hdr = dir.sort==="hood" && s.hood!==lastHood ? `<div class="tag" style="padding:12px 2px 4px">${esc(lastHood=s.hood)}</div>` : "";
+    const hdr = dir.sort==="hood" && s.hood!==lastHood ? `<div class="tag hoodh">${esc(lastHood=s.hood)}</div>` : "";
     return `${hdr}<div class="ditem"><button type="button" class="dhead" data-exp="${s.id}" aria-expanded="${ex}">
       ${starSvg("mk"+(v?"":" empty"))}
       <div class="txt"><div class="n">${esc(s.name)}</div><div class="m">${esc(s.hood)} · ${esc(KIND_LABEL[s.kind])}${s.free?" · Free":""}${(()=>{const t=ratingText(spotStats(s.id));return t?` <span class="rpill">${t}</span>`:""})()}</div></div>
       <div class="r"><b>${miles(s).toFixed(1)} mi</b><span class="${os.open?"open":""}">${esc(os.known?os.text:"Check hours")}</span></div>
-    </button>${ex?`<div class="dbody"><div class="travel">${travel(s)}</div><div>${esc(s.note)}</div><div class="meta">${esc(s.addr)}</div>${safeLicLine(s)}<div class="acts">${spotActions(s)}</div></div>`:""}</div>`;
+    </button>${ex?`<div class="dbody"><div class="travel">${travel(s)}</div>${s.note?`<div class="note">${esc(s.note)}</div>`:""}<div class="meta">${esc(s.addr)}</div>${safeLicLine(s)}<div class="acts">${spotActions(s)}</div></div>`:""}</div>`;
   }).join("") : `<div class="empty-note">${dir.sort==="rated"?"No rated spots yet. Add a Rep Score and RPE when you log a rep, and your sweet spots show up here, ranked by score minus RPE.":"No spots match. Clear a filter or the search."}</div>`;
 }
 $("dirQ").addEventListener("input",e=>{ dir.q=e.target.value; renderList(); });
@@ -680,13 +820,18 @@ function renderTracker(){
   const ws=weekStart(); let hit=0;
   for(let i=0;i<7;i++){const d=addDays(ws,i); if(PLAN[d.getDay()].out && dates.has(iso(d))) hit++;}
   $("sWeek").textContent=`${hit}/3`; $("sTotal").textContent=reps.length; $("sSpots").textContent=visitedSet().size;
-  const today0=new Date();today0.setHours(0,0,0,0);
-  $("week").innerHTML=[...Array(7)].map((_,i)=>{
-    const d=addDays(ws,i), k=iso(d), pl=PLAN[d.getDay()], has=dates.has(k), past=d<today0&&d>=parse(START);
-    const mark = has ? starSvg("mark") : (pl.out && past ? `<div class="mark miss" aria-label="missed">–</div>` : `<div class="mark"></div>`);
-    return `<div class="dcell ${pl.out?"out":""} ${k===tk?"is-today":""}"><div class="d">${d.toLocaleDateString("en-US",{weekday:"narrow"})} ${d.getDate()}</div><div class="p">${pl.short}</div>${mark}</div>`;
-  }).join("");
+  $("hdrStatus").className=st.className; $("hdrStatus").textContent = miss===0 ? `On track · ${hit}/3` : miss===1 ? "Missed one" : "Missed twice";
+  $("week").innerHTML = $("strip").innerHTML = dayCells(ws, dates, tk);
   renderLog();
+}
+// Mon–Sun cells: red star = rep logged, blue dot = target day, dash = missed target
+function dayCells(ws, dates, tk){
+  const today0=new Date(); today0.setHours(0,0,0,0);
+  return [...Array(7)].map((_,i)=>{
+    const d=addDays(ws,i), k=iso(d), pl=PLAN[d.getDay()], has=dates.has(k), past=d<today0&&d>=parse(START), isT=k===tk;
+    const mark = has ? `<svg aria-label="Rep logged"><use href="#star"/></svg>` : pl.out && past ? `<b aria-label="Missed target">–</b>` : pl.out ? `<i aria-label="Target day"></i>` : "";
+    return `<div class="sday ${isT?"is-today":""}"><span class="d">${isT?"Today":d.toLocaleDateString("en-US",{weekday:"short"})}</span><span class="n">${d.getDate()}</span><span class="m">${mark}</span></div>`;
+  }).join("");
 }
 function renderLog(){
   const sorted=[...reps].sort((a,b)=>b.date.localeCompare(a.date)||(b.created||0)-(a.created||0));
@@ -715,7 +860,7 @@ async function save(rep){
   reps.push(rep); if(!repStore.save(reps)) $("notice").hidden=false; renderAll(); return true;
 }
 
-function renderAll(){ renderTracker(); renderResults(); renderMap(); renderList(); renderNew(); }
+function renderAll(){ renderTracker(); renderResults(); if(mapOpen) renderMap(); renderList(); renderNew(); }
 
 document.addEventListener("submit",async e=>{
   e.preventDefault();
@@ -724,15 +869,37 @@ document.addEventListener("submit",async e=>{
   if(await save(rep)){ $("fNote").value=""; $("fScore").value=""; $("fRpe").value=""; $("toast").textContent=`Rep logged for ${fmt(date,{weekday:"long"})}.`; setTimeout(()=>$("toast").textContent="",3000); }
 });
 const smooth = ()=>matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth";
+// ---------- navigation: tabs, full-screen map, filter sheet ----------
+function setTab(t){
+  tab=t;
+  for(const v of ["explore","week","log","reps"]) $("view-"+v).hidden = v!==t;
+  document.querySelectorAll(".nav [data-tab]").forEach(b=>{ if(b.dataset.tab===t) b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current"); });
+  $("mapFab").hidden = t!=="explore";
+  window.scrollTo(0,0);
+}
+function openMap(){ mapOpen=true; $("mapSec").hidden=false; document.body.style.overflow="hidden"; renderMap(); }
+function closeMap(){ mapOpen=false; settingHome=false; $("mapSec").hidden=true; document.body.style.overflow=""; }
+function openSheet(){ $("sheet").hidden=$("scrim").hidden=false; document.body.style.overflow="hidden"; $("sheetDone").focus(); }
+function closeSheet(){ $("sheet").hidden=$("scrim").hidden=true; if(!mapOpen) document.body.style.overflow=""; }
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ if(!$("sheet").hidden) closeSheet(); else if(mapOpen) closeMap(); } });
+
 document.addEventListener("click",async e=>{
   const t=e.target;
-  if(t.id==="shuffle"){ seed++; renderResults(); return; }
-  if(t.id==="setHome"){ settingHome=!settingHome; if(settingHome){ viewCenter=null; } renderMap(); return; }
+  if(t.closest?.("#shuffle")){ seed++; renderResults(); return; }
+  if(t.closest?.("#setHome")){ settingHome=!settingHome; if(settingHome){ viewCenter=null; selId=null; } renderMap(); return; }
+  if(t.closest?.("#mapFab")){ viewCenter=null; selId=null; openMap(); return; }
+  if(t.closest?.("#mapClose")){ closeMap(); return; }
+  if(t.closest?.("#filterBtn")){ openSheet(); return; }
+  if(t.closest?.("#sheetDone,#scrim")){ closeSheet(); return; }
+  if(t.closest?.("#sheetGo")){ closeSheet(); setTab("explore"); $("goH").scrollIntoView({behavior:smooth(),block:"start"}); return; }
+  const nav=t.closest?.("[data-tab]"); if(nav){ closeMap(); setTab(nav.dataset.tab); return; }
+  const cat=t.closest?.("[data-cat]"); if(cat){ dir.cat = dir.cat===cat.dataset.cat ? "all" : cat.dataset.cat; renderDirectory(); $("dirH").scrollIntoView({behavior:smooth(),block:"start"}); return; }
+  const hd=t.closest?.("[data-hood]"); if(hd){ dir.hood = hd.dataset.hood || null; renderDirectory(); $("dirH").scrollIntoView({behavior:smooth(),block:"start"}); return; }
   const exp=t.closest?.("[data-exp]"); if(exp){ dir.expanded = dir.expanded===exp.dataset.exp?null:exp.dataset.exp; renderList(); return; }
-  const show=t.closest?.("[data-show]"); if(show){ const s=SPOT[show.dataset.show]; selId=s.id; viewCenter={x:X(s.lng),y:Y(s.lat)}; renderMap(); $("mapSec").scrollIntoView({behavior:smooth()}); return; }
+  const show=t.closest?.("[data-show]"); if(show){ const s=SPOT[show.dataset.show]; selId=s.id; viewCenter={x:X(s.lng),y:Y(s.lat)}; openMap(); return; }
   const use=t.closest?.("[data-use]");
-  if(use){ const s=SPOT[use.dataset.use]; $("fSpot").value=s.id; const r=document.querySelector(`input[name=type][value=${typeFor(s)}]`); if(r) r.checked=true;
-    $("fDate").value=iso(new Date()); $("form").scrollIntoView({behavior:smooth()}); return; }
+  if(use){ const s=SPOT[use.dataset.use]; closeMap(); setTab("log"); $("fSpot").value=s.id; const r=document.querySelector(`input[name=type][value=${typeFor(s)}]`); if(r) r.checked=true;
+    $("fDate").value=iso(new Date()); return; }
   const del=t.closest?.("[data-del]");
   if(del){ const id=del.dataset.del;
     if(del.dataset.confirm!=="1"){ del.dataset.confirm="1"; del.textContent="Confirm"; setTimeout(()=>{if(del.isConnected){del.dataset.confirm="";del.textContent="Delete";}},3000); return; }
@@ -742,7 +909,6 @@ document.addEventListener("change",e=>{
   const n=e.target.name||"", id=e.target.id;
   if(n.startsWith("q-")){ sel[n.slice(2)]=e.target.value; seed=1; savePrefs(); renderResults(); }
   if(n==="view"){ view=e.target.value; viewCenter=null; renderMap(); }
-  if(n==="cat"){ dir.cat=e.target.value; renderList(); }
   if(id==="fFree"){ dir.free=e.target.checked; renderList(); }
   if(id==="fOpen"){ dir.open=e.target.checked; renderList(); }
   if(id==="fNew"){ dir.fresh=e.target.checked; renderList(); }
@@ -794,10 +960,11 @@ function renderNew(){
   const near = NEW.map(p=>({...p, mi:miles(p)})).filter(p=>p.mi<=2).sort((a,b)=>a.mi-b.mi).slice(0,6);
   $("newSec").hidden = !near.length;
   $("newList").innerHTML = near.map(p=>`
-    <div class="entry newp"><div class="nm">
+    <div class="newcard">
+      <div class="tag">${esc(KIND_LABEL[p.kind]||"Café")} · licensed ${esc(fmt(p.on,{month:"short",day:"numeric"}))}</div>
       <div class="n">${esc(p.name)}</div>
-      <div class="m">${esc(KIND_LABEL[p.kind]||"Café")} · ${esc(p.addr)} · licensed ${esc(fmt(p.on,{month:"short",day:"numeric"}))}</div></div>
-      <div class="r"><b>${p.mi.toFixed(1)} mi</b><a href="${mapsUrl(p)}" target="_blank" rel="noopener">Directions</a></div>
+      <div class="m">${esc(p.addr)}</div>
+      <div class="r"><b class="mono">${p.mi.toFixed(1)} mi</b><a href="${mapsUrl(p)}" target="_blank" rel="noopener">Directions</a></div>
     </div>`).join("");
 }
 function sortHoods(){
@@ -819,6 +986,7 @@ function showSource(data){
   SPOTS = data.rows.map(toSpot);
   SPOT = Object.fromEntries(SPOTS.map(s=>[s.id,s]));
   sortHoods(); showSource(data);
+  addEventListener("resize",()=>{ if(mapOpen) renderMap(); });
   const saved = repStore.load(); if(saved===null) $("notice").hidden=false; else reps = saved;
   buildForm(); renderPicker(); renderDirectory(); renderAll();
   loadNewPlaces();
