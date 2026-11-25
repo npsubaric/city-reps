@@ -40,6 +40,14 @@ h2{font-size:22px;font-weight:800;font-stretch:80%;text-transform:uppercase;lett
 .lic{font-size:12px;color:var(--muted)}
 .lic.current{color:var(--ok)}
 .lic.cancelled{color:var(--red);font-weight:600}
+/* License line opens a detail panel (native <details>, no JS) */
+.licd summary{cursor:pointer;list-style:none} .licd summary::-webkit-details-marker{display:none}
+.lic-more{font-size:11px;text-decoration:underline;margin-left:4px;opacity:.85}
+.licd[open] .lic-more{display:none}
+.licpanel{margin:6px 0 2px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:13px;line-height:1.5}
+.ld-h{font-weight:600;margin-top:8px} .ld-h:first-child{margin-top:0}
+.ld-ok{color:var(--ok)} .ld-warn{color:var(--warn)} .ld-bad{color:var(--red)}
+.ld-src{font-size:12px;color:var(--muted);margin-top:6px} .ld-src a{color:var(--blue-ink)}
 .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
 .section{display:flex;flex-direction:column;gap:12px}
 .sub{font-size:14px;color:var(--muted);margin-top:-4px}
@@ -319,11 +327,50 @@ const LIC_TEXT = {current:"City license current", on_file:"City license on file"
 // Latest food inspection: an inspection after a license expired suggests the place is still open;
 // an "Out of Business" result is a stronger closure signal than an expired license.
 const monYr = d => { const [y,m] = d.split("-").map(Number); return new Date(y, m-1, 1).toLocaleDateString("en-US", {month:"short", year:"numeric"}); };
+// Tapping the license line opens the latest inspection and license details.
+const fmtDay = d => { const [y,m,dd] = d.split("-").map(Number); return new Date(y, m-1, dd).toLocaleDateString("en-US", {month:"short", day:"numeric", year:"numeric"}); };
+const titleCase = t => t ? t.toLowerCase().replace(/\b\w/g, c => c.toUpperCase()) : "";
+const RESULT_TEXT = {"PASS":["Passed","ok"], "PASS W/ CONDITIONS":["Passed with conditions","warn"], "FAIL":["Failed","bad"],
+  "OUT OF BUSINESS":["Out of business","bad"], "NO ENTRY":["No entry (inspector couldn't get in)","warn"],
+  "NOT READY":["Not ready for inspection","warn"], "BUSINESS NOT LOCATED":["Business not located","bad"]};
+function licDetail(s){
+  const out = [`<div class="ld-h">Health inspection</div>`];
+  if (s.insp) {
+    const [label, tone] = RESULT_TEXT[s.inspResult] || [titleCase(s.inspResult || "Unknown"), ""];
+    out.push(`<div>Last inspected <b>${esc(fmtDay(s.insp))}</b>${s.inspType ? ` · ${esc(titleCase(s.inspType))}` : ""}</div>`);
+    out.push(`<div>Result: <b class="ld-${tone}">${esc(label)}</b>${s.inspViol ? ` · ${s.inspViol} violation${s.inspViol === 1 ? "" : "s"} noted` : ""}</div>`);
+    if (s.inspCount) out.push(`<div>${s.inspCount} inspection${s.inspCount === 1 ? "" : "s"} since 2024, ${s.inspFails ? `${s.inspFails} failed` : "none failed"}</div>`);
+  } else {
+    out.push(`<div>No food inspections on record since 2024.</div>`);
+  }
+  out.push(`<div class="ld-h">City business license</div>`);
+  if (s.lic === "not_found") {
+    out.push(`<div>No matching license in the city's data. Some cafés run under another business's license, or the record is missing.</div>`);
+  } else {
+    const [status, tone] = s.lic === "current" ? [`Current through ${fmtDay(s.licExp)}`, "ok"]
+      : s.lic === "cancelled" ? ["Cancelled by the city", "bad"]
+      : [`Expired ${s.licExp ? fmtDay(s.licExp) : ""}, no renewal on file yet`, "warn"];
+    out.push(`<div>Status: <b class="ld-${tone}">${esc(status)}</b></div>`);
+    if (s.licName) out.push(`<div>Licensed as ${esc(titleCase(s.licName))}</div>`);
+    if (s.licType) out.push(`<div>${esc(titleCase(s.licType))}${s.licStart ? `, current term began ${esc(fmtDay(s.licStart))}` : ""}</div>`);
+  }
+  if (s.licNo) {
+    const n = encodeURIComponent(s.licNo);
+    out.push(`<div class="ld-src">City of Chicago open data, license #${esc(String(s.licNo))}: `
+      + `<a href="https://data.cityofchicago.org/resource/4ijn-s7e5.json?license_=${n}&$order=inspection_date%20DESC" target="_blank" rel="noopener">inspections</a> · `
+      + `<a href="https://data.cityofchicago.org/resource/r5kz-chrr.json?license_number=${n}&$order=expiration_date%20DESC" target="_blank" rel="noopener">license</a></div>`);
+  }
+  return `<div class="licpanel">${out.join("")}</div>`;
+}
 const licLine = s => {
-  if (s.inspClosed) return `<div class="lic cancelled">City inspector marked this out of business (${monYr(s.insp)})</div>`;
-  const t = LIC_TEXT[s.lic]; if (!t) return "";
-  const insp = s.insp && (s.lic === "current" || s.lic === "on_file") ? ` · inspected ${monYr(s.insp)}` : "";
-  return `<div class="lic ${s.lic}">${esc(t)}${insp}</div>`;
+  let cls, text;
+  if (s.inspClosed) { cls = "cancelled"; text = `City inspector marked this out of business (${monYr(s.insp)})`; }
+  else {
+    const t = LIC_TEXT[s.lic]; if (!t) return "";
+    cls = s.lic;
+    text = t + (s.insp && (s.lic === "current" || s.lic === "on_file") ? ` · inspected ${monYr(s.insp)}` : "");
+  }
+  return `<details class="licd"><summary class="lic ${cls}">${esc(text)}<span class="lic-more">Details</span></summary>${licDetail(s)}</details>`;
 };
 let HOODS = [];   // neighborhoods, nearest to the home pin first
 const KIND_LABEL = {cafe:"Café",bakery:"Bakery",library:"Library",park:"Park",trail:"Trail",museum:"Museum",books:"Bookstore",public:"Public space",walk:"Walk"};
@@ -673,6 +720,10 @@ function toSpot(r){
   return {id:r.spot_id, name:r.name, hood:r.neighborhood, addr:r.address, kind:r.kind,
     lat:r.lat, lng:r.lon, coordSrc:r.coord_source, lic:r.license_state,
     insp:r.last_inspection_date||undefined, inspClosed:r.inspector_marked_closed||undefined,
+    inspType:r.last_inspection_type||null, inspResult:r.last_inspection_result||null,
+    inspViol:r.last_violation_count||0, inspCount:r.inspection_count||0, inspFails:r.failed_inspection_count||0,
+    licNo:r.license_no||null, licName:r.license_business_name||null, licType:r.license_type||null,
+    licStart:r.license_start_date||null, licExp:r.license_expiration_date||null,
     moods:r.moods||[], free:!!r.is_free, out:!!r.is_outdoors, work:!!r.good_for_work,
     min:r.time_needed||"quick", hours:r.hours_week||null, hoursSrc:r.hours_source||null, note:r.note||""};
 }

@@ -34,6 +34,16 @@ models:
         tests:
           - unique
           - not_null
+      - name: last_violation_count
+        description: Violations noted on the latest inspection (the city separates them with " | ").
+        tests:
+          - not_null
+      - name: inspection_count
+        description: Inspections on record for this license since 2024.
+        tests:
+          - not_null
+      - name: failed_inspection_count
+        description: How many of those inspections failed.
   - name: dim_spots
     description: >
       One row per City Reps spot, with the best available coordinates and the
