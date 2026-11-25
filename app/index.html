@@ -41,9 +41,8 @@ h2{font-size:22px;font-weight:800;font-stretch:80%;text-transform:uppercase;lett
 .lic.current{color:var(--ok)}
 .lic.cancelled{color:var(--red);font-weight:600}
 /* License line opens a detail panel (native <details>, no JS) */
-.licd summary{cursor:pointer;list-style:none} .licd summary::-webkit-details-marker{display:none}
-.lic-more{font-size:11px;text-decoration:underline;margin-left:4px;opacity:.85}
-.licd[open] .lic-more{display:none}
+.licd summary{cursor:pointer;list-style:none;display:inline} .licd summary::-webkit-details-marker{display:none}
+.licd summary:hover,.licd summary:focus-visible,.licd[open] summary{text-decoration:underline;text-underline-offset:2px}
 .licpanel{margin:6px 0 2px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:13px;line-height:1.5}
 .ld-h{font-weight:600;margin-top:8px} .ld-h:first-child{margin-top:0}
 .ld-ok{color:var(--ok)} .ld-warn{color:var(--warn)} .ld-bad{color:var(--red)}
@@ -110,7 +109,7 @@ select,input[type=date],input[type=text],input[type=search]{font:inherit;color:v
 #map .mil{stroke:var(--street);fill:none;vector-effect:non-scaling-stroke}
 #map .sl{fill:var(--muted);font-family:var(--mono)}
 #map .dot{stroke:var(--surface);vector-effect:non-scaling-stroke}
-#map .dot.paid{fill:var(--blue-ink)} #map .dot.free{fill:var(--ok)}
+#map .dot.food{fill:var(--blue-ink)} #map .dot.free{fill:var(--ok)} #map .dot.paid{fill:var(--muted)}
 #map .vstar{fill:var(--red)}
 #map .ring{fill:none;stroke:var(--ink);vector-effect:non-scaling-stroke;stroke-width:2}
 #map .home{color:var(--red);stroke:var(--ink);stroke-width:1.6;stroke-linejoin:round} #map .homel{fill:var(--ink);font-family:var(--body);font-weight:700}
@@ -230,7 +229,7 @@ form{display:flex;flex-direction:column;gap:12px}
       <button type="button" id="setHome">Move home pin</button>
     </div>
     <div class="mapbox"><svg id="map" role="img" aria-label="Map of spots around West Town"></svg></div>
-    <div class="keyrow"><span><i style="background:var(--blue-ink)"></i>Café or bakery</span><span><i style="background:var(--ok)"></i>Free</span><span><i style="background:var(--red)"></i>Been there</span><span><svg class="homekey" aria-hidden="true"><use href="#star"/></svg>Home</span></div>
+    <div class="keyrow"><span><i style="background:var(--blue-ink)"></i>Café or bakery</span><span><i style="background:var(--ok)"></i>Free</span><span><i style="background:var(--muted)"></i>Paid entry</span><span><i style="background:var(--red)"></i>Been there</span><span><svg class="homekey" aria-hidden="true"><use href="#star"/></svg>Home</span></div>
     <div class="selcard" id="selCard" hidden></div>
   </section>
 
@@ -370,7 +369,7 @@ const licLine = s => {
     cls = s.lic;
     text = t + (s.insp && (s.lic === "current" || s.lic === "on_file") ? ` · inspected ${monYr(s.insp)}` : "");
   }
-  return `<details class="licd"><summary class="lic ${cls}">${esc(text)}<span class="lic-more">Details</span></summary>${licDetail(s)}</details>`;
+  return `<details class="licd"><summary class="lic ${cls}" title="Show inspection and license details">${esc(text)}</summary>${licDetail(s)}</details>`;
 };
 let HOODS = [];   // neighborhoods, nearest to the home pin first
 const KIND_LABEL = {cafe:"Café",bakery:"Bakery",library:"Library",park:"Park",trail:"Trail",museum:"Museum",books:"Bookstore",public:"Public space",walk:"Walk"};
@@ -532,6 +531,8 @@ function viewBox(){
   let w=x1-x0,h=y1-y0; if(w/h<A){const nw=h*A;x0-=(nw-w)/2;w=nw}else{const nh=w/A;y0-=(nh-h)/2;h=nh}
   return [x0,y0,w,h];
 }
+// Dot colors: blue = café or bakery, green = free (parks, libraries...), gray = paid entry
+const dotClass = s => (s.kind === "cafe" || s.kind === "bakery") ? "food" : s.free ? "free" : "paid";
 function renderMap(){
   const [vx,vy,vw,vh]=viewBox(), fs=vw*0.024, r=vw*0.011, visited=visitedSet();
   const parts=[];
@@ -550,7 +551,7 @@ function renderMap(){
     const v=visited.has(s.id);
     parts.push(`<g data-id="${s.id}" style="cursor:pointer"><circle cx="${x}" cy="${y}" r="${r*2.2}" fill="transparent"/>`+
       (v ? `<use href="#star" x="${x-r*1.6}" y="${y-r*1.6}" width="${r*3.2}" height="${r*3.2}" class="vstar" style="color:var(--red)"/>`
-         : `<circle class="dot ${s.free?"free":"paid"}" cx="${x}" cy="${y}" r="${r}" stroke-width="1.5"/>`)+
+         : `<circle class="dot ${dotClass(s)}" cx="${x}" cy="${y}" r="${r}" stroke-width="1.5"/>`)+
       (s.id===selId?`<circle class="ring" cx="${x}" cy="${y}" r="${r*2}"/>`:"")+`</g>`);
   }
   if(selId && showLabels){ const s=SPOT[selId]; parts.push(`<text class="lab" x="${X(s.lng)+r*2.4}" y="${Y(s.lat)+fs*0.35}" font-size="${fs}">${esc(s.name)}</text>`); }
@@ -582,7 +583,13 @@ $("map").addEventListener("click",e=>{
     setHome({lat:+LAT(p.y).toFixed(5),lng:+LNG(p.x).toFixed(5),custom:true});
     settingHome=false; viewCenter=null; renderAll(); return;
   }
-  const g=e.target.closest("[data-id]"); if(g){ selId=g.dataset.id; renderMap(); }
+  // Tap areas overlap where spots are close together, so pick the dot nearest the tap
+  const pt=svg.createSVGPoint(); pt.x=e.clientX; pt.y=e.clientY;
+  const p=pt.matrixTransform(svg.getScreenCTM().inverse());
+  const reach=viewBox()[2]*0.011*3;
+  let best=null, bestD=Infinity;
+  for(const s of SPOTS){ const d=Math.hypot(X(s.lng)-p.x, Y(s.lat)-p.y); if(d<bestD){ bestD=d; best=s; } }
+  if(best && bestD<=reach && best.id!==selId){ selId=best.id; renderMap(); }
 });
 async function setHome(h){
   home=h; savePrefs(); sortHoods();
