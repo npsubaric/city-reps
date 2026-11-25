@@ -32,7 +32,7 @@ COLUMNS = [
     "license_no", "license_business_name", "license_type", "match_method",
     "license_start_date", "license_expiration_date", "license_state",
     "last_inspection_date", "last_inspection_type", "last_inspection_result",
-    "last_violation_count", "inspection_count", "failed_inspection_count",
+    "last_violation_count", "last_violations", "inspection_count", "failed_inspection_count",
     "inspector_marked_closed",
     "hours_week", "hours_source", "osm_key",
 ]
