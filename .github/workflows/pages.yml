@@ -66,6 +66,7 @@ jobs:
         run: |
           mkdir -p _site
           cp app/index.html _site/
+          cp app/*.png _site/
           cp export/dim_spots.json _site/
           mkdir -p _site/docs
           cp city_reps_dbt/target/static_index.html _site/docs/index.html
