@@ -26,7 +26,7 @@
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
 a{color:var(--blue-ink)}
-.wrap{max-width:640px;margin:0 auto;padding-top:20px;padding-bottom:calc(var(--navh) + 120px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:22px}
+.wrap{max-width:640px;margin:0 auto;padding-top:calc(20px + env(safe-area-inset-top,0px));padding-bottom:calc(var(--navh) + 120px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:22px}
 .pad{padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
 .view{display:flex;flex-direction:column;gap:22px}
 h1,h2{font-family:var(--display);margin:0;text-wrap:balance}
@@ -202,6 +202,10 @@ form{display:flex;flex-direction:column;gap:14px}
 .foot{font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--line);padding-top:16px}
 
 /* floating map button + bottom nav */
+.mapfab{transition:transform .25s ease,opacity .25s ease}
+.mapfab.away{transform:translateX(-50%) translateY(140px);opacity:0;pointer-events:none}
+/* Home Screen app: keep the clock and battery on a solid strip, not over the page */
+.topsafe{position:fixed;left:0;right:0;top:0;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:35}
 .mapfab{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--navh) + 32px + env(safe-area-inset-bottom,0px));z-index:20;background:var(--ink);color:var(--bg);font-size:18px;font-weight:700;padding:14px 26px;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,.55);gap:10px}
 .nav{position:fixed;left:50%;transform:translateX(-50%);width:min(612px,calc(100% - 28px));bottom:calc(14px + env(safe-area-inset-bottom,0px));height:var(--navh);z-index:20;border-radius:36px;background:#161c22;border:1px solid var(--line);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));align-items:center;box-shadow:0 8px 24px rgba(0,0,0,.45)}
 .nav button{all:unset;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px;font-weight:600;color:var(--ink);padding:6px 0;border-radius:24px}
@@ -242,6 +246,7 @@ form{display:flex;flex-direction:column;gap:14px}
 .maptop>*{pointer-events:auto}
 .maptop .bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .maptop .bar button{box-shadow:0 6px 18px rgba(0,0,0,.45)}
+.maptop .homeline,.maptop .keyrow{pointer-events:none}
 .maptop .homeline{font-size:12px;color:var(--muted);background:rgba(16,24,31,.85);padding:6px 10px;border-radius:10px;align-self:flex-start}
 .keyrow{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted);background:rgba(16,24,31,.85);padding:6px 10px;border-radius:10px;align-self:flex-start}
 .keyrow i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
@@ -277,6 +282,7 @@ form{display:flex;flex-direction:column;gap:14px}
   <defs><symbol id="star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 1.5l2.6 6 6.5-.6-3.9 5.1 3.9 5.1-6.5-.6-2.6 6-2.6-6-6.5.6 3.9-5.1-3.9-5.1 6.5.6z"/></symbol></defs>
 </svg>
 
+<div class="topsafe" aria-hidden="true"></div>
 <div class="wrap">
   <header class="mast pad">
     <div class="flag" aria-hidden="true"><div class="band"></div>
@@ -584,7 +590,9 @@ const dir = {q:"",cat:"all",hood:null,free:false,open:false,fresh:false,sort:"ne
 let tab = "explore", mapOpen = false;
 // The category tile you picked (Coffee, Bakeries…) narrows the picks, the map and New near you
 const catKinds = ()=>(CATS.find(c=>c[0]===dir.cat)||[])[2] || null;
-const inCat = s=>{ const k=catKinds(); return !k || k.includes(s.kind); };
+const inCat = s=>{ const k=catKinds(); return (!k || k.includes(s.kind)) && (!dir.hood || s.hood===dir.hood); };
+// New places have no neighborhood name, so match them to the middle of the neighborhood's spots
+function hoodCenter(h){ const xs=SPOTS.filter(s=>s.hood===h); return xs.length ? {lat:xs.reduce((a,s)=>a+s.lat,0)/xs.length, lng:xs.reduce((a,s)=>a+s.lng,0)/xs.length} : null; }
 const PAID_CATS = ["coffee","bakery"];  // picking these means you're fine buying something
 
 const $ = id=>document.getElementById(id);
@@ -638,7 +646,7 @@ function recommend(){
     const dc=distCat(s);
     if(!inCat(s)) continue;
     if(sel.spend==="free" && !s.free && !PAID_CATS.includes(dir.cat)) continue;
-    if(DR[dc]>DR[sel.dist]) continue;
+    if(DR[dc]>DR[sel.dist] && !dir.hood) continue;  // picking a neighborhood means you're willing to go there
     if(TR[s.min]>TR[sel.time]) continue;
     if(sel.wx==="wet" && s.out) continue;
     const os=openState(s);
@@ -710,7 +718,7 @@ function renderResults(){
       <div class="meta">${esc(r.s.addr)}</div>${safeLicLine(r.s)}
       <div class="acts">${spotActions(r.s).replace(/<button type="button" data-show[^]*?<\/button>/,"")}</div>
     </article>`).join("")
-    : `<div class="empty-note">${dir.cat!=="all" ? `No ${esc(((CATS.find(c=>c[0]===dir.cat)||[])[1]||"").toLowerCase())} open that fit right now. Tap the filter button for a longer trip or more time, or tap the tile again to see everything.` : `Nothing fits right now. Tap the filter button and try "Coffee is fine," a longer trip, or more time.`}</div>`;
+    : `<div class="empty-note">${dir.cat!=="all"||dir.hood ? `No ${esc(dir.cat!=="all"?((CATS.find(c=>c[0]===dir.cat)||[])[1]||"").toLowerCase():"spots")}${dir.hood?` in ${esc(dir.hood)}`:""} fit right now. Tap the filter button for more time, or tap the tile or neighborhood again to see everything.` : `Nothing fits right now. Tap the filter button and try "Coffee is fine," a longer trip, or more time.`}</div>`;
   $("results").scrollLeft = 0;
   $("tip").textContent = sel.spend==="free" && !PAID_CATS.includes(dir.cat) ? "Free-only tip: bring coffee from home in a thermos. You're out of the house and it costs nothing." : "";
 }
@@ -907,7 +915,6 @@ function renderList(){
   const visited=visitedSet(), q=dir.q.trim().toLowerCase(), kinds=(CATS.find(c=>c[0]===dir.cat)||[])[2];
   let list=SPOTS.filter(s=>{
     if(kinds && !kinds.includes(s.kind)) return false;
-    if(dir.hood && s.hood!==dir.hood) return false;
     if(dir.free && !s.free) return false;
     if(dir.fresh && visited.has(s.id)) return false;
     if(dir.open){ const os=openState(s); if(!os.known || !os.open) return false; }
@@ -1005,6 +1012,12 @@ document.addEventListener("submit",async e=>{
 });
 const smooth = ()=>matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth";
 // ---------- navigation: tabs, full-screen map, filter sheet ----------
+// The floating Map button slides away while you scroll down and comes back when you stop or scroll up
+(()=>{ let last=scrollY, t=0;
+  addEventListener("scroll",()=>{ const y=scrollY, fab=$("mapFab");
+    if(y>last+4 && y>120) fab.classList.add("away"); else if(y<last-4) fab.classList.remove("away");
+    last=y; clearTimeout(t); t=setTimeout(()=>fab.classList.remove("away"),700); },{passive:true});
+})();
 function setTab(t){
   tab=t;
   for(const v of ["explore","week","log","reps"]) $("view-"+v).hidden = v!==t;
@@ -1031,7 +1044,7 @@ document.addEventListener("click",async e=>{
   const t=e.target;
   if(t.closest?.("#shuffle")){ seed++; renderResults(); return; }
   if(t.closest?.("#setHome")){ settingHome=!settingHome; if(settingHome){ viewCenter=null; selId=null; } renderMap(); return; }
-  if(t.closest?.("#mapFab")){ viewCenter=null; cam=null; selId=null; openMap(); return; }
+  if(t.closest?.("#mapFab")){ const hc=dir.hood&&hoodCenter(dir.hood); viewCenter=hc?{x:X(hc.lng),y:Y(hc.lat)}:null; cam=null; selId=null; openMap(); return; }
   if(t.closest?.("#viewSeg input")){ cam=null; viewCenter=null; renderMap(); return; }  // tap "Near home" again to jump back
   if(t.closest?.("#zoomIn")){ zoomBy(1/1.6); return; }
   if(t.closest?.("#zoomOut")){ zoomBy(1.6); return; }
@@ -1041,13 +1054,17 @@ document.addEventListener("click",async e=>{
   if(t.closest?.("#sheetDone,#scrim")){ closeSheet(); return; }
   if(t.closest?.("#sheetGo")){ closeSheet(); setTab("explore"); $("goH").scrollIntoView({behavior:smooth(),block:"start"}); return; }
   const nav=t.closest?.("[data-tab]"); if(nav){ closeMap(); setTab(nav.dataset.tab); return; }
-  const cat=t.closest?.("[data-cat]"); if(cat){ dir.cat = dir.cat===cat.dataset.cat ? "all" : cat.dataset.cat;
+  // Category tiles and neighborhood pills narrow the picks, the map, New near you and the list,
+  // then scroll just enough to put the tiles at the top with the picks right below
+  const cat=t.closest?.("[data-cat]"), hd=t.closest?.("[data-hood]");
+  if(cat || hd){
+    if(cat) dir.cat = dir.cat===cat.dataset.cat ? "all" : cat.dataset.cat;
+    if(hd) dir.hood = (hd.dataset.hood||null)===dir.hood ? null : (hd.dataset.hood||null);
     if(selId && !inCat(SPOT[selId])) selId=null;
-    renderDirectory(); seed=1; renderResults(); renderNew(); if(mapOpen) renderMap();
-    // bring the picks up a little so you can start swiping, without jumping to the list
-    if(dir.cat!=="all"){ const y=$("catSeg").getBoundingClientRect().top+scrollY-12; if(y>scrollY) scrollTo({top:y,behavior:smooth()}); }
+    const x=$("hoodRow").scrollLeft;
+    renderDirectory(); $("hoodRow").scrollLeft=x; seed=1; renderResults(); renderNew(); if(mapOpen) renderMap();
+    if(dir.cat!=="all" || dir.hood){ const y=$("catSeg").getBoundingClientRect().top+scrollY-12; if(y>scrollY) scrollTo({top:y,behavior:smooth()}); }
     return; }
-  const hd=t.closest?.("[data-hood]"); if(hd){ dir.hood = hd.dataset.hood || null; renderDirectory(); $("dirH").scrollIntoView({behavior:smooth(),block:"start"}); return; }
   const exp=t.closest?.("[data-exp]"); if(exp){ dir.expanded = dir.expanded===exp.dataset.exp?null:exp.dataset.exp; renderList(); return; }
   const show=t.closest?.("[data-show]"); if(show){ const s=SPOT[show.dataset.show]; selId=s.id; cam=null; viewCenter={x:X(s.lng),y:Y(s.lat)}; openMap(); return; }
   const use=t.closest?.("[data-use]");
@@ -1111,7 +1128,9 @@ async function loadNewPlaces(){
 }
 function renderNew(){
   // New places are cafés and bakeries, so they show under All, Coffee and Bakeries only
-  const near = NEW.filter(p=>inCat({kind:p.kind||"cafe"})).map(p=>({...p, mi:miles(p)})).filter(p=>p.mi<=2).sort((a,b)=>a.mi-b.mi).slice(0,6);
+  const hc = dir.hood && hoodCenter(dir.hood);
+  const near = NEW.filter(p=>{ const k=catKinds(); return !k || k.includes(p.kind||"cafe"); })
+    .filter(p=>!hc || Math.hypot(X(p.lng)-X(hc.lng), Y(p.lat)-Y(hc.lat))<=1).map(p=>({...p, mi:miles(p)})).filter(p=>p.mi<=2).sort((a,b)=>a.mi-b.mi).slice(0,6);
   $("newSec").hidden = !near.length;
   $("newList").innerHTML = near.map(p=>`
     <div class="newcard">
