@@ -216,6 +216,7 @@ form{display:flex;flex-direction:column;gap:14px}
 .mapview{position:fixed;inset:0;z-index:30;background:var(--mapbg)}
 #map{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
 #map:active{cursor:grabbing}
+#map *{pointer-events:none}  /* every touch lands on the map itself, so redrawing dots mid-pinch can't drop a finger */
 .zoom{position:absolute;right:16px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px}
 .zoom button{width:44px;height:44px;justify-content:center;padding:0;font-size:24px;font-weight:500;box-shadow:0 6px 18px rgba(0,0,0,.45)}
 .handle{all:unset;cursor:pointer;align-self:stretch;display:flex;justify-content:center;padding:6px 0 2px;margin-top:-8px;touch-action:none}
@@ -576,6 +577,10 @@ let cam = null, dotR = 0.03, reps = [], seed = 1, selId = null, settingHome = fa
 const sel = {energy:"ok",feel:"recharge",time:"quick",dist:"walk",wx:"nice",spend:"free"};
 const dir = {q:"",cat:"all",hood:null,free:false,open:false,fresh:false,sort:"near",expanded:null};
 let tab = "explore", mapOpen = false;
+// The category tile you picked (Coffee, Bakeries…) narrows the picks, the map and New near you
+const catKinds = ()=>(CATS.find(c=>c[0]===dir.cat)||[])[2] || null;
+const inCat = s=>{ const k=catKinds(); return !k || k.includes(s.kind); };
+const PAID_CATS = ["coffee","bakery"];  // picking these means you're fine buying something
 
 const $ = id=>document.getElementById(id);
 const pad = n=>String(n).padStart(2,"0");
@@ -626,7 +631,8 @@ function recommend(){
   const out=[];
   for(const s of SPOTS){
     const dc=distCat(s);
-    if(sel.spend==="free" && !s.free) continue;
+    if(!inCat(s)) continue;
+    if(sel.spend==="free" && !s.free && !PAID_CATS.includes(dir.cat)) continue;
     if(DR[dc]>DR[sel.dist]) continue;
     if(TR[s.min]>TR[sel.time]) continue;
     if(sel.wx==="wet" && s.out) continue;
@@ -699,8 +705,9 @@ function renderResults(){
       <div class="meta">${esc(r.s.addr)}</div>${safeLicLine(r.s)}
       <div class="acts">${spotActions(r.s).replace(/<button type="button" data-show[^]*?<\/button>/,"")}</div>
     </article>`).join("")
-    : `<div class="empty-note">Nothing fits right now. Tap the filter button and try "Coffee is fine," a longer trip, or more time.</div>`;
-  $("tip").textContent = sel.spend==="free" ? "Free-only tip: bring coffee from home in a thermos. You're out of the house and it costs nothing." : "";
+    : `<div class="empty-note">${dir.cat!=="all" ? `No ${esc(((CATS.find(c=>c[0]===dir.cat)||[])[1]||"").toLowerCase())} open that fit right now. Tap the filter button for a longer trip or more time, or tap the tile again to see everything.` : `Nothing fits right now. Tap the filter button and try "Coffee is fine," a longer trip, or more time.`}</div>`;
+  $("results").scrollLeft = 0;
+  $("tip").textContent = sel.spend==="free" && !PAID_CATS.includes(dir.cat) ? "Free-only tip: bring coffee from home in a thermos. You're out of the house and it costs nothing." : "";
 }
 
 // ---------- map ----------
@@ -739,6 +746,7 @@ function drawMap(){
   const showLabels = vw<4;
   for(const s of SPOTS){
     const x=X(s.lng), y=Y(s.lat); if(x<vx-r||x>vx+vw+r||y<vy-r||y>vy+vh+r) continue;
+    if(!inCat(s) && s.id!==selId) continue;
     const v=visited.has(s.id);
     parts.push(`<g data-id="${s.id}" style="cursor:pointer"><circle cx="${x}" cy="${y}" r="${r*2.2}" fill="transparent"/>`+
       (v ? `<use href="#star" x="${x-r*1.6}" y="${y-r*1.6}" width="${r*3.2}" height="${r*3.2}" class="vstar" style="color:var(--red)"/>`
@@ -790,7 +798,7 @@ $("map").addEventListener("click",e=>{
   const p=pt.matrixTransform(svg.getScreenCTM().inverse());
   const reach=dotR*3.5;
   let best=null, bestD=Infinity;
-  for(const s of SPOTS){ const d=Math.hypot(X(s.lng)-p.x, Y(s.lat)-p.y); if(d<bestD){ bestD=d; best=s; } }
+  for(const s of SPOTS){ if(!inCat(s)) continue; const d=Math.hypot(X(s.lng)-p.x, Y(s.lat)-p.y); if(d<bestD){ bestD=d; best=s; } }
   if(best && bestD<=reach){ if(best.id!==selId){ selId=best.id; renderMap(); } }
   else if(selId) closeSel();  // tap open map to close the card
 });
@@ -838,6 +846,9 @@ function gestureStart(){
   gesture.start={cam:c, mid, dist};
 }
 $("map").addEventListener("pointerdown",e=>{
+  // A first finger down starts fresh, so a finger whose lift we missed can't leave a ghost behind
+  if(e.isPrimary) gesture.pts.clear();
+  try{ $("map").setPointerCapture(e.pointerId); }catch(_){}
   gesture.pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
   if(gesture.pts.size===1) gesture.moved=false;
   gestureStart();
@@ -848,7 +859,7 @@ $("map").addEventListener("pointermove",e=>{
   const ps=[...gesture.pts.values()], st=gesture.start, svg=$("map");
   const mid={x:ps.reduce((a,p)=>a+p.x,0)/ps.length, y:ps.reduce((a,p)=>a+p.y,0)/ps.length};
   if(!gesture.moved && Math.hypot(mid.x-st.mid.x, mid.y-st.mid.y)<6 && ps.length<2) return;
-  if(!gesture.moved){ gesture.moved=true; try{ svg.setPointerCapture(e.pointerId); }catch(_){} }
+  if(!gesture.moved) gesture.moved=true;
   let w=st.cam.w;
   if(ps.length>1 && st.dist>0) w=clampW(st.cam.w*st.dist/Math.hypot(ps[0].x-ps[1].x, ps[0].y-ps[1].y));
   const ppx0=st.cam.w/svg.clientWidth, ppx=w/svg.clientWidth, r=svg.getBoundingClientRect();
@@ -863,6 +874,7 @@ function pointerEnd(e){
 }
 $("map").addEventListener("pointerup",pointerEnd);
 $("map").addEventListener("pointercancel",pointerEnd);
+$("map").addEventListener("lostpointercapture",pointerEnd);
 // Mouse wheel or trackpad: zoom around the pointer
 $("map").addEventListener("wheel",e=>{
   e.preventDefault();
@@ -1024,7 +1036,12 @@ document.addEventListener("click",async e=>{
   if(t.closest?.("#sheetDone,#scrim")){ closeSheet(); return; }
   if(t.closest?.("#sheetGo")){ closeSheet(); setTab("explore"); $("goH").scrollIntoView({behavior:smooth(),block:"start"}); return; }
   const nav=t.closest?.("[data-tab]"); if(nav){ closeMap(); setTab(nav.dataset.tab); return; }
-  const cat=t.closest?.("[data-cat]"); if(cat){ dir.cat = dir.cat===cat.dataset.cat ? "all" : cat.dataset.cat; renderDirectory(); $("dirH").scrollIntoView({behavior:smooth(),block:"start"}); return; }
+  const cat=t.closest?.("[data-cat]"); if(cat){ dir.cat = dir.cat===cat.dataset.cat ? "all" : cat.dataset.cat;
+    if(selId && !inCat(SPOT[selId])) selId=null;
+    renderDirectory(); seed=1; renderResults(); renderNew(); if(mapOpen) renderMap();
+    // bring the picks up a little so you can start swiping, without jumping to the list
+    if(dir.cat!=="all"){ const y=$("catSeg").getBoundingClientRect().top+scrollY-12; if(y>scrollY) scrollTo({top:y,behavior:smooth()}); }
+    return; }
   const hd=t.closest?.("[data-hood]"); if(hd){ dir.hood = hd.dataset.hood || null; renderDirectory(); $("dirH").scrollIntoView({behavior:smooth(),block:"start"}); return; }
   const exp=t.closest?.("[data-exp]"); if(exp){ dir.expanded = dir.expanded===exp.dataset.exp?null:exp.dataset.exp; renderList(); return; }
   const show=t.closest?.("[data-show]"); if(show){ const s=SPOT[show.dataset.show]; selId=s.id; cam=null; viewCenter={x:X(s.lng),y:Y(s.lat)}; openMap(); return; }
@@ -1088,7 +1105,8 @@ async function loadNewPlaces(){
   renderNew();
 }
 function renderNew(){
-  const near = NEW.map(p=>({...p, mi:miles(p)})).filter(p=>p.mi<=2).sort((a,b)=>a.mi-b.mi).slice(0,6);
+  // New places are cafés and bakeries, so they show under All, Coffee and Bakeries only
+  const near = NEW.filter(p=>inCat({kind:p.kind||"cafe"})).map(p=>({...p, mi:miles(p)})).filter(p=>p.mi<=2).sort((a,b)=>a.mi-b.mi).slice(0,6);
   $("newSec").hidden = !near.length;
   $("newList").innerHTML = near.map(p=>`
     <div class="newcard">
