@@ -25,11 +25,13 @@ a{color:var(--blue-ink)}
 .pad{padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
 .view{display:flex;flex-direction:column;gap:22px}
 h1,h2{font-family:var(--display);margin:0;text-wrap:balance}
-h1{font-size:28px;font-weight:900;font-stretch:72%;line-height:1;text-transform:uppercase;letter-spacing:.01em}
+h1{font-size:44px;font-weight:900;font-stretch:72%;line-height:.95;text-transform:uppercase;letter-spacing:-.01em}
 h2{font-size:26px;font-weight:800;font-stretch:85%;line-height:1.1;scroll-margin-top:16px}
-.stars{display:flex;gap:4px;color:var(--red)} .stars svg{width:11px;height:11px}
-.mast{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.mast .brand{display:flex;flex-direction:column;gap:4px}
+/* Masthead: the Chicago flag, two light-blue bands and four red stars */
+.mast{display:flex;flex-direction:column;gap:10px}
+.flag{display:flex;flex-direction:column;gap:6px}
+.band{height:8px;background:#6aa7cf;border-radius:2px}
+.stars{display:flex;gap:6px;color:var(--red)} .stars svg{width:16px;height:16px}
 .tag{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .mut{color:var(--muted)}
 .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
@@ -212,7 +214,14 @@ form{display:flex;flex-direction:column;gap:14px}
 
 /* map view: full screen */
 .mapview{position:fixed;inset:0;z-index:30;background:var(--mapbg)}
-#map{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:manipulation;cursor:pointer}
+#map{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+#map:active{cursor:grabbing}
+.zoom{position:absolute;right:16px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px}
+.zoom button{width:44px;height:44px;justify-content:center;padding:0;font-size:24px;font-weight:500;box-shadow:0 6px 18px rgba(0,0,0,.45)}
+.handle{all:unset;cursor:pointer;align-self:stretch;display:flex;justify-content:center;padding:6px 0 2px;margin-top:-8px;touch-action:none}
+.handle:focus-visible{outline:2px solid var(--blue);outline-offset:-2px;border-radius:8px}
+.selcard{transition:transform .2s ease;overscroll-behavior:contain}
+.selcard.dragging{transition:none}
 #map.setting{cursor:crosshair}
 #map .st{stroke:var(--street);fill:none;vector-effect:non-scaling-stroke}
 #map .mil{stroke:#2a4356;fill:none;vector-effect:non-scaling-stroke}
@@ -231,7 +240,7 @@ form{display:flex;flex-direction:column;gap:14px}
 .keyrow{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted);background:rgba(16,24,31,.85);padding:6px 10px;border-radius:10px;align-self:flex-start}
 .keyrow i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
 .keyrow .homekey{width:13px;height:13px;margin-right:4px;vertical-align:-2px;color:var(--red)}
-.selcard{position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:min(640px,100%);max-height:62vh;overflow-y:auto;background:#161c22;border-radius:28px 28px 0 0;border-top:1px solid var(--line);padding:10px 20px calc(22px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:8px}
+.selcard{position:absolute;left:50%;transform:translateX(-50%) translateY(var(--drag,0px));bottom:0;width:min(640px,100%);max-height:62vh;overflow-y:auto;background:#161c22;border-radius:28px 28px 0 0;border-top:1px solid var(--line);padding:10px 20px calc(22px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:8px}
 .selcard[hidden]{display:none}
 .selcard .btn,.selcard button{height:50px;justify-content:center;font-size:16px;font-weight:700}
 .selcard .acts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -251,7 +260,7 @@ form{display:flex;flex-direction:column;gap:14px}
   .card,.newcard{width:auto}
   .side .mapview{left:auto;width:var(--side);border-left:1px solid var(--line)}
   .side .maptop{max-width:none}
-  .side .selcard{left:0;right:0;transform:none;width:auto;max-height:58vh;margin:0 16px 16px;border-radius:24px;border:1px solid var(--line)}
+  .side .selcard{left:0;right:0;transform:translateY(var(--drag,0px));width:auto;max-height:58vh;margin:0 16px 16px;border-radius:24px;border:1px solid var(--line)}
   .dlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));align-items:start}
 }
 </style>
@@ -264,11 +273,11 @@ form{display:flex;flex-direction:column;gap:14px}
 
 <div class="wrap">
   <header class="mast pad">
-    <div class="brand">
-      <div class="stars" aria-hidden="true"><svg><use href="#star"/></svg><svg><use href="#star"/></svg><svg><use href="#star"/></svg><svg><use href="#star"/></svg></div>
-      <h1>City Reps</h1>
-    </div>
-    <span class="chip ok" id="hdrStatus"></span>
+    <div class="flag" aria-hidden="true"><div class="band"></div>
+      <div class="stars"><svg><use href="#star"/></svg><svg><use href="#star"/></svg><svg><use href="#star"/></svg><svg><use href="#star"/></svg></div>
+      <div class="band"></div></div>
+    <h1>City Reps</h1>
+    <div class="tag">Never miss twice · West Town, Chicago</div>
   </header>
 
   <nav class="nav" aria-label="Sections">
@@ -408,6 +417,7 @@ form{display:flex;flex-direction:column;gap:14px}
     <div class="homeline" id="homeLine"></div>
     <div class="keyrow"><span><i style="background:var(--blue)"></i>Café or bakery</span><span><i style="background:var(--ok)"></i>Free</span><span><i style="background:var(--red)"></i>Been there</span><span><svg class="homekey" aria-hidden="true"><use href="#star"/></svg>Home</span></div>
   </div>
+  <div class="zoom"><button type="button" id="zoomIn" aria-label="Zoom in">+</button><button type="button" id="zoomOut" aria-label="Zoom out">−</button></div>
   <div class="selcard" id="selCard" hidden></div>
 </section>
 
@@ -562,7 +572,7 @@ function mapsUrl(s){ const mode = miles(s)<=1.5 ? "w" : "r";
 function gridAddr(lat,lng){ const ns=Math.round(-Y(lat)*800/25)*25, ew=Math.round(-X(lng)*800/25)*25;
   return `${Math.abs(ns)} ${ns>=0?"N":"S"} · ${Math.abs(ew)} ${ew>=0?"W":"E"}`; }
 
-let dotR = 0.03, reps = [], seed = 1, selId = null, settingHome = false, view = "near", viewCenter = null;
+let cam = null, dotR = 0.03, reps = [], seed = 1, selId = null, settingHome = false, view = "near", viewCenter = null;
 const sel = {energy:"ok",feel:"recharge",time:"quick",dist:"walk",wx:"nice",spend:"free"};
 const dir = {q:"",cat:"all",hood:null,free:false,open:false,fresh:false,sort:"near",expanded:null};
 let tab = "explore", mapOpen = false;
@@ -700,6 +710,8 @@ const MILWAUKEE=[[41.8855,-87.6399],[41.89491,-87.65388],[41.90529,-87.66997],[4
 function viewBox(){
   // The map fills the screen, so its shape follows the window
   const svg=$("map"), A=(svg.clientWidth&&svg.clientHeight) ? svg.clientWidth/svg.clientHeight : 5/4;
+  // Once you drag or zoom, the map stays where you put it ("Near home" / "Everything" jump back)
+  if(cam){ const h=cam.w/A; return [cam.x-cam.w/2, cam.y-h/2, cam.w, h]; }
   if(view==="near" || viewCenter){
     const c = viewCenter || {x:X(home.lng),y:Y(home.lat)}; const w = (viewCenter?2.6:3.0)*Math.min(1,Math.max(.55,A)), h=w/A;
     // Nudge the spot above the card that slides up from the bottom
@@ -710,15 +722,16 @@ function viewBox(){
   let w=x1-x0,h=y1-y0; if(w/h<A){const nw=h*A;x0-=(nw-w)/2;w=nw}else{const nh=w/A;y0-=(nh-h)/2;h=nh}
   return [x0,y0,w,h];
 }
-function renderMap(){
+// Draws the streets and dots for the current view. Called on every frame while you drag or pinch.
+function drawMap(){
   const [vx,vy,vw,vh]=viewBox(), ppx=vw/($("map").clientWidth||500), fs=13*ppx, r=6*ppx, visited=visitedSet();
   dotR=r;
-  const parts=[];
-  for(const [n,a] of NS_STREETS){ const x=-a/800; if(x<vx||x>vx+vw) continue;
-    parts.push(`<line class="st" x1="${x}" y1="${vy}" x2="${x}" y2="${vy+vh}" stroke-width="${a%800===0?2:1}"/>`);
-    parts.push(`<text class="sl" x="${x+fs*0.25}" y="${vy+fs*1.1}" font-size="${fs*0.8}">${n}</text>`); }
-  for(const [n,a] of EW_STREETS){ const y=-a/800; if(y<vy||y>vy+vh) continue;
-    parts.push(`<line class="st" x1="${vx}" y1="${y}" x2="${vx+vw}" y2="${y}" stroke-width="${a%800===0?2:1}"/>`);
+  const parts=[], top=vy+((document.querySelector(".maptop")?.offsetHeight||0)+6)*ppx;  // street names sit below the buttons
+  for(const [n,a] of NS_STREETS){ const x=-a/800; if(x<vx-vw||x>vx+2*vw) continue;
+    parts.push(`<line class="st" x1="${x}" y1="${vy-vh}" x2="${x}" y2="${vy+2*vh}" stroke-width="${a%800===0?2:1}"/>`);
+    parts.push(`<text class="sl" x="${x+fs*0.25}" y="${top+fs}" font-size="${fs*0.8}">${n}</text>`); }
+  for(const [n,a] of EW_STREETS){ const y=-a/800; if(y<vy-vh||y>vy+2*vh) continue;
+    parts.push(`<line class="st" x1="${vx-vw}" y1="${y}" x2="${vx+2*vw}" y2="${y}" stroke-width="${a%800===0?2:1}"/>`);
     parts.push(`<text class="sl" x="${vx+fs*0.3}" y="${y-fs*0.3}" font-size="${fs*0.8}">${n}</text>`); }
   parts.push(`<polyline class="mil" stroke-width="2" points="${MILWAUKEE.map(([la,ln])=>`${X(ln)},${Y(la)}`).join(" ")}"/>`);
   const ml=MILWAUKEE[2]; parts.push(`<text class="sl" font-size="${fs*0.8}" transform="translate(${X(ml[1])+fs*0.4},${Y(ml[0])-fs*0.2}) rotate(-36)">Milwaukee</text>`);
@@ -736,12 +749,17 @@ function renderMap(){
   const hx=X(home.lng), hy=Y(home.lat), hs=r*4.2;
   parts.push(`<use href="#star" class="home" x="${hx-hs/2}" y="${hy-hs/2}" width="${hs}" height="${hs}"/><text class="homel" x="${hx+hs*0.55}" y="${hy-hs*0.25}" font-size="${fs}">Home</text>`);
   const svg=$("map"); svg.setAttribute("viewBox",`${vx} ${vy} ${vw} ${vh}`); svg.innerHTML=parts.join("");
+}
+function renderMap(){
+  drawMap();
+  const svg=$("map");
   svg.classList.toggle("setting",settingHome);
   $("setHome").classList.toggle("on",settingHome);
   $("setHome").textContent = settingHome ? "Tap the map to place home · Cancel" : "Move home pin";
+  // Keep the map clear: only say something while placing the pin, or while it's still the default
   $("homeLine").textContent = settingHome ? "Tap where you live. Distances everywhere update right away."
-    : home.custom ? `Distances are measured from your home pin, near ${gridAddr(home.lat,home.lng)} on the grid.`
-    : "Distances are measured from a default pin at Chicago & Wood. Tap \"Move home pin\" to put it where you live.";
+    : home.custom ? "" : "Home is a default pin at Chicago & Wood. Move it to where you live.";
+  $("homeLine").hidden = !$("homeLine").textContent;
   renderSelCard();
 }
 // A missing field in the license details must never blank the card or stop the map
@@ -751,7 +769,7 @@ function renderSelCard(){
   const s=SPOT[selId], os=openState(s), v=visitedSet().has(s.id);
   c.hidden=false;
   const st=spotStats(s.id), rt=ratingText(st);
-  c.innerHTML=`<span class="grab" aria-hidden="true"></span>${openLine(os)}
+  c.innerHTML=`<button type="button" class="handle" id="selClose" aria-label="Close this spot"><span class="grab"></span></button>${openLine(os)}
     <div class="name">${esc(s.name)}</div>
     <div class="travel">${esc(KIND_LABEL[s.kind])} · ${esc(s.hood)}${s.free?" · Free":""}${v?" · Been there":""}</div>
     <div class="travel">${travel(s)}</div>${rt?`<div class="travel">Your ratings: ${rt} (${st.visits} visit${st.visits===1?"":"s"})</div>`:""}
@@ -760,6 +778,7 @@ function renderSelCard(){
 }
 $("map").addEventListener("click",e=>{
   const svg=$("map");
+  if(gesture.moved){ gesture.moved=false; return; }  // that was a drag, not a tap
   if(settingHome){
     const pt=svg.createSVGPoint(); pt.x=e.clientX; pt.y=e.clientY;
     const p=pt.matrixTransform(svg.getScreenCTM().inverse());
@@ -773,8 +792,88 @@ $("map").addEventListener("click",e=>{
   let best=null, bestD=Infinity;
   for(const s of SPOTS){ const d=Math.hypot(X(s.lng)-p.x, Y(s.lat)-p.y); if(d<bestD){ bestD=d; best=s; } }
   if(best && bestD<=reach){ if(best.id!==selId){ selId=best.id; renderMap(); } }
-  else if(selId){ selId=null; viewCenter=null; renderMap(); }  // tap open map to close the card
+  else if(selId) closeSel();  // tap open map to close the card
 });
+// ---------- the spot card: swipe it down (or tap the handle, or tap empty map) to close ----------
+function closeSel(){ const c=$("selCard"); c.style.removeProperty("--drag"); selId=null; viewCenter=null; renderMap(); }
+(()=>{
+  const c=$("selCard"); let y0=null, dy=0, t0=0;
+  const start=y=>{ y0=y; dy=0; t0=Date.now(); };
+  const move=(y,e)=>{
+    if(y0===null) return;
+    const d=y-y0;
+    if(d<0 && dy===0){ y0=null; return; }          // moving up: let the card scroll
+    if(c.scrollTop>0 && dy===0){ y0=null; return; } // card is scrolled: let it scroll back first
+    dy=Math.max(0,d); if(e.cancelable) e.preventDefault();
+    if(dy>4){ c.classList.add("dragging"); c.style.setProperty("--drag",dy+"px"); }
+  };
+  const end=()=>{
+    if(y0===null) return;
+    y0=null; c.classList.remove("dragging");
+    const fast = dy>30 && dy/(Date.now()-t0)>0.5;
+    if(dy>c.offsetHeight*0.3 || fast){ c.style.setProperty("--drag",c.offsetHeight+"px"); setTimeout(closeSel,180); }
+    else c.style.removeProperty("--drag");
+    if(dy>4){ const stop=ev=>{ ev.stopPropagation(); ev.preventDefault(); }; c.addEventListener("click",stop,{capture:true,once:true}); setTimeout(()=>c.removeEventListener("click",stop,{capture:true}),300); }
+  };
+  // Phones: touch events, so a downward swipe moves the card instead of scrolling the page
+  c.addEventListener("touchstart",e=>{ if(e.touches.length===1) start(e.touches[0].clientY); },{passive:true});
+  c.addEventListener("touchmove",e=>move(e.touches[0].clientY,e),{passive:false});
+  c.addEventListener("touchend",end); c.addEventListener("touchcancel",end);
+  // Mouse: drag the handle
+  c.addEventListener("pointerdown",e=>{ if(e.pointerType==="mouse" && e.target.closest(".handle")){ start(e.clientY); } });
+  c.addEventListener("pointermove",e=>{ if(e.pointerType==="mouse") move(e.clientY,e); });
+  c.addEventListener("pointerup",e=>{ if(e.pointerType==="mouse") end(); });
+})();
+
+// ---------- drag to pan, pinch or scroll to zoom ----------
+const gesture = {pts:new Map(), start:null, moved:false};
+let frame = 0;
+const redraw = ()=>{ if(!frame) frame=requestAnimationFrame(()=>{ frame=0; drawMap(); }); };
+function camNow(){ const [vx,vy,vw,vh]=viewBox(); return {x:vx+vw/2, y:vy+vh/2, w:vw}; }
+const clampW = w=>Math.min(25, Math.max(0.35, w));
+function gestureStart(){
+  const ps=[...gesture.pts.values()], c=camNow();
+  const mid={x:ps.reduce((a,p)=>a+p.x,0)/ps.length, y:ps.reduce((a,p)=>a+p.y,0)/ps.length};
+  const dist=ps.length>1 ? Math.hypot(ps[0].x-ps[1].x, ps[0].y-ps[1].y) : 0;
+  gesture.start={cam:c, mid, dist};
+}
+$("map").addEventListener("pointerdown",e=>{
+  gesture.pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(gesture.pts.size===1) gesture.moved=false;
+  gestureStart();
+});
+$("map").addEventListener("pointermove",e=>{
+  if(!gesture.pts.has(e.pointerId)) return;
+  gesture.pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  const ps=[...gesture.pts.values()], st=gesture.start, svg=$("map");
+  const mid={x:ps.reduce((a,p)=>a+p.x,0)/ps.length, y:ps.reduce((a,p)=>a+p.y,0)/ps.length};
+  if(!gesture.moved && Math.hypot(mid.x-st.mid.x, mid.y-st.mid.y)<6 && ps.length<2) return;
+  if(!gesture.moved){ gesture.moved=true; try{ svg.setPointerCapture(e.pointerId); }catch(_){} }
+  let w=st.cam.w;
+  if(ps.length>1 && st.dist>0) w=clampW(st.cam.w*st.dist/Math.hypot(ps[0].x-ps[1].x, ps[0].y-ps[1].y));
+  const ppx0=st.cam.w/svg.clientWidth, ppx=w/svg.clientWidth, r=svg.getBoundingClientRect();
+  // keep the map point under your fingers' starting midpoint under their current midpoint
+  const ax=st.cam.x+(st.mid.x-r.left-r.width/2)*ppx0, ay=st.cam.y+(st.mid.y-r.top-r.height/2)*ppx0;
+  cam={x:ax-(mid.x-r.left-r.width/2)*ppx, y:ay-(mid.y-r.top-r.height/2)*ppx, w};
+  viewCenter=null; redraw();
+});
+function pointerEnd(e){
+  if(!gesture.pts.delete(e.pointerId)) return;
+  if(gesture.pts.size) gestureStart(); else if(gesture.moved) renderMap();
+}
+$("map").addEventListener("pointerup",pointerEnd);
+$("map").addEventListener("pointercancel",pointerEnd);
+// Mouse wheel or trackpad: zoom around the pointer
+$("map").addEventListener("wheel",e=>{
+  e.preventDefault();
+  const c=camNow(), svg=$("map"), r=svg.getBoundingClientRect(), k=Math.exp(e.deltaY*(e.ctrlKey?0.01:0.0025));
+  const w=clampW(c.w*k), ppx0=c.w/svg.clientWidth, ppx=w/svg.clientWidth;
+  const ox=e.clientX-r.left-r.width/2, oy=e.clientY-r.top-r.height/2;
+  cam={x:c.x+ox*ppx0-ox*ppx, y:c.y+oy*ppx0-oy*ppx, w}; viewCenter=null; redraw();
+  clearTimeout(gesture.wt); gesture.wt=setTimeout(renderMap,150);
+},{passive:false});
+function zoomBy(k){ const c=camNow(); cam={...c, w:clampW(c.w*k)}; viewCenter=null; renderMap(); }
+
 async function setHome(h){
   home=h; savePrefs(); sortHoods();
 }
@@ -840,7 +939,6 @@ function renderTracker(){
   const ws=weekStart(); let hit=0;
   for(let i=0;i<7;i++){const d=addDays(ws,i); if(PLAN[d.getDay()].out && dates.has(iso(d))) hit++;}
   $("sWeek").textContent=`${hit}/3`; $("sTotal").textContent=reps.length; $("sSpots").textContent=visitedSet().size;
-  $("hdrStatus").className=st.className; $("hdrStatus").textContent = miss===0 ? `On track · ${hit}/3` : miss===1 ? "Missed one" : "Missed twice";
   $("week").innerHTML = $("strip").innerHTML = dayCells(ws, dates, tk);
   renderLog();
 }
@@ -916,7 +1014,11 @@ document.addEventListener("click",async e=>{
   const t=e.target;
   if(t.closest?.("#shuffle")){ seed++; renderResults(); return; }
   if(t.closest?.("#setHome")){ settingHome=!settingHome; if(settingHome){ viewCenter=null; selId=null; } renderMap(); return; }
-  if(t.closest?.("#mapFab")){ viewCenter=null; selId=null; openMap(); return; }
+  if(t.closest?.("#mapFab")){ viewCenter=null; cam=null; selId=null; openMap(); return; }
+  if(t.closest?.("#viewSeg input")){ cam=null; viewCenter=null; renderMap(); return; }  // tap "Near home" again to jump back
+  if(t.closest?.("#zoomIn")){ zoomBy(1/1.6); return; }
+  if(t.closest?.("#zoomOut")){ zoomBy(1.6); return; }
+  if(t.closest?.("#selClose")){ closeSel(); return; }
   if(t.closest?.("#mapClose")){ closeMap(); return; }
   if(t.closest?.("#filterBtn")){ openSheet(); return; }
   if(t.closest?.("#sheetDone,#scrim")){ closeSheet(); return; }
@@ -925,7 +1027,7 @@ document.addEventListener("click",async e=>{
   const cat=t.closest?.("[data-cat]"); if(cat){ dir.cat = dir.cat===cat.dataset.cat ? "all" : cat.dataset.cat; renderDirectory(); $("dirH").scrollIntoView({behavior:smooth(),block:"start"}); return; }
   const hd=t.closest?.("[data-hood]"); if(hd){ dir.hood = hd.dataset.hood || null; renderDirectory(); $("dirH").scrollIntoView({behavior:smooth(),block:"start"}); return; }
   const exp=t.closest?.("[data-exp]"); if(exp){ dir.expanded = dir.expanded===exp.dataset.exp?null:exp.dataset.exp; renderList(); return; }
-  const show=t.closest?.("[data-show]"); if(show){ const s=SPOT[show.dataset.show]; selId=s.id; viewCenter={x:X(s.lng),y:Y(s.lat)}; openMap(); return; }
+  const show=t.closest?.("[data-show]"); if(show){ const s=SPOT[show.dataset.show]; selId=s.id; cam=null; viewCenter={x:X(s.lng),y:Y(s.lat)}; openMap(); return; }
   const use=t.closest?.("[data-use]");
   if(use){ const s=SPOT[use.dataset.use]; closeMap(); setTab("log"); $("fSpot").value=s.id; const r=document.querySelector(`input[name=type][value=${typeFor(s)}]`); if(r) r.checked=true;
     $("fDate").value=iso(new Date()); return; }
@@ -937,7 +1039,7 @@ document.addEventListener("click",async e=>{
 document.addEventListener("change",e=>{
   const n=e.target.name||"", id=e.target.id;
   if(n.startsWith("q-")){ sel[n.slice(2)]=e.target.value; seed=1; savePrefs(); renderResults(); }
-  if(n==="view"){ view=e.target.value; viewCenter=null; renderMap(); }
+  if(n==="view"){ view=e.target.value; viewCenter=null; cam=null; renderMap(); }
   if(id==="fFree"){ dir.free=e.target.checked; renderList(); }
   if(id==="fOpen"){ dir.open=e.target.checked; renderList(); }
   if(id==="fNew"){ dir.fresh=e.target.checked; renderList(); }
