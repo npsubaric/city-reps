@@ -6,9 +6,10 @@ name: Daily pipeline
 
 on:
   schedule:
-    # 11:17 UTC = 5:17 AM Chicago (CST) / 6:17 AM (CDT). Off the hour, because
-    # GitHub delays scheduled runs that start exactly on the hour.
-    - cron: "17 11 * * *"
+    # 5:17 AM Chicago time all year (GitHub handles daylight saving). Off the
+    # hour, because GitHub delays scheduled runs that start exactly on the hour.
+    - cron: "17 5 * * *"
+      timezone: "America/Chicago"
   # Adds a "Run workflow" button in the Actions tab for manual runs
   workflow_dispatch:
 

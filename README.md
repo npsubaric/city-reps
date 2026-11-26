@@ -114,7 +114,7 @@ Seeds: `spots` (the app's spots and notes), `spot_coordinates` (open-data geocod
 
 | Workflow | When | What it does |
 | --- | --- | --- |
-| [Daily pipeline](.github/workflows/daily_pipeline.yml) | Every day, 11:17 UTC (+ manual button) | Runs the loaders, then `dbt build`, then commits the JSON export if the data changed |
+| [Daily pipeline](.github/workflows/daily_pipeline.yml) | Every day, 5:17 AM Chicago time (+ manual button) | Runs the loaders, then `dbt build`, then commits the JSON export if the data changed |
 | [Deploy website](.github/workflows/pages.yml) | After each pipeline run, and on changes to the app or models | Publishes `app/`, the backup JSON and the dbt docs site to GitHub Pages |
 | [Record demo GIF](.github/workflows/record_demo.yml) | By hand, after visible app changes | Drives the live site with Playwright and commits `assets/demo.gif` |
 | [CI](.github/workflows/ci.yml) | Every pull request | Runs the Python tests, then builds and tests every model in separate `ci` and `ci_public` schemas, so checks never touch production tables |
