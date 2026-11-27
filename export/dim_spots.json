@@ -1457,7 +1457,7 @@
       "last_inspection_type": "CANVASS",
       "last_inspection_result": "PASS",
       "last_violation_count": 2,
-      "last_violations": "39. CONTAMINATION PREVENTED DURING FOOD PREPARATION, STORAGE & DISPLAY - Comments: Food container stored under sewer lines in basement, instructed to enclose or move food containers.  | 39. CONTAMINATION PREVENTED DURING FOOD PREPARATION, STORAGE & DISPLAY - Comments: Pottery plants stored above food production area, instructed to remove.",
+      "last_violations": "39. CONTAMINATION PREVENTED DURING FOOD PREPARATION, STORAGE & DISPLAY - Comments: Pottery plants stored above food production area, instructed to remove. | 39. CONTAMINATION PREVENTED DURING FOOD PREPARATION, STORAGE & DISPLAY - Comments: Food container stored under sewer lines in basement, instructed to enclose or move food containers.",
       "inspection_count": 2,
       "failed_inspection_count": 0,
       "inspector_marked_closed": false,
